@@ -1,10 +1,10 @@
 {
   "date": "2026-10-15",
-  "notes": "- (1.0.7) Dying no longer crashes the game: out of the car, and everything of ours lets go of you\n- (1.0.6) Weapon handling: gun inertia, hip and aimed recoil, wobble, quicker reloads and a crash guard; smooth aim-in (setup turns it on in lStewieAl's Tweaks and kNVSE)\n- (1.0.6) Cover aiming: lean, rise or dip to see past cover; blind fire over or round close cover\n- (1.0.4) PLAY WITHOUT CARS sets up everything but the cars; (1.0.3) never an older plugin over a newer one",
+  "notes": "- (1.0.8) Local add-ons are back in setup (1.0.7 had left them out)\n- (1.0.7) Dying no longer crashes the game: out of the car, and everything of ours lets go of you\n- (1.0.6) Weapon handling: gun inertia, hip and aimed recoil, wobble, quicker reloads and a crash guard; smooth aim-in (setup turns it on in lStewieAl's Tweaks and kNVSE)\n- (1.0.6) Cover aiming: lean, rise or dip to see past cover; blind fire over or round close cover\n- (1.0.4) PLAY WITHOUT CARS sets up everything but the cars; (1.0.3) never an older plugin over a newer one",
   "setup": {
-    "file": "MojaveMostWanted-Setup-1.0.7.exe",
-    "sha256": "fadd1914d0119d7367ea27719aa31e3735575dae7b86161b8cb1353287725bb8",
-    "size": 11286528
+    "file": "MojaveMostWanted-Setup-1.0.8.exe",
+    "sha256": "839db18456c05e9462934ad11e0e29ba94df210de7ad87beb7be7aa1b64072c2",
+    "size": 11299840
   },
-  "version": "1.0.7"
+  "version": "1.0.8"
 }
