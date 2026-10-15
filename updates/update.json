@@ -1,10 +1,10 @@
 {
   "date": "2026-10-15",
-  "notes": "- (1.0.9) Playing together: friends move 1:1 with their own animations, hold their guns and you hear their shots; parked cars stay put for friends; ride in a friend's passenger seat (G near the car, or the driver presses I); dropped items are shared. Everyone needs 1.0.9 to play together.\n- (1.0.9) The last run's log is MojaveMostWanted-previous.log; a crash also leaves MojaveMostWanted-crash.log\n- (1.0.7) Dying no longer crashes the game: out of the car, and everything of ours lets go of you\n- (1.0.6) Weapon handling: gun inertia, hip and aimed recoil, wobble, quicker reloads and a crash guard; smooth aim-in (setup turns it on in lStewieAl's Tweaks and kNVSE)\n- (1.0.6) Cover aiming: lean, rise or dip to see past cover; blind fire over or round close cover\n- (1.0.4) PLAY WITHOUT CARS sets up everything but the cars; (1.0.3) never an older plugin over a newer one",
+  "notes": "- (1.0.10) Playing together: guns sit in friends' hands and bodies no longer stretch (the whole skeleton is shared, sized as theirs); every shot heard in time; dropped items show for everyone; containers are shared (what one takes is gone for all); you see the enemies fighting a friend, and kills are shared; chat with Enter, and /name YourName sets the name friends see. Everyone needs 1.0.10 to play together.\n- (1.0.10) Undo everything removes every trace: the shortcut, the launcher and its files, our logs and setup itself\n- (1.0.9) Playing together: friends move 1:1 with their own animations, hold their guns and you hear their shots; parked cars stay put for friends; ride in a friend's passenger seat (G near the car, or the driver presses I); dropped items are shared. Everyone needs 1.0.9 to play together.\n- (1.0.9) The last run's log is MojaveMostWanted-previous.log; a crash also leaves MojaveMostWanted-crash.log\n- (1.0.7) Dying no longer crashes the game: out of the car, and everything of ours lets go of you\n- (1.0.6) Weapon handling: gun inertia, hip and aimed recoil, wobble, quicker reloads and a crash guard; smooth aim-in (setup turns it on in lStewieAl's Tweaks and kNVSE)\n- (1.0.6) Cover aiming: lean, rise or dip to see past cover; blind fire over or round close cover\n- (1.0.4) PLAY WITHOUT CARS sets up everything but the cars; (1.0.3) never an older plugin over a newer one",
   "setup": {
-    "file": "MojaveMostWanted-Setup-1.0.9.exe",
-    "sha256": "e98675c487e50bcba838c618a9254a045ef8894f3ebeb4c34095986e0ba7541f",
-    "size": 11316224
+    "file": "MojaveMostWanted-Setup-1.0.10.exe",
+    "sha256": "a25ec3ad9404c276048212839da144bdaed52368ce6dad428d6c6475f77325a5",
+    "size": 11335168
   },
-  "version": "1.0.9"
+  "version": "1.0.10"
 }
