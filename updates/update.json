@@ -1,10 +1,10 @@
 {
   "date": "2026-10-15",
-  "notes": "- (1.0.8) Local add-ons are back in setup (1.0.7 had left them out)\n- (1.0.7) Dying no longer crashes the game: out of the car, and everything of ours lets go of you\n- (1.0.6) Weapon handling: gun inertia, hip and aimed recoil, wobble, quicker reloads and a crash guard; smooth aim-in (setup turns it on in lStewieAl's Tweaks and kNVSE)\n- (1.0.6) Cover aiming: lean, rise or dip to see past cover; blind fire over or round close cover\n- (1.0.4) PLAY WITHOUT CARS sets up everything but the cars; (1.0.3) never an older plugin over a newer one",
+  "notes": "- (1.0.9) Playing together: friends move 1:1 with their own animations, hold their guns and you hear their shots; parked cars stay put for friends; ride in a friend's passenger seat (G near the car, or the driver presses I); dropped items are shared. Everyone needs 1.0.9 to play together.\n- (1.0.9) The last run's log is MojaveMostWanted-previous.log; a crash also leaves MojaveMostWanted-crash.log\n- (1.0.7) Dying no longer crashes the game: out of the car, and everything of ours lets go of you\n- (1.0.6) Weapon handling: gun inertia, hip and aimed recoil, wobble, quicker reloads and a crash guard; smooth aim-in (setup turns it on in lStewieAl's Tweaks and kNVSE)\n- (1.0.6) Cover aiming: lean, rise or dip to see past cover; blind fire over or round close cover\n- (1.0.4) PLAY WITHOUT CARS sets up everything but the cars; (1.0.3) never an older plugin over a newer one",
   "setup": {
-    "file": "MojaveMostWanted-Setup-1.0.8.exe",
-    "sha256": "839db18456c05e9462934ad11e0e29ba94df210de7ad87beb7be7aa1b64072c2",
-    "size": 11299840
+    "file": "MojaveMostWanted-Setup-1.0.9.exe",
+    "sha256": "e98675c487e50bcba838c618a9254a045ef8894f3ebeb4c34095986e0ba7541f",
+    "size": 11316224
   },
-  "version": "1.0.8"
+  "version": "1.0.9"
 }
