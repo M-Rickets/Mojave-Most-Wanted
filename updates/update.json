@@ -1,10 +1,10 @@
 {
   "date": "2026-10-14",
-  "notes": "- Adds the 4GB Patcher: New Vegas can use 4 GB of memory (it crashed loading Goodsprings with 2 GB) and loads xNVSE from Steam; PLAY puts it in for anyone set up before\n- (1.0.1) Fixes the game closing at once with \"NVTF.ini not found\"; finds downloads in more places, CHOOSE THE FILE; GET buttons for missing games; PLAY brings the mod's files up to date",
+  "notes": "- Opening setup no longer starts the game by itself: it updates if there's an update, then waits for PLAY\n- Before each Nexus page opens, a window says exactly which file to download (and that the Tick Fix needs its \"NVTF - INI\" too, and which 4GB Patcher file)\n- PLAY never puts an older plugin over a newer one\n- (1.0.2) The 4GB Patcher; (1.0.1) the NVTF.ini fix, downloads found in more places, GET buttons for missing games, PLAY brings the mod's files up to date",
   "setup": {
-    "file": "MojaveMostWanted-Setup-1.0.2.exe",
-    "sha256": "62029808ddb15416b82197408152d78038d9821a9324452098f05f6eb7e6282d",
-    "size": 11227648
+    "file": "MojaveMostWanted-Setup-1.0.3.exe",
+    "sha256": "c01a525524f358cf1e03ced40b425458c830cebf3cdaa59a42fdf600af335136",
+    "size": 11233280
   },
-  "version": "1.0.2"
+  "version": "1.0.3"
 }
