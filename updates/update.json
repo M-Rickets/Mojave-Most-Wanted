@@ -1,10 +1,10 @@
 {
   "date": "2026-10-14",
-  "notes": "- First release: one-button setup for Mojave Most Wanted (Need for Speed cars in Fallout: New Vegas), with the modding tools, the cars built from your own NFS Most Wanted, report, undo everything, signed automatic updates, playing together with friends, dash gauges",
+  "notes": "- Fixes the game closing at once with \"NVTF.ini not found\": setup gets the Tick Fix's settings file too, and puts it in before PLAY if it's missing\n- Finds Nexus downloads in more places (Downloads, Desktop, setup's folder, Vortex and Mod Organizer downloads), unpacked or not; CHOOSE THE FILE takes one from anywhere\n- No Fallout: New Vegas or NFS Most Wanted yet? GET buttons open their store pages and setup carries on by itself once they're installed\n- PLAY also brings the mod's own files up to date",
   "setup": {
-    "file": "MojaveMostWanted-Setup-1.0.0.exe",
-    "sha256": "a95a583fe3b05ee26f54d4a702aa20673efa2e97446558cde89a8e71bd00a761",
-    "size": 11179520
+    "file": "MojaveMostWanted-Setup-1.0.1.exe",
+    "sha256": "e00bfca88ad8a1881dfcf16c34c9c93b8bff4599648b826def4ac53acd91d8dc",
+    "size": 11219968
   },
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
