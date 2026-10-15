@@ -1,10 +1,10 @@
 {
   "date": "2026-10-14",
-  "notes": "- Opening setup no longer starts the game by itself: it updates if there's an update, then waits for PLAY\n- Before each Nexus page opens, a window says exactly which file to download (and that the Tick Fix needs its \"NVTF - INI\" too, and which 4GB Patcher file)\n- PLAY never puts an older plugin over a newer one\n- (1.0.2) The 4GB Patcher; (1.0.1) the NVTF.ini fix, downloads found in more places, GET buttons for missing games, PLAY brings the mod's files up to date",
+  "notes": "- No Need for Speed? PLAY WITHOUT CARS sets up everything but the cars (snow, lighting, gun handling, parkour, sprint, playing together) - works without Most Wanted and without Hot Pursuit; Most Wanted installed later is found and its cars built\n- (1.0.3) Opening setup no longer starts the game; which-file pop-ups for Nexus; never an older plugin over a newer one\n- (1.0.2) The 4GB Patcher; (1.0.1) the NVTF.ini fix, GET buttons for missing games, PLAY brings the mod's files up to date",
   "setup": {
-    "file": "MojaveMostWanted-Setup-1.0.3.exe",
-    "sha256": "c01a525524f358cf1e03ced40b425458c830cebf3cdaa59a42fdf600af335136",
-    "size": 11233280
+    "file": "MojaveMostWanted-Setup-1.0.4.exe",
+    "sha256": "6e743155c63db5557d0be6fda7936dcac0e8cbeded325a327ce1f37e89629df8",
+    "size": 11236352
   },
-  "version": "1.0.3"
+  "version": "1.0.4"
 }
