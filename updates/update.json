@@ -1,10 +1,10 @@
 {
-  "date": "2026-10-14",
-  "notes": "- No Need for Speed? PLAY WITHOUT CARS sets up everything but the cars (snow, lighting, gun handling, parkour, sprint, playing together) - works without Most Wanted and without Hot Pursuit; Most Wanted installed later is found and its cars built\n- (1.0.3) Opening setup no longer starts the game; which-file pop-ups for Nexus; never an older plugin over a newer one\n- (1.0.2) The 4GB Patcher; (1.0.1) the NVTF.ini fix, GET buttons for missing games, PLAY brings the mod's files up to date",
+  "date": "2026-10-15",
+  "notes": "- Weapon handling: gun inertia, hip and aimed recoil, wobble, quicker reloads and a crash guard; smooth aim-in (the camera blends onto the sights; setup turns this on in lStewieAl's Tweaks and kNVSE)\n- Cover aiming: lean, rise or dip to see past cover; blind fire over or round close cover\n- (1.0.4) PLAY WITHOUT CARS sets up everything but the cars; (1.0.3) never an older plugin over a newer one",
   "setup": {
-    "file": "MojaveMostWanted-Setup-1.0.4.exe",
-    "sha256": "6e743155c63db5557d0be6fda7936dcac0e8cbeded325a327ce1f37e89629df8",
-    "size": 11236352
+    "file": "MojaveMostWanted-Setup-1.0.6.exe",
+    "sha256": "2cd9f4a1cac58ed2ba723eea61566692f4f9c669ba30ea9c3faedfb49dbf5f8d",
+    "size": 11298816
   },
-  "version": "1.0.4"
+  "version": "1.0.6"
 }

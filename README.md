@@ -2,7 +2,7 @@
 
 Real cars from *Need for Speed Most Wanted (2012)* in *Fallout: New Vegas*: pick one at a garage by the Goodsprings
 gas station and drive the Mojave with the NFS soundtracks on the radio. Snow storms with working wipers, dark nights,
-Bodycam-style gun handling, parkour (vault, mantle, climb, wall kicks) and a two-tier sprint.
+Bodycam-style gun handling (inertia, recoil, smooth aim-in, aiming from cover), parkour (vault, mantle, climb, wall kicks) and a two-tier sprint.
 
 A private, just-for-fun fan mod. **Nothing from any game is in it**: the setup builds the cars from your own copy of
 Need for Speed Most Wanted, and the modding tools come from their authors' own pages.
