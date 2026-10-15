@@ -1,10 +1,10 @@
 {
   "date": "2026-10-15",
-  "notes": "- Weapon handling: gun inertia, hip and aimed recoil, wobble, quicker reloads and a crash guard; smooth aim-in (the camera blends onto the sights; setup turns this on in lStewieAl's Tweaks and kNVSE)\n- Cover aiming: lean, rise or dip to see past cover; blind fire over or round close cover\n- (1.0.4) PLAY WITHOUT CARS sets up everything but the cars; (1.0.3) never an older plugin over a newer one",
+  "notes": "- (1.0.7) Dying no longer crashes the game: out of the car, and everything of ours lets go of you\n- (1.0.6) Weapon handling: gun inertia, hip and aimed recoil, wobble, quicker reloads and a crash guard; smooth aim-in (setup turns it on in lStewieAl's Tweaks and kNVSE)\n- (1.0.6) Cover aiming: lean, rise or dip to see past cover; blind fire over or round close cover\n- (1.0.4) PLAY WITHOUT CARS sets up everything but the cars; (1.0.3) never an older plugin over a newer one",
   "setup": {
-    "file": "MojaveMostWanted-Setup-1.0.6.exe",
-    "sha256": "2cd9f4a1cac58ed2ba723eea61566692f4f9c669ba30ea9c3faedfb49dbf5f8d",
-    "size": 11298816
+    "file": "MojaveMostWanted-Setup-1.0.7.exe",
+    "sha256": "fadd1914d0119d7367ea27719aa31e3735575dae7b86161b8cb1353287725bb8",
+    "size": 11286528
   },
-  "version": "1.0.6"
+  "version": "1.0.7"
 }
