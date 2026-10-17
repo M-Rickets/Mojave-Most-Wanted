@@ -1,18 +1,35 @@
-# Mojave Most Wanted
+# Mojave Enhanced
 
-Real cars from *Need for Speed Most Wanted (2012)* in *Fallout: New Vegas*: pick one at a garage by the Goodsprings
-gas station and drive the Mojave with the NFS soundtracks on the radio. Snow storms with working wipers, dark nights,
-Bodycam-style gun handling (inertia, recoil, smooth aim-in, aiming from cover), parkour (vault, mantle, climb, wall kicks) and a two-tier sprint.
+*Fallout: New Vegas*, enhanced: the game made stable and smooth, guns that feel weighty and alive, and co-op with
+your friends, all put in by one program with one button.
 
-A private, just-for-fun fan mod. **Nothing from any game is in it**: the setup builds the cars from your own copy of
-Need for Speed Most Wanted, and the modding tools come from their authors' own pages.
+A private, just-for-fun fan mod. **Nothing from any game is in it**: the modding tools come from their authors' own
+pages, and everything else is the mod's own work.
+
+## What it does
+
+- **Stable and smooth:** the engine fixes New Vegas needs (xNVSE, JIP LN NVSE, kNVSE, lStewieAl's Tweaks,
+  New Vegas Tick Fix), set up for you.
+- **Gun handling:** weapon inertia and sway, hip and aimed recoil, a camera that kicks and rolls with each shot,
+  and contextual aiming: aim near cover and you lean, rise or dip to see past it.
+- **Third person done properly:** the body leans round cover and into strafes, carries the gun's weight, and the
+  camera swaps shoulders (**X**) so you can peek either side. A small X in the crosshair warns you when the wall
+  right in front of your barrel would take the shot.
+- **Shots light up the world** for an instant, in first and third person.
+- **Your feel, your way:** **F8** opens smooth sliders for every part of the gun feel; **U** turns the gun handling
+  on or off and **O** smooth aiming, both at once and remembered.
+- **Co-op:** host a game or join a friend's from setup (up to three players), with your own name and in-game
+  chat (**Enter**).
 
 ## Install
 
-1. You need Fallout: New Vegas, Need for Speed Most Wanted (2012) and a free Nexus Mods account.
-2. Download `updates/MojaveMostWanted-Setup-<version>.exe`, run it and press **MAKE IT WORK**.
-3. Play with the **Mojave Most Wanted** shortcut on your desktop. Updates install themselves (they're signed: the
+1. You need Fallout: New Vegas (Steam or GOG) and a free Nexus Mods account.
+2. Download `updates/MojaveEnhanced-Setup-<version>.exe`, run it and press **MAKE IT WORK**.
+3. Play with the **Mojave Enhanced** shortcut on your desktop. Updates install themselves (they're signed: the
    setup refuses anything that isn't).
 
-Stuck? Give `MojaveMostWanted-HELP-for-Claude.md` to Claude, or press **report** in the setup and send the file it
+Stuck? Give `MojaveEnhanced-HELP-for-Claude.md` to Claude, or press **report** in the setup and send the file it
 saves. **undo everything** in the setup takes it all out again.
+
+*(Mojave Enhanced was called Mojave Most Wanted before setup 1.0.15; this repository keeps the old name so
+existing setups keep finding their updates.)*
