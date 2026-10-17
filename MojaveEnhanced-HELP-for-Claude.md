@@ -70,7 +70,8 @@ How to help well:
 ## Playing
 
 Always start the game with the **Mojave Enhanced** shortcut on the desktop (or PLAY in setup). It
-checks for an update of the mod and starts New Vegas through xNVSE, straight to Continue. Starting the
+checks for an update of the mod and starts New Vegas through xNVSE, straight to the main menu (no
+pre-launcher, no logos). Starting the
 game from Steam directly works only if the game was patched with the 4GB Patcher.
 
 Keys in the game:
@@ -79,6 +80,8 @@ Keys in the game:
 | --- | --- |
 | **Shift** | Hold to sprint; double-tap for a tactical sprint (it runs out and comes back) |
 | **Space** | At a ledge: vault, mantle or climb; in the air next to a wall: kick off it |
+| **Right-click** | Sprinting, jumping, weapon away: a flying dropkick |
+| **G** | Next to one of the game's pickup trucks: drive it (it's yours from then on: G again to get in) |
 | **F8** | The weapon feel menu: Up/Down pick a line, Left/Right slide it (hold to go faster, Shift for fine steps), Backspace back to 100%. Saved by itself. |
 | **U** | Gun handling on or off (inertia, sway, recoil, contextual aiming) |
 | **O** | Smooth aiming on or off |

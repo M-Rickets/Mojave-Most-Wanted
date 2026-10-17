@@ -16,7 +16,10 @@ pages, and everything else is the mod's own work.
   camera swaps shoulders (**X**) so you can peek either side. A small X in the crosshair warns you when the wall
   right in front of your barrel would take the shot.
 - **Move like you mean it:** hold **Shift** to sprint, double-tap it for a tactical sprint; **Space** at a ledge vaults,
-  mantles or climbs, and kicks off walls in the air.
+  mantles or climbs, and kicks off walls in the air; sprint, jump and **right-click** (weapon away) for a flying
+  dropkick that sends people sprawling.
+- **Drive the wasteland's own pickups:** walk up to one (outside Goodsprings, say) and press **G** - built on your PC
+  from your own game files.
 - **Shots light up the world** for an instant, in first and third person.
 - **Your feel, your way:** **F8** opens smooth sliders for every part of the gun feel; **U** turns the gun handling
   on or off and **O** smooth aiming, both at once and remembered.
@@ -27,8 +30,8 @@ pages, and everything else is the mod's own work.
 
 1. You need Fallout: New Vegas (Steam or GOG) and a free Nexus Mods account.
 2. Download `updates/MojaveEnhanced-Setup-<version>.exe`, run it and press **MAKE IT WORK**.
-3. Play with the **Mojave Enhanced** shortcut on your desktop. Updates install themselves (they're signed: the
-   setup refuses anything that isn't).
+3. Play with the **Mojave Enhanced** shortcut on your desktop (straight to the main menu: no pre-launcher, no
+   logos). Updates install themselves (they're signed: the setup refuses anything that isn't).
 
 Stuck? Give `MojaveEnhanced-HELP-for-Claude.md` to Claude, or press **report** in the setup and send the file it
 saves. **undo everything** in the setup takes it all out again.
