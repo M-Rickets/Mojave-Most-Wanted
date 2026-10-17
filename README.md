@@ -15,6 +15,8 @@ pages, and everything else is the mod's own work.
 - **Third person done properly:** the body leans round cover and into strafes, carries the gun's weight, and the
   camera swaps shoulders (**X**) so you can peek either side. A small X in the crosshair warns you when the wall
   right in front of your barrel would take the shot.
+- **Move like you mean it:** hold **Shift** to sprint, double-tap it for a tactical sprint; **Space** at a ledge vaults,
+  mantles or climbs, and kicks off walls in the air.
 - **Shots light up the world** for an instant, in first and third person.
 - **Your feel, your way:** **F8** opens smooth sliders for every part of the gun feel; **U** turns the gun handling
   on or off and **O** smooth aiming, both at once and remembered.

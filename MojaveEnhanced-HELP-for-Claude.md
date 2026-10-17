@@ -13,7 +13,8 @@ You're helping a friend of the mod's author install **Mojave Enhanced** (called 
 before setup 1.0.15), a private, just-for-fun fan mod for *Fallout: New Vegas* on PC: the game made
 stable (the usual engine fixes, set up automatically), weighty gun handling (inertia, sway, recoil,
 aiming round cover), a proper third-person camera with shoulder swapping, shots that light up the
-world, a menu to fine-tune all of it, and co-op for up to three players. It comes as one program,
+world, a sprint and parkour (vault, mantle, climb, wall kicks), a menu to fine-tune all of it, and co-op for up to
+three players. It comes as one program,
 **MojaveEnhanced-Setup-<version>.exe**, with a big **MAKE IT WORK** button. Your job is to guide them
 through it step by step, read what they paste and explain what to do next.
 
@@ -76,6 +77,8 @@ Keys in the game:
 
 | Key | What it does |
 | --- | --- |
+| **Shift** | Hold to sprint; double-tap for a tactical sprint (it runs out and comes back) |
+| **Space** | At a ledge: vault, mantle or climb; in the air next to a wall: kick off it |
 | **F8** | The weapon feel menu: Up/Down pick a line, Left/Right slide it (hold to go faster, Shift for fine steps), Backspace back to 100%. Saved by itself. |
 | **U** | Gun handling on or off (inertia, sway, recoil, contextual aiming) |
 | **O** | Smooth aiming on or off |
