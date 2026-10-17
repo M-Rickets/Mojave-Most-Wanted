@@ -21,7 +21,7 @@ pages, and everything else is the mod's own work.
 - **Your feel, your way:** **F8** opens smooth sliders for every part of the gun feel; **U** turns the gun handling
   on or off and **O** smooth aiming, both at once and remembered.
 - **Co-op:** host a game or join a friend's from setup (up to three players), with your own name and in-game
-  chat (**Enter**).
+  chat (**Enter**); everyone is seen as they really look, in the armour they wear.
 
 ## Install
 
