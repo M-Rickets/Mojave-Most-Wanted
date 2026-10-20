@@ -70,8 +70,7 @@ How to help well:
 ## Playing
 
 Always start the game with the **Mojave Enhanced** shortcut on the desktop (or PLAY in setup). It
-checks for an update of the mod and starts New Vegas through xNVSE, straight to the main menu (no
-pre-launcher, no logos). Starting the
+checks for an update of the mod and starts New Vegas through xNVSE. Starting the
 game from Steam directly works only if the game was patched with the 4GB Patcher.
 
 Keys in the game:
@@ -87,6 +86,8 @@ Keys in the game:
 | **O** | Smooth aiming on or off |
 | **X** | Third person: the camera to the other shoulder |
 | **Enter** | Chat, when playing together (`/name Something` changes the name friends see) |
+| **F6 / F7** | Hosting: let in / refuse the friend who's asking to join (the game says who) |
+| **Ctrl+Alt+End** | Panic key: frees the mouse, ends playing together and closes a frozen game |
 | **F10** | A solo multiplayer test: a copy of you from 2 seconds ago |
 
 Aiming near cover leans, rises or dips you to see past it by itself. While playing together, the
@@ -98,10 +99,11 @@ Under the checklist in setup:
 
 - **NAME: ...** is the name your friends see. Click it, type, press Enter (Esc keeps the old one).
 - **HOST A GAME** opens your game to friends and copies a join code: paste it to them in a chat,
-  then press PLAY.
-- **JOIN A FRIEND**: first copy the join code your friend sent (it starts with `MMW1-`), then press
-  JOIN A FRIEND, then PLAY.
-- **STOP HOSTING** / **LEAVE** play on your own again.
+  then press PLAY. Each time you host there's a new code, and it stops working after 12 hours. When a
+  friend asks to join, the game says so: **F6** lets them in, **F7** refuses.
+- **JOIN A FRIEND**: first copy the join code your friend sent (it starts with `MMW2-`), then press
+  JOIN A FRIEND, then PLAY, and wait for the host to let you in.
+- **STOP HOSTING** / **LEAVE** play on your own again (also in a running game).
 
 Everyone needs the same version: when someone joins on an older one, the game says so (open setup:
 it updates itself). Up to three players. Windows may ask once whether New Vegas may use the network:

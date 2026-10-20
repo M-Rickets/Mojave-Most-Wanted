@@ -24,14 +24,16 @@ pages, and everything else is the mod's own work.
 - **Your feel, your way:** **F8** opens smooth sliders for every part of the gun feel; **U** turns the gun handling
   on or off and **O** smooth aiming, both at once and remembered.
 - **Co-op:** host a game or join a friend's from setup (up to three players), with your own name and in-game
-  chat (**Enter**); everyone is seen as they really look, in the armour they wear.
+  chat (**Enter**); everyone is seen as they really look, in the armour they wear. The host lets each friend in
+  (**F6** / **F7**), join codes run out after 12 hours, and **Ctrl+Alt+End** is a panic key that frees the mouse
+  and ends playing together.
 
 ## Install
 
 1. You need Fallout: New Vegas (Steam or GOG) and a free Nexus Mods account.
 2. Download `updates/MojaveEnhanced-Setup-<version>.exe`, run it and press **MAKE IT WORK**.
-3. Play with the **Mojave Enhanced** shortcut on your desktop (straight to the main menu: no pre-launcher, no
-   logos). Updates install themselves (they're signed: the setup refuses anything that isn't).
+3. Play with the **Mojave Enhanced** shortcut on your desktop. Updates install themselves (they're signed: the setup
+   refuses anything that isn't).
 
 Stuck? Give `MojaveEnhanced-HELP-for-Claude.md` to Claude, or press **report** in the setup and send the file it
 saves. **undo everything** in the setup takes it all out again.
