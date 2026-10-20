@@ -85,7 +85,9 @@ Keys in the game:
 | **U** | Gun handling on or off (inertia, sway, recoil, contextual aiming) |
 | **O** | Smooth aiming on or off |
 | **X** | Third person: the camera to the other shoulder |
-| **Enter** | Chat, when playing together (`/name Something` changes the name friends see) |
+| **Enter** | Chat, when playing together (`/name Something` changes the name friends see; `/join`, `/leave` and `/ff on` / `/ff off` below) |
+| **E** | On a downed friend: get them up |
+| **1** | Downed yourself: use a stimpak to get up |
 | **F6 / F7** | Hosting: let in / refuse the friend who's asking to join (the game says who) |
 | **Ctrl+Alt+End** | Panic key: frees the mouse, ends playing together and closes a frozen game |
 | **F10** | A solo multiplayer test: a copy of you from 2 seconds ago |
@@ -104,6 +106,25 @@ Under the checklist in setup:
 - **JOIN A FRIEND**: first copy the join code your friend sent (it starts with `MMW2-`), then press
   JOIN A FRIEND, then PLAY, and wait for the host to let you in.
 - **STOP HOSTING** / **LEAVE** play on your own again (also in a running game).
+
+In the game, while playing together (being tested in 1.0.22):
+
+- **/join** in chat takes you into the host's world as your own character; **/leave** takes you back to your
+  own game with the XP, caps, items, karma, reputation and places you earned there. If the host leaves, you
+  get 60 seconds, then you go home with what you earned. While you're in a friend's world, autosaves and
+  quicksave (F5) are off so none of your own save slots get the session. Joining needs the same mods: the game
+  says which differ.
+- It works from the very start: a guest joining a host still in Doc Mitchell's house stands beside them and
+  makes their own character (face, name, SPECIAL, traits, tag skills).
+- One shared world: the people around you are the host's, deaths near either of you happen for both, and doors
+  open, close and unlock for everyone.
+- Friendly fire is on by default; the host types **/ff off** (or **/ff on**) to change it.
+- A guest of a lower level than the host gets the host's health and damage (their guns stay as they are);
+  everything the guest gains takes the same off the boost, and none of it comes home. A host is never raised.
+- What would kill you puts you down instead: a friend has 20 seconds to get you up (**E**), or you use a
+  stimpak (**1**). Nobody in time and you die: 20 caps lost (none if you have none), and you're back on your
+  feet next to a friend or at the last safe place you stood. The game is never loaded again, so nothing since
+  your last save is lost.
 
 Everyone needs the same version: when someone joins on an older one, the game says so (open setup:
 it updates itself). Up to three players. Windows may ask once whether New Vegas may use the network:

@@ -26,7 +26,10 @@ pages, and everything else is the mod's own work.
 - **Co-op:** host a game or join a friend's from setup (up to three players), with your own name and in-game
   chat (**Enter**); everyone is seen as they really look, in the armour they wear. The host lets each friend in
   (**F6** / **F7**), join codes run out after 12 hours, and **Ctrl+Alt+End** is a panic key that frees the mouse
-  and ends playing together.
+  and ends playing together. Being tested: type **/join** to play in your friend's world as your own character
+  (from the very first scene at Doc Mitchell's), with one shared world, friendly fire (**/ff on** / **/ff off**,
+  the host decides), a lower-level guest raised to the host's level, and death that's real but avoidable: downed,
+  a friend has 20 seconds to get you up.
 
 ## Install
 
