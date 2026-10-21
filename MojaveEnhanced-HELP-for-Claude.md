@@ -81,7 +81,7 @@ Keys in the game:
 | **Space** | At a ledge: vault, mantle or climb; in the air next to a wall: kick off it |
 | **Right-click** | Sprinting, jumping, weapon away: a flying dropkick |
 | **G** | Next to one of the game's pickup trucks: drive it (it's yours from then on: G again to get in) |
-| **F8** | The weapon feel menu: Up/Down pick a line, Left/Right slide it (hold to go faster, Shift for fine steps), Backspace back to 100%. Saved by itself. |
+| **F8** | The feel menu (guns, and since 1.0.23 the body: foot placement, body lean, body bank, hill lean, hill side lean, animation blend time, head look, breath/weight/arms, movement acceleration): Up/Down pick a line, Left/Right slide it (hold to go faster, Shift for fine steps), Backspace back to 100%. Saved by itself. |
 | **U** | Gun handling on or off (inertia, sway, recoil, contextual aiming) |
 | **O** | Smooth aiming on or off |
 | **X** | Third person: the camera to the other shoulder |

@@ -15,13 +15,17 @@ pages, and everything else is the mod's own work.
 - **Third person done properly:** the body leans round cover and into strafes, carries the gun's weight, and the
   camera swaps shoulders (**X**) so you can peek either side. A small X in the crosshair warns you when the wall
   right in front of your barrel would take the shot.
+- **A whole body under you:** in third person your feet stand on the ground you're on (steps, slopes, rocks), your
+  body leans into starts, turns and hills, poses blend instead of snapping, and you breathe, shift your weight and
+  fidget like a person. Free look is always on: standing still, your head follows the camera while your body stays
+  put. Setting off and changing pace ease in.
 - **Move like you mean it:** hold **Shift** to sprint, double-tap it for a tactical sprint; **Space** at a ledge vaults,
   mantles or climbs, and kicks off walls in the air; sprint, jump and **right-click** (weapon away) for a flying
   dropkick that sends people sprawling.
 - **Drive the wasteland's own pickups:** walk up to one (outside Goodsprings, say) and press **G** - built on your PC
   from your own game files.
 - **Shots light up the world** for an instant, in first and third person.
-- **Your feel, your way:** **F8** opens smooth sliders for every part of the gun feel; **U** turns the gun handling
+- **Your feel, your way:** **F8** opens smooth sliders for every part of the gun and body feel; **U** turns the gun handling
   on or off and **O** smooth aiming, both at once and remembered.
 - **Co-op:** host a game or join a friend's from setup (up to three players), with your own name and in-game
   chat (**Enter**); everyone is seen as they really look, in the armour they wear. The host lets each friend in
