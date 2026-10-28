@@ -1,6 +1,6 @@
 # Mojave Enhanced
 
-<h2 align="center"><a href="https://github.com/M-Rickets/Mojave-Most-Wanted/releases/download/v1.0.34/MojaveEnhanced-Setup-1.0.34.exe">⬇ Download Mojave Enhanced 1.0.34</a></h2>
+<h2 align="center"><a href="https://github.com/M-Rickets/Mojave-Most-Wanted/releases/download/v1.0.34/MojaveEnhanced-Setup-1.0.34.exe">Download Mojave Enhanced 1.0.34</a></h2>
 <p align="center">Windows setup, 13 MB · run it, press <b>MAKE IT WORK</b>, then <b>FIRST TIME START-UP</b> shows how to play with friends<br>
 <a href="../../releases">all versions</a></p>
 
