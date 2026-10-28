@@ -1,0 +1,176 @@
+{
+ "sheet": "hooks",
+ "about": "Everything the plugin touches in New Vegas 1.4.0.525 and xNVSE: addresses, offsets, interfaces and script commands.",
+ "columns": {
+  "id": "row key",
+  "kind": "address | offset | api | script | console",
+  "value": "value",
+  "use": "what the plugin does with it"
+ },
+ "rows": [
+  {
+   "id": "player",
+   "kind": "address",
+   "value": "0x11DEA3C",
+   "use": "PlayerCharacter**"
+  },
+  {
+   "id": "tes",
+   "kind": "address",
+   "value": "0x11DEA10",
+   "use": "TES** for terrain height and ray casts"
+  },
+  {
+   "id": "terrain_height",
+   "kind": "address",
+   "value": "0x4572E0",
+   "use": "ground under each wheel"
+  },
+  {
+   "id": "pick_object",
+   "kind": "address",
+   "value": "0x458440",
+   "use": "obstacle and LOS ray casts"
+  },
+  {
+   "id": "lookup_form",
+   "kind": "address",
+   "value": "0x11C54C0",
+   "use": "form map (NiTPointerMap: bucket count +4, buckets +8, entries next/key/value) walked to find forms by id"
+  },
+  {
+   "id": "menu_mode",
+   "kind": "address",
+   "value": "0x702360",
+   "use": "pause logic in menus"
+  },
+  {
+   "id": "queue_ui_message",
+   "kind": "address",
+   "value": "0x7052F0",
+   "use": "on-screen hints (Heat, garage)"
+  },
+  {
+   "id": "show_messagebox",
+   "kind": "address",
+   "value": "0x703E80",
+   "use": "garage car menu"
+  },
+  {
+   "id": "messagebox_button",
+   "kind": "address",
+   "value": "0x118C684",
+   "use": "which button was pressed (0xFF = none)"
+  },
+  {
+   "id": "toggle_first_person",
+   "kind": "address",
+   "value": "0x950110",
+   "use": "force third person while driving"
+  },
+  {
+   "id": "process_manager_actors",
+   "kind": "address",
+   "value": "0x11E0E80+0x80",
+   "use": "nearby NPCs (witnesses, run over)"
+  },
+  {
+   "id": "ref_layout",
+   "kind": "offset",
+   "value": "base 0x20, rot 0x24, pos 0x30, cell 0x40, renderState 0x64 (+0x14 node)",
+   "use": "read positions; hide the player's 3D node while driving"
+  },
+  {
+   "id": "niav_hidden",
+   "kind": "offset",
+   "value": "flags 0x30 bit 0",
+   "use": "hide the player model inside the car"
+  },
+  {
+   "id": "nvse_script_iface",
+   "kind": "api",
+   "value": "kInterface_Script: CompileScript, CallFunction",
+   "use": "place, move and remove cars; damage; witness checks"
+  },
+  {
+   "id": "nvse_console_iface",
+   "kind": "api",
+   "value": "kInterface_Console: RunScriptLine2",
+   "use": "controls, settings, music"
+  },
+  {
+   "id": "nvse_messages",
+   "kind": "api",
+   "value": "PreLoadGame 6, PostLoadGame 8, NewGame 14, DeferredInit 18, MainGameLoop 20",
+   "use": "frame tick and state reset"
+  },
+  {
+   "id": "nvse_serialization",
+   "kind": "api",
+   "value": "kInterface_Serialization record MMW1",
+   "use": "remember your car and the garage cars in the save"
+  },
+  {
+   "id": "camera_settings",
+   "kind": "console",
+   "value": "SetNumericGameSetting fVanityModeMinDist/fVanityModeMaxDist; SetNumericIniSetting fOverShoulderPosX:Camera, fOverShoulderPosZ:Camera",
+   "use": "pull the third-person camera back behind the car"
+  },
+  {
+   "id": "player_controls",
+   "kind": "console",
+   "value": "DisablePlayerControls 1 0 1 1 1 0 1 / EnablePlayerControls",
+   "use": "W/A/S/D drive the car instead of the Courier"
+  },
+  {
+   "id": "play_music",
+   "kind": "console",
+   "value": "PlayMusic <MUSC>",
+   "use": "car radio"
+  },
+  {
+   "id": "input_globals_mouse",
+   "target": "OSInputGlobals* at 0x11F35CC; currMouseMovementX/Y at +0x1B24/+0x1B28"
+  },
+  {
+   "id": "ini_mouse_settings",
+   "target": "fMouseSensitivity:Controls 0x11E0A6C, bInvertYValues:Controls 0x11E0A5C (value at +4)"
+  },
+  {
+   "id": "niav_local_rotate",
+   "target": "NiAVObject m_transformLocal.rotate at +0x34 (row-major 3x3)"
+  },
+  {
+   "id": "niav_update_downward",
+   "target": "NiAVObject vtable +0xA4 UpdateDownwardPass(const NiUpdateData&, UInt32)"
+  },
+  {
+   "id": "niobjectnet_name",
+   "target": "NiObjectNET m_blockName (const char*) at +0x08"
+  },
+  {
+   "id": "create_texture_image",
+   "target": "0x4568C0 TES::CreateTextureImage(const char *path, NiSourceTexture **out, bool mustFindFile, bool archiveOnly) thiscall; returns a referenced texture"
+  },
+  {
+   "id": "geometry_props",
+   "target": "NiGeometry materialProp (NiMaterialProperty*) at +0xA4, shaderProp (BSShaderProperty*) at +0xA8"
+  },
+  {
+   "id": "shader_type",
+   "target": "BSShaderProperty shaderType at +0x1C: 8 = BSShaderPPLightingProperty"
+  },
+  {
+   "id": "ppl_textures",
+   "target": "BSShaderPPLightingProperty srcTextures at +0xAC: per slot (0 diffuse .. 5 environment mask) a pointer to the NiTexture* array"
+  },
+  {
+   "id": "material_fields",
+   "target": "NiMaterialProperty specularRGB at +0x1C, glossiness at +0x38"
+  },
+  {
+   "id": "niref_release",
+   "target": "NiRefObject refcount at +4; vtable +4 DeleteThis() when it reaches 0"
+  }
+ ]
+}

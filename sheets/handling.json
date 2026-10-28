@@ -1,0 +1,357 @@
+{
+ "sheet": "handling",
+ "about": "Bodycam-style weapon handling on foot.",
+ "columns": {
+  "type": "eWeaponType number (0 hand-to-hand, 1 one-hand melee, 2 two-hand melee, 3 pistol, 4 energy pistol, 5 rifle, 6 automatic rifle, 7 energy rifle, 8 two-hand handle (minigun, flamer), 9 launcher, 10 grenade, 11 mine, 12 lunchbox mine, 13 thrown)",
+  "label": "what it is",
+  "kickDeg": "how far one shot kicks the view up at refDamage (degrees, the peak); 0 = no recoil",
+  "sideDeg": "the random sideways part of a kick (degrees, either way)",
+  "keep": "share of the kick that stays (you pull the gun back down yourself); the rest springs back",
+  "returnHz": "how fast the kick springs back (higher = snappier)",
+  "refDamage": "damage x projectiles that gives kickDeg; stronger guns kick more (square root)",
+  "refWeight": "weight that gives swayDeg and lagSec; heavier guns sway and lag more, kick a little less",
+  "swayDeg": "breathing sway, standing still (degrees)",
+  "lagSec": "how far the view trails the mouse (seconds)",
+  "formId": "weapons rows: the weapon's form id in FalloutNV.esm (mod index 00)",
+  "kickScale": "weapons rows: times the type's kick",
+  "swayScale": "weapons rows: times the type's sway and lag",
+  "feed": "how the gun is fed, for reloads: 'box' (a detachable magazine, closed bolt: a reload with rounds left keeps one in the chamber, +1, and the dropped magazine's rounds are lost), 'open' (a detachable magazine or belt fired from an open bolt: no +1, the dropped rounds are lost), 'fixed' (revolvers, tubes, break-actions, internal magazines, energy cells, launchers: reloads unchanged). Looped reloads (shell by shell) are always left alone.",
+  "plugin": "weapons rows: the master file the form id is in (FalloutNV.esm when left out); DLC ids are the low 6 hex digits"
+ },
+ "types": [
+  {
+   "type": 0,
+   "label": "hand-to-hand",
+   "kickDeg": 0,
+   "sideDeg": 0,
+   "keep": 0,
+   "returnHz": 5,
+   "refDamage": 10,
+   "refWeight": 2,
+   "swayDeg": 0.15,
+   "lagSec": 0.03,
+   "feed": "fixed"
+  },
+  {
+   "type": 1,
+   "label": "one-hand melee",
+   "kickDeg": 0,
+   "sideDeg": 0,
+   "keep": 0,
+   "returnHz": 5,
+   "refDamage": 10,
+   "refWeight": 3,
+   "swayDeg": 0.2,
+   "lagSec": 0.05,
+   "feed": "fixed"
+  },
+  {
+   "type": 2,
+   "label": "two-hand melee",
+   "kickDeg": 0,
+   "sideDeg": 0,
+   "keep": 0,
+   "returnHz": 5,
+   "refDamage": 10,
+   "refWeight": 10,
+   "swayDeg": 0.25,
+   "lagSec": 0.09,
+   "feed": "fixed"
+  },
+  {
+   "type": 3,
+   "label": "pistol",
+   "kickDeg": 2.2,
+   "sideDeg": 0.6,
+   "keep": 0.35,
+   "returnHz": 2.6,
+   "refDamage": 20,
+   "refWeight": 3,
+   "swayDeg": 0.25,
+   "lagSec": 0.05,
+   "feed": "box"
+  },
+  {
+   "type": 4,
+   "label": "energy pistol",
+   "kickDeg": 1.4,
+   "sideDeg": 0.35,
+   "keep": 0.2,
+   "returnHz": 3.8,
+   "refDamage": 20,
+   "refWeight": 3,
+   "swayDeg": 0.25,
+   "lagSec": 0.05,
+   "feed": "fixed"
+  },
+  {
+   "type": 5,
+   "label": "rifle",
+   "kickDeg": 3.0,
+   "sideDeg": 0.7,
+   "keep": 0.3,
+   "returnHz": 4,
+   "refDamage": 40,
+   "refWeight": 8,
+   "swayDeg": 0.3,
+   "lagSec": 0.08,
+   "feed": "box"
+  },
+  {
+   "type": 6,
+   "label": "automatic rifle",
+   "kickDeg": 1.3,
+   "sideDeg": 0.55,
+   "keep": 0.35,
+   "returnHz": 6,
+   "refDamage": 15,
+   "refWeight": 9,
+   "swayDeg": 0.3,
+   "lagSec": 0.09,
+   "feed": "box"
+  },
+  {
+   "type": 7,
+   "label": "energy rifle",
+   "kickDeg": 1.6,
+   "sideDeg": 0.4,
+   "keep": 0.25,
+   "returnHz": 5,
+   "refDamage": 30,
+   "refWeight": 8,
+   "swayDeg": 0.3,
+   "lagSec": 0.08,
+   "feed": "fixed"
+  },
+  {
+   "type": 8,
+   "label": "two-hand handle (minigun, flamer)",
+   "kickDeg": 0.6,
+   "sideDeg": 0.5,
+   "keep": 0.4,
+   "returnHz": 7,
+   "refDamage": 10,
+   "refWeight": 20,
+   "swayDeg": 0.4,
+   "lagSec": 0.14,
+   "feed": "fixed"
+  },
+  {
+   "type": 9,
+   "label": "launcher",
+   "kickDeg": 4.5,
+   "sideDeg": 1.0,
+   "keep": 0.2,
+   "returnHz": 3,
+   "refDamage": 80,
+   "refWeight": 15,
+   "swayDeg": 0.4,
+   "lagSec": 0.13,
+   "feed": "fixed"
+  },
+  {
+   "type": 10,
+   "label": "grenade",
+   "kickDeg": 0,
+   "sideDeg": 0,
+   "keep": 0,
+   "returnHz": 5,
+   "refDamage": 10,
+   "refWeight": 1,
+   "swayDeg": 0.15,
+   "lagSec": 0.03,
+   "feed": "fixed"
+  },
+  {
+   "type": 11,
+   "label": "mine",
+   "kickDeg": 0,
+   "sideDeg": 0,
+   "keep": 0,
+   "returnHz": 5,
+   "refDamage": 10,
+   "refWeight": 1,
+   "swayDeg": 0.15,
+   "lagSec": 0.03,
+   "feed": "fixed"
+  },
+  {
+   "type": 12,
+   "label": "lunchbox mine",
+   "kickDeg": 0,
+   "sideDeg": 0,
+   "keep": 0,
+   "returnHz": 5,
+   "refDamage": 10,
+   "refWeight": 1,
+   "swayDeg": 0.15,
+   "lagSec": 0.03,
+   "feed": "fixed"
+  },
+  {
+   "type": 13,
+   "label": "thrown",
+   "kickDeg": 0,
+   "sideDeg": 0,
+   "keep": 0,
+   "returnHz": 5,
+   "refDamage": 10,
+   "refWeight": 1,
+   "swayDeg": 0.15,
+   "lagSec": 0.03,
+   "feed": "fixed"
+  }
+ ],
+ "weapons": [
+  {
+   "formId": "0008F216",
+   "label": ".357 Magnum revolver",
+   "feed": "fixed"
+  },
+  {
+   "formId": "000E2C86",
+   "label": "Lucky",
+   "feed": "fixed"
+  },
+  {
+   "formId": "0008F215",
+   "label": ".44 Magnum revolver",
+   "feed": "fixed"
+  },
+  {
+   "formId": "00127C6C",
+   "label": "Mysterious Magnum",
+   "feed": "fixed"
+  },
+  {
+   "formId": "0008F214",
+   "label": "Hunting revolver",
+   "feed": "fixed"
+  },
+  {
+   "formId": "00129A44",
+   "label": "Ranger Sequoia",
+   "feed": "fixed"
+  },
+  {
+   "formId": "000852",
+   "plugin": "GunRunnersArsenal.esm",
+   "label": "Hunting revolver (GRA)",
+   "feed": "fixed"
+  },
+  {
+   "formId": "00BBC2",
+   "plugin": "DeadMoney.esm",
+   "label": "Police pistol",
+   "feed": "fixed"
+  },
+  {
+   "formId": "000CD53A",
+   "label": "Caravan shotgun",
+   "feed": "fixed"
+  },
+  {
+   "formId": "001735E3",
+   "label": "Sturdy caravan shotgun",
+   "feed": "fixed"
+  },
+  {
+   "formId": "0000434C",
+   "label": "Sawed-off shotgun",
+   "feed": "fixed"
+  },
+  {
+   "formId": "001673CD",
+   "label": "Big Boomer",
+   "feed": "fixed"
+  },
+  {
+   "formId": "000E393B",
+   "label": "Single shotgun",
+   "feed": "fixed"
+  },
+  {
+   "formId": "0008F21A",
+   "label": "Cowboy repeater",
+   "feed": "fixed"
+  },
+  {
+   "formId": "000F56F5",
+   "label": "La Longue Carabine",
+   "feed": "fixed"
+  },
+  {
+   "formId": "000CD539",
+   "label": "Trail carbine",
+   "feed": "fixed"
+  },
+  {
+   "formId": "00121148",
+   "label": "Brush gun",
+   "feed": "fixed"
+  },
+  {
+   "formId": "0008ED0C",
+   "label": "Lever-action shotgun",
+   "feed": "fixed"
+  },
+  {
+   "formId": "0008ED0B",
+   "label": "Hunting shotgun",
+   "feed": "fixed"
+  },
+  {
+   "formId": "000F0B12",
+   "label": "Dinner Bell",
+   "feed": "fixed"
+  },
+  {
+   "formId": "000F062B",
+   "label": "This Machine",
+   "feed": "fixed"
+  },
+  {
+   "formId": "00080E",
+   "plugin": "GunRunnersArsenal.esm",
+   "label": "Medicine Stick",
+   "feed": "fixed"
+  },
+  {
+   "formId": "000906DF",
+   "label": "Light machine gun (test gun)",
+   "feed": "open"
+  },
+  {
+   "formId": "0008F217",
+   "label": "9mm submachine gun",
+   "feed": "open"
+  },
+  {
+   "formId": "000E32F4",
+   "label": "Vance's 9mm submachine gun",
+   "feed": "open"
+  },
+  {
+   "formId": "0008F218",
+   "label": ".22 silenced submachine gun",
+   "feed": "open"
+  },
+  {
+   "formId": "00996C",
+   "plugin": "HonestHearts.esm",
+   "label": ".45 Auto submachine gun",
+   "feed": "open"
+  },
+  {
+   "formId": "000806",
+   "plugin": "GunRunnersArsenal.esm",
+   "label": "Bozar",
+   "feed": "open"
+  },
+  {
+   "formId": "001735D4",
+   "label": "Weathered 10mm pistol (test gun)",
+   "feed": "box"
+  }
+ ]
+}

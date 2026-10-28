@@ -1,0 +1,10 @@
+LIBRARY ws2_32.dll
+EXPORTS
+WSAStartup@8
+socket@12
+bind@12
+sendto@24
+recvfrom@24
+closesocket@4
+ioctlsocket@12
+WSAGetLastError@0

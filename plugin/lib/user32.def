@@ -1,0 +1,23 @@
+LIBRARY user32.dll
+EXPORTS
+GetAsyncKeyState@4
+MapVirtualKeyA@8
+ToAscii@20
+GetKeyState@4
+GetForegroundWindow@0
+GetWindowThreadProcessId@8
+EnumWindows@8
+IsWindowVisible@4
+IsIconic@4
+IsWindow@4
+GetWindowTextW@12
+GetClientRect@8
+PrintWindow@12
+GetDC@4
+ReleaseDC@8
+GetWindowRect@8
+MonitorFromWindow@8
+GetMonitorInfoW@8
+SetWindowPos@28
+GetWindowLongA@8
+SetWindowLongA@12

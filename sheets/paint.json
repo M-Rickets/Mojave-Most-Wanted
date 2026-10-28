@@ -1,0 +1,211 @@
+{
+ "sheet": "paint",
+ "about": "Paint shop: the colours offered and the paint finishes.",
+ "columns": {
+  "colors": {
+   "id": "row key",
+   "label": "button text",
+   "rgb": "hex RRGGBB"
+  },
+  "finishes": {
+   "id": "row key",
+   "label": "button text",
+   "specular": "highlight strength 0-1",
+   "specTint": "0 = white highlights, 1 = highlights in the paint colour",
+   "specHueShift": "degrees the highlight colour is turned round the colour wheel (pearl)",
+   "gloss": "highlight sharpness (specular power)",
+   "reflection": "0-1 how much of the sky/ground reflection shows (mask texture level)",
+   "shade": "multiplier on the paint colour's brightness",
+   "about": "What it looks like"
+  },
+  "liveRates": {
+   "hueDegreesPerSecond": "live editor: hue turn while a hue key is held",
+   "saturationPerSecond": "live editor: colour strength change per second held",
+   "brightnessPerSecond": "live editor: brightness change per second held"
+  }
+ },
+ "colors": [
+  {
+   "id": "polar_white",
+   "label": "Polar White",
+   "rgb": "F2F2EE"
+  },
+  {
+   "id": "silver",
+   "label": "Silver Bullet",
+   "rgb": "BFC3C8"
+  },
+  {
+   "id": "gunmetal",
+   "label": "Gunmetal",
+   "rgb": "5A5E64"
+  },
+  {
+   "id": "jet_black",
+   "label": "Jet Black",
+   "rgb": "0E0F11"
+  },
+  {
+   "id": "race_red",
+   "label": "Race Red",
+   "rgb": "C8141E"
+  },
+  {
+   "id": "candy_apple",
+   "label": "Candy Apple",
+   "rgb": "8E0A18"
+  },
+  {
+   "id": "blaze_orange",
+   "label": "Blaze Orange",
+   "rgb": "F05A14"
+  },
+  {
+   "id": "sunburst",
+   "label": "Sunburst Yellow",
+   "rgb": "F5C518"
+  },
+  {
+   "id": "lime",
+   "label": "Lime Rush",
+   "rgb": "8ED11F"
+  },
+  {
+   "id": "racing_green",
+   "label": "Racing Green",
+   "rgb": "0F4D2A"
+  },
+  {
+   "id": "acid_green",
+   "label": "Acid Green",
+   "rgb": "3CE05A"
+  },
+  {
+   "id": "teal",
+   "label": "Teal",
+   "rgb": "0E8C8C"
+  },
+  {
+   "id": "sky_blue",
+   "label": "Sky Blue",
+   "rgb": "5AA8E6"
+  },
+  {
+   "id": "electric_blue",
+   "label": "Electric Blue",
+   "rgb": "1450F0"
+  },
+  {
+   "id": "midnight",
+   "label": "Midnight Blue",
+   "rgb": "0E1A45"
+  },
+  {
+   "id": "royal_purple",
+   "label": "Royal Purple",
+   "rgb": "5A1E8C"
+  },
+  {
+   "id": "hot_pink",
+   "label": "Hot Pink",
+   "rgb": "F0328C"
+  },
+  {
+   "id": "plum",
+   "label": "Plum",
+   "rgb": "6E1E4A"
+  },
+  {
+   "id": "gold",
+   "label": "Gold",
+   "rgb": "C9A23A"
+  },
+  {
+   "id": "bronze",
+   "label": "Bronze",
+   "rgb": "8C5A2E"
+  },
+  {
+   "id": "desert_sand",
+   "label": "Desert Sand",
+   "rgb": "C8B48C"
+  },
+  {
+   "id": "copper",
+   "label": "Copper",
+   "rgb": "B4643C"
+  },
+  {
+   "id": "graphite",
+   "label": "Graphite",
+   "rgb": "2E3034"
+  },
+  {
+   "id": "ivory",
+   "label": "Ivory",
+   "rgb": "EDE6D2"
+  }
+ ],
+ "finishes": [
+  {
+   "id": "gloss",
+   "label": "Gloss",
+   "specular": 0.9,
+   "specTint": 0,
+   "specHueShift": 0,
+   "gloss": 80,
+   "reflection": 0.25,
+   "shade": 1.0,
+   "about": "Clear coat: sharp white highlights, a little reflection"
+  },
+  {
+   "id": "metallic",
+   "label": "Metallic",
+   "specular": 1.0,
+   "specTint": 0.6,
+   "specHueShift": 0,
+   "gloss": 45,
+   "reflection": 0.45,
+   "shade": 0.85,
+   "about": "Metal flake: broad highlights in the paint's own colour, more reflection"
+  },
+  {
+   "id": "pearl",
+   "label": "Pearl",
+   "specular": 1.0,
+   "specTint": 0.7,
+   "specHueShift": 50,
+   "gloss": 60,
+   "reflection": 0.35,
+   "shade": 1.0,
+   "about": "pearlescent: highlights shift to a neighbouring hue"
+  },
+  {
+   "id": "matte",
+   "label": "Matte",
+   "specular": 0.06,
+   "specTint": 0,
+   "specHueShift": 0,
+   "gloss": 6,
+   "reflection": 0.0,
+   "shade": 0.92,
+   "about": "flat: almost no shine or reflection"
+  },
+  {
+   "id": "chrome",
+   "label": "Chrome",
+   "specular": 1.0,
+   "specTint": 0.3,
+   "specHueShift": 0,
+   "gloss": 140,
+   "reflection": 1.0,
+   "shade": 0.3,
+   "about": "mirror: mostly reflection, the colour tints it"
+  }
+ ],
+ "liveRates": {
+  "hueDegreesPerSecond": 60,
+  "saturationPerSecond": 0.6,
+  "brightnessPerSecond": 0.5
+ }
+}

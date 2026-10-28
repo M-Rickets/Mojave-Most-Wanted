@@ -1,0 +1,45 @@
+{
+ "sheet": "constants",
+ "about": "",
+ "columns": {
+  "id": "row key",
+  "value": "value"
+ },
+ "rows": [
+  {
+   "id": "unitsPerMetre",
+   "value": 70
+  },
+  {
+   "id": "wornBone",
+   "value": "Bip01"
+  },
+  {
+   "id": "flipWinding",
+   "value": false
+  },
+  {
+   "id": "maxTextureSize",
+   "value": 1024
+  },
+  {
+   "id": "converterVersion",
+   "value": 8
+  },
+  {
+   "id": "topSpeedScale",
+   "value": 0.25,
+   "about": "Game top speed in m/s per real mph; keeps cell streaming ahead of the car"
+  },
+  {
+   "id": "maxSpeedMs",
+   "value": 55,
+   "about": "Hard cap on any car, m/s"
+  },
+  {
+   "id": "carScale",
+   "value": 0.93,
+   "about": "Cars are converted at this fraction of their real size (wheels, lights and handling dimensions follow)"
+  }
+ ]
+}

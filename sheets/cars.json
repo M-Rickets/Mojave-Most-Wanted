@@ -1,0 +1,2567 @@
+{
+ "sheet": "cars",
+ "about": "Most Wanted (2012) cars the player can take from the garage: all 43 racers of the base game and the 20 of its four DLC packs.",
+ "columns": {
+  "id": "row key, also the output folder under meshes\\mmw\\cars and textures\\mmw\\cars",
+  "label": "name shown in the garage menu (identified from the car's own model and badge textures)",
+  "game": "ref games.id",
+  "vehicleId": "MW GameDB vehicle id (VEH_<id>_*.BNDL)",
+  "bundles": "car bundles relative to the game folder, most detailed first; the launcher uses the first one that converts",
+  "paint": "RGB used for paint materials (MW chooses paint at runtime; this is our pick)",
+  "staticFormId": "STAT for the parked car and garage display (drive.nif with lights off)",
+  "staticEdid": "editor id of the parked model",
+  "engineSound": "ref sounds.id",
+  "handling": "steering rate in degrees per second at low speed (design value)",
+  "driveFormId": "STAT the plugin moves while you drive (drive.nif, no collision)",
+  "driveEdid": "editor id of the driving model",
+  "topSpeedMph": "top speed from MW's VEHICLES/VEHICLELIST.BNDL (VehicleList 0x105, 112-byte entry, float at +0x3C); the plugin scales it (topSpeedScale in constants)",
+  "pack": "base game or the DLC pack the car comes from (VehicleList field 11)",
+  "class": "garage menu group: ref garage.classes.id",
+  "screen": "optional: the dash screen - the interior texture (resource id) and the rectangle of it (u0 v0 u1 v1) that is the screen; its triangles become MMWScreen, which the plugin draws on rotate / skew: the picture's starting turn (degrees, counter-clockwise as you look at it) and slant (degrees, uprights leaning right at the top), for a dash whose texture is a little off; the plugin turns it as it draws, and J + the arrow keys in the car tune it (kept in screen.ini).",
+  "cockpit": "measured on the car's cabin (tools/cockpit_review.py renders it with both riders posed by the plugin's own rider.cpp): eye [x y z] = the driver's seat camera and where your seated body's head goes (x right, y forward, z up from the ground between the axles; the passenger is mirrored), hood [y z] = the hood camera, floor = the footwell floor under the pedals, recline = the seat back (degrees), lever [x y z] = the gear knob; cars without it use the old guess from the car's size",
+  "archFit": "true: the converter lowers wheels whose tyres sit inside their arches (Most Wanted hangs them lower on their suspension than the graphics spec says) - set per car as each is checked",
+  "seats": "optional: 1 for a single-seater (the BAC Mono): its steering wheel is looked for on the centreline and no companion rides; default 2",
+  "steer": "optional: {minAcross: the smallest steering wheel rim the converter takes (metres; default 0.26 - the Caterham's is 0.25), maxDepth: how far in front of the rim a spoke or hub piece may sit (metres; default 0.12 - the Caterham's gauge cluster is 0.095 in front of its wheel)}",
+  "lamps": "optional, for a car whose lights aren't Most Wanted's four-channel light material (the Ariel Atom's are plain lenses, one material for every lamp): {material: the lens material id (hex), reach: game units, mirror: each lamp also at -x, units: [{at [x y z], role head/tail/brake/reverse/none}]} - lens triangles within reach of a lamp take its role (positions in the converted model, game units)",
+  "shiftLights": "optional: the dash's shift lights {texture: the dash texture id (hex), leds: [[u v],...] left to right where each LED is painted, colors: [[r g b],...], radius: game units}; the converter puts a glowing disc over each (MMWShiftLED<i>) and the plugin lights them from the outside in as the revs climb, blinking at the shift point (tuning shiftLight*)",
+  "suspension": "optional: \"links\" for an open-wheel car whose suspension shows: the converter sorts each corner's upright and mudguard (ride and steer with the wheel), wishbones (turn about their chassis hinge), pushrods and track rods (follow the wheel) out of the body, and the front wheels steer about the kingpin (plugin suspensionLinks)",
+  "dashGadgets": "optional, for a car with no radio display (the Ariel Atom): {pipboy: {at, rot (row-major, the model to the car), scale}: the game's own Pip-Boy (AnimObjects\\\\AOPipBoy.nif) attached there by the plugin, its screen the equalizer (green phosphor); speaker: {centre, axis, up, radius, length, socket (end: -1 left, +1 right), stand {gap}}: a portable speaker on a cradle; cable: {points, radius}: an aux cable between them} - placed by tools/pipboy_place.py on the converted model",
+  "archGap": "optional: the tyre-to-arch clearance (game units at scale 1, measured radially from the wheel centre on the converted model) an axle is brought to when it's far off - under 0.3 (tyres into the arches) the wheels go down, over 6 (the body riding high on them) they go up; set per car as each is checked (the hatches: 2.5)",
+  "model": "game \"fnv\" only: the game's own vehicle model (inside Fallout - Meshes.bsa) the launcher makes drivable on the player's PC (internal/gamecar: its wheels cut out of it); placed copies of it in the world can be taken with G",
+  "front": "game \"fnv\" only: where the model's front is (\"+x\", \"-x\", \"+y\", \"-y\") when the launcher can't tell",
+  "wheelsFrom": "game \"fnv\" only: another game model whose front wheels are put on in place of this one's own (sized to them) - for a wreck on bare hubs",
+  "tyreRadius": "game \"fnv\" only: the size of the wheels put on (game units, radius) when the wheel-well guess is wrong; the truck stands higher by the difference from its hubs",
+  "steeringFrom": "game \"fnv\" only: the game model whose steering wheel goes in its cab (\"\" the first the launcher finds)",
+  "rideRaise": "game \"fnv\" only, with wheelsFrom: the body this much higher over its wheels (game units, 70 to the metre: the suspension raised)",
+  "eyeDown": "game \"fnv\" only: the seat camera, and your seated body under it, this much lower than the eye found on the cab (game units)"
+ },
+ "rows": [
+  {
+   "id": "mw_1085007",
+   "label": "Porsche 911 Carrera S",
+   "game": "mw",
+   "vehicleId": 1085007,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_1085007_HI.BNDL",
+    "VEHICLES/VEH_1085007_LO.BNDL"
+   ],
+   "paint": [
+    178,
+    24,
+    28
+   ],
+   "driveFormId": "0x01000810",
+   "driveEdid": "MMWDrivePorsche911",
+   "staticFormId": "0x01000811",
+   "staticEdid": "MMWCarPorsche911Static",
+   "engineSound": "eng_mw_1085007",
+   "handling": 95,
+   "topSpeedMph": 189,
+   "screen": {
+    "texture": "1000000001026d0",
+    "uv": [
+     0.567,
+     0.527,
+     0.729,
+     0.618
+    ]
+   }
+  },
+  {
+   "id": "mw_122704",
+   "label": "Dodge Challenger SRT8",
+   "game": "mw",
+   "vehicleId": 122704,
+   "pack": "base",
+   "class": "muscle",
+   "bundles": [
+    "VEHICLES/VEH_122704_HI.BNDL",
+    "VEHICLES/VEH_122704_LO.BNDL"
+   ],
+   "paint": [
+    240,
+    140,
+    20
+   ],
+   "driveFormId": "0x01000820",
+   "driveEdid": "MMWDriveChallenger",
+   "staticFormId": "0x01000821",
+   "staticEdid": "MMWCarChallengerStatic",
+   "engineSound": "eng_mw_122704",
+   "handling": 80,
+   "topSpeedMph": 170
+  },
+  {
+   "id": "mw_122714",
+   "label": "Ford GT",
+   "game": "mw",
+   "vehicleId": 122714,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_122714_HI.BNDL",
+    "VEHICLES/VEH_122714_LO.BNDL"
+   ],
+   "paint": [
+    30,
+    60,
+    160
+   ],
+   "driveFormId": "0x01000830",
+   "driveEdid": "MMWDriveFordGT",
+   "staticFormId": "0x01000831",
+   "staticEdid": "MMWCarFordGTStatic",
+   "engineSound": "eng_mw_122714",
+   "handling": 100,
+   "topSpeedMph": 205
+  },
+  {
+   "id": "mw_300097",
+   "label": "Ford F-150 SVT Raptor",
+   "game": "mw",
+   "vehicleId": 300097,
+   "pack": "base",
+   "class": "offroad",
+   "bundles": [
+    "VEHICLES/VEH_300097_HI.BNDL",
+    "VEHICLES/VEH_300097_LO.BNDL"
+   ],
+   "paint": [
+    200,
+    200,
+    195
+   ],
+   "driveFormId": "0x01000840",
+   "driveEdid": "MMWDriveRaptor",
+   "staticFormId": "0x01000841",
+   "staticEdid": "MMWCarRaptorStatic",
+   "engineSound": "eng_mw_300097",
+   "handling": 70,
+   "topSpeedMph": 155,
+   "cockpit": {
+    "eye": [
+     -29.2,
+     12,
+     104
+    ],
+    "hood": [
+     61,
+     118
+    ],
+    "floor": 35,
+    "recline": 10,
+    "lever": [
+     -7.5,
+     32,
+     62
+    ]
+   },
+   "screen": {
+    "texture": "1000000000ff720",
+    "uv": [
+     0.4434,
+     0.3027,
+     0.5566,
+     0.3281
+    ],
+    "kind": "din",
+    "rotate": -2.0,
+    "skew": 0
+   }
+  },
+  {
+   "id": "mw_122672",
+   "label": "Aston Martin V12 Vantage",
+   "game": "mw",
+   "vehicleId": 122672,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_122672_HI.BNDL",
+    "VEHICLES/VEH_122672_LO.BNDL"
+   ],
+   "paint": [
+    225,
+    225,
+    220
+   ],
+   "driveFormId": "0x01001000",
+   "driveEdid": "MMWAstonMartinV12VantageDrive",
+   "staticFormId": "0x01001001",
+   "staticEdid": "MMWAstonMartinV12VantageParked",
+   "engineSound": "eng_mw_122672",
+   "handling": 90,
+   "topSpeedMph": 190
+  },
+  {
+   "id": "mw_122675",
+   "label": "Audi R8 GT Spyder",
+   "game": "mw",
+   "vehicleId": 122675,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_122675_HI.BNDL",
+    "VEHICLES/VEH_122675_LO.BNDL"
+   ],
+   "paint": [
+    200,
+    170,
+    20
+   ],
+   "driveFormId": "0x01001002",
+   "driveEdid": "MMWAudiR8GtSpyderDrive",
+   "staticFormId": "0x01001003",
+   "staticEdid": "MMWAudiR8GtSpyderParked",
+   "engineSound": "eng_mw_122675",
+   "handling": 90,
+   "topSpeedMph": 197
+  },
+  {
+   "id": "mw_122682",
+   "label": "BMW M3 Coupé",
+   "game": "mw",
+   "vehicleId": 122682,
+   "pack": "base",
+   "class": "tuner",
+   "bundles": [
+    "VEHICLES/VEH_122682_HI.BNDL",
+    "VEHICLES/VEH_122682_LO.BNDL"
+   ],
+   "paint": [
+    20,
+    110,
+    60
+   ],
+   "driveFormId": "0x01001004",
+   "driveEdid": "MMWBmwM3CoupéDrive",
+   "staticFormId": "0x01001005",
+   "staticEdid": "MMWBmwM3CoupéParked",
+   "engineSound": "eng_mw_122682",
+   "handling": 96,
+   "topSpeedMph": 183
+  },
+  {
+   "id": "mw_122692",
+   "label": "Bugatti Veyron Super Sport",
+   "game": "mw",
+   "vehicleId": 122692,
+   "pack": "base",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_122692_HI.BNDL",
+    "VEHICLES/VEH_122692_LO.BNDL"
+   ],
+   "paint": [
+    90,
+    20,
+    120
+   ],
+   "driveFormId": "0x01001006",
+   "driveEdid": "MMWBugattiVeyronSuperSportDrive",
+   "staticFormId": "0x01001007",
+   "staticEdid": "MMWBugattiVeyronSuperSportParked",
+   "engineSound": "eng_mw_122692",
+   "handling": 88,
+   "topSpeedMph": 268
+  },
+  {
+   "id": "mw_122701",
+   "label": "Chevrolet Corvette ZR1",
+   "game": "mw",
+   "vehicleId": 122701,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_122701_HI.BNDL",
+    "VEHICLES/VEH_122701_LO.BNDL"
+   ],
+   "paint": [
+    150,
+    150,
+    155
+   ],
+   "driveFormId": "0x01001008",
+   "driveEdid": "MMWChevroletCorvetteZr1Drive",
+   "staticFormId": "0x01001009",
+   "staticEdid": "MMWChevroletCorvetteZr1Parked",
+   "engineSound": "eng_mw_122701",
+   "handling": 90,
+   "topSpeedMph": 205
+  },
+  {
+   "id": "mw_122716",
+   "label": "Ford Mustang Boss 302",
+   "game": "mw",
+   "vehicleId": 122716,
+   "pack": "base",
+   "class": "muscle",
+   "bundles": [
+    "VEHICLES/VEH_122716_HI.BNDL",
+    "VEHICLES/VEH_122716_LO.BNDL"
+   ],
+   "paint": [
+    10,
+    120,
+    170
+   ],
+   "driveFormId": "0x0100100A",
+   "driveEdid": "MMWFordMustangBoss302Drive",
+   "staticFormId": "0x0100100B",
+   "staticEdid": "MMWFordMustangBoss302Parked",
+   "engineSound": "eng_mw_122716",
+   "handling": 78,
+   "topSpeedMph": 185
+  },
+  {
+   "id": "mw_122757",
+   "label": "Maserati GT MC Stradale",
+   "game": "mw",
+   "vehicleId": 122757,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_122757_HI.BNDL",
+    "VEHICLES/VEH_122757_LO.BNDL"
+   ],
+   "paint": [
+    230,
+    90,
+    10
+   ],
+   "driveFormId": "0x0100100C",
+   "driveEdid": "MMWMaseratiGtMcStradaleDrive",
+   "staticFormId": "0x0100100D",
+   "staticEdid": "MMWMaseratiGtMcStradaleParked",
+   "engineSound": "eng_mw_122757",
+   "handling": 90,
+   "topSpeedMph": 180
+  },
+  {
+   "id": "mw_122765",
+   "label": "McLaren MP4-12C",
+   "game": "mw",
+   "vehicleId": 122765,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_122765_HI.BNDL",
+    "VEHICLES/VEH_122765_LO.BNDL"
+   ],
+   "paint": [
+    110,
+    10,
+    20
+   ],
+   "driveFormId": "0x0100100E",
+   "driveEdid": "MMWMclarenMp412CDrive",
+   "staticFormId": "0x0100100F",
+   "staticEdid": "MMWMclarenMp412CParked",
+   "engineSound": "eng_mw_122765",
+   "handling": 90,
+   "topSpeedMph": 202
+  },
+  {
+   "id": "mw_122769",
+   "label": "Mercedes-Benz SL 65 AMG",
+   "game": "mw",
+   "vehicleId": 122769,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_122769_HI.BNDL",
+    "VEHICLES/VEH_122769_LO.BNDL"
+   ],
+   "paint": [
+    178,
+    24,
+    28
+   ],
+   "driveFormId": "0x01001010",
+   "driveEdid": "MMWMercedesBenzSl65AmgDrive",
+   "staticFormId": "0x01001011",
+   "staticEdid": "MMWMercedesBenzSl65AmgParked",
+   "engineSound": "eng_mw_122769",
+   "handling": 90,
+   "topSpeedMph": 205
+  },
+  {
+   "id": "mw_122773",
+   "label": "Mercedes-Benz SLS AMG",
+   "game": "mw",
+   "vehicleId": 122773,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_122773_HI.BNDL",
+    "VEHICLES/VEH_122773_LO.BNDL"
+   ],
+   "paint": [
+    240,
+    140,
+    20
+   ],
+   "driveFormId": "0x01001012",
+   "driveEdid": "MMWMercedesBenzSlsAmgDrive",
+   "staticFormId": "0x01001013",
+   "staticEdid": "MMWMercedesBenzSlsAmgParked",
+   "engineSound": "eng_mw_122773",
+   "handling": 90,
+   "topSpeedMph": 197
+  },
+  {
+   "id": "mw_122814",
+   "label": "Subaru Cosworth Impreza",
+   "game": "mw",
+   "vehicleId": 122814,
+   "pack": "base",
+   "class": "tuner",
+   "bundles": [
+    "VEHICLES/VEH_122814_HI.BNDL",
+    "VEHICLES/VEH_122814_LO.BNDL"
+   ],
+   "paint": [
+    30,
+    60,
+    160
+   ],
+   "driveFormId": "0x01001014",
+   "driveEdid": "MMWSubaruCosworthImprezaDrive",
+   "staticFormId": "0x01001015",
+   "staticEdid": "MMWSubaruCosworthImprezaParked",
+   "engineSound": "eng_mw_122814",
+   "handling": 96,
+   "topSpeedMph": 160
+  },
+  {
+   "id": "mw_392074",
+   "label": "Lamborghini Aventador",
+   "game": "mw",
+   "vehicleId": 392074,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_392074_HI.BNDL",
+    "VEHICLES/VEH_392074_LO.BNDL"
+   ],
+   "paint": [
+    20,
+    20,
+    22
+   ],
+   "driveFormId": "0x01001016",
+   "driveEdid": "MMWLamborghiniAventadorDrive",
+   "staticFormId": "0x01001017",
+   "staticEdid": "MMWLamborghiniAventadorParked",
+   "engineSound": "eng_mw_392074",
+   "handling": 90,
+   "topSpeedMph": 217
+  },
+  {
+   "id": "mw_393001",
+   "label": "Caterham Superlight R500",
+   "game": "mw",
+   "vehicleId": 393001,
+   "pack": "base",
+   "class": "track",
+   "bundles": [
+    "VEHICLES/VEH_393001_HI.BNDL",
+    "VEHICLES/VEH_393001_LO.BNDL"
+   ],
+   "paint": [
+    225,
+    225,
+    220
+   ],
+   "driveFormId": "0x01001018",
+   "driveEdid": "MMWCaterhamSuperlightR500Drive",
+   "staticFormId": "0x01001019",
+   "staticEdid": "MMWCaterhamSuperlightR500Parked",
+   "engineSound": "eng_mw_393001",
+   "handling": 104,
+   "topSpeedMph": 140,
+   "steer": {
+    "minAcross": 0.22,
+    "maxDepth": 0.06
+   },
+   "cockpit": {
+    "eye": [
+     -17.7,
+     -52,
+     60
+    ],
+    "floor": 12,
+    "recline": 24,
+    "lever": [
+     -2,
+     -28,
+     32
+    ]
+   },
+   "lamps": {
+    "material": "a0e4a",
+    "reach": 5.2,
+    "mirror": true,
+    "units": [
+     {
+      "at": [
+       27,
+       85.1,
+       38.6
+      ],
+      "role": "head"
+     },
+     {
+      "at": [
+       48.5,
+       -96.1,
+       34
+      ],
+      "role": "tail"
+     },
+     {
+      "at": [
+       36.1,
+       -96.1,
+       34
+      ],
+      "role": "brake"
+     },
+     {
+      "at": [
+       23.5,
+       -104.4,
+       22.7
+      ],
+      "role": "reverse"
+     },
+     {
+      "at": [
+       27,
+       88.5,
+       29.3
+      ],
+      "role": "none"
+     }
+    ]
+   },
+   "shiftLights": {
+    "texture": "f540e",
+    "leds": [
+     [
+      0.5396,
+      0.0332
+     ],
+     [
+      0.5801,
+      0.0332
+     ],
+     [
+      0.6211,
+      0.0332
+     ],
+     [
+      0.6616,
+      0.0332
+     ],
+     [
+      0.7031,
+      0.0332
+     ]
+    ],
+    "colors": [
+     [
+      40,
+      255,
+      60
+     ],
+     [
+      40,
+      255,
+      60
+     ],
+     [
+      255,
+      170,
+      0
+     ],
+     [
+      255,
+      25,
+      15
+     ],
+     [
+      255,
+      25,
+      15
+     ]
+    ],
+    "radius": 0.2
+   },
+   "suspension": "links"
+  },
+  {
+   "id": "mw_435169",
+   "label": "Nissan GT-R Egoist",
+   "game": "mw",
+   "vehicleId": 435169,
+   "pack": "base",
+   "class": "tuner",
+   "bundles": [
+    "VEHICLES/VEH_435169_HI.BNDL",
+    "VEHICLES/VEH_435169_LO.BNDL"
+   ],
+   "paint": [
+    200,
+    170,
+    20
+   ],
+   "driveFormId": "0x0100101A",
+   "driveEdid": "MMWNissanGtREgoistDrive",
+   "staticFormId": "0x0100101B",
+   "staticEdid": "MMWNissanGtREgoistParked",
+   "engineSound": "eng_mw_435169",
+   "handling": 96,
+   "topSpeedMph": 190
+  },
+  {
+   "id": "mw_535435",
+   "label": "Pagani Huayra",
+   "game": "mw",
+   "vehicleId": 535435,
+   "pack": "base",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_535435_HI.BNDL",
+    "VEHICLES/VEH_535435_LO.BNDL"
+   ],
+   "paint": [
+    20,
+    110,
+    60
+   ],
+   "driveFormId": "0x0100101C",
+   "driveEdid": "MMWPaganiHuayraDrive",
+   "staticFormId": "0x0100101D",
+   "staticEdid": "MMWPaganiHuayraParked",
+   "engineSound": "eng_mw_535435",
+   "handling": 88,
+   "topSpeedMph": 233
+  },
+  {
+   "id": "mw_535621",
+   "label": "Porsche Panamera Turbo S",
+   "game": "mw",
+   "vehicleId": 535621,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_535621_HI.BNDL",
+    "VEHICLES/VEH_535621_LO.BNDL"
+   ],
+   "paint": [
+    90,
+    20,
+    120
+   ],
+   "driveFormId": "0x0100101E",
+   "driveEdid": "MMWPorschePanameraTurboSDrive",
+   "staticFormId": "0x0100101F",
+   "staticEdid": "MMWPorschePanameraTurboSParked",
+   "engineSound": "eng_mw_535621",
+   "handling": 90,
+   "topSpeedMph": 191
+  },
+  {
+   "id": "mw_589261",
+   "label": "Koenigsegg Agera R",
+   "game": "mw",
+   "vehicleId": 589261,
+   "pack": "base",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_589261_HI.BNDL",
+    "VEHICLES/VEH_589261_LO.BNDL"
+   ],
+   "paint": [
+    150,
+    150,
+    155
+   ],
+   "driveFormId": "0x01001020",
+   "driveEdid": "MMWKoenigseggAgeraRDrive",
+   "staticFormId": "0x01001021",
+   "staticEdid": "MMWKoenigseggAgeraRParked",
+   "engineSound": "eng_mw_589261",
+   "handling": 88,
+   "topSpeedMph": 269
+  },
+  {
+   "id": "mw_621053",
+   "label": "Chevrolet Camaro ZL1",
+   "game": "mw",
+   "vehicleId": 621053,
+   "pack": "base",
+   "class": "muscle",
+   "bundles": [
+    "VEHICLES/VEH_621053_HI.BNDL",
+    "VEHICLES/VEH_621053_LO.BNDL"
+   ],
+   "paint": [
+    10,
+    120,
+    170
+   ],
+   "driveFormId": "0x01001022",
+   "driveEdid": "MMWChevroletCamaroZl1Drive",
+   "staticFormId": "0x01001023",
+   "staticEdid": "MMWChevroletCamaroZl1Parked",
+   "engineSound": "eng_mw_621053",
+   "handling": 78,
+   "topSpeedMph": 185
+  },
+  {
+   "id": "mw_866774",
+   "label": "Bentley Supersports ISR",
+   "game": "mw",
+   "vehicleId": 866774,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_866774_HI.BNDL",
+    "VEHICLES/VEH_866774_LO.BNDL"
+   ],
+   "paint": [
+    230,
+    90,
+    10
+   ],
+   "driveFormId": "0x01001024",
+   "driveEdid": "MMWBentleySupersportsIsrDrive",
+   "staticFormId": "0x01001025",
+   "staticEdid": "MMWBentleySupersportsIsrParked",
+   "engineSound": "eng_mw_866774",
+   "handling": 90,
+   "topSpeedMph": 191
+  },
+  {
+   "id": "mw_866832",
+   "label": "Mitsubishi Lancer Evolution X",
+   "game": "mw",
+   "vehicleId": 866832,
+   "pack": "base",
+   "class": "tuner",
+   "bundles": [
+    "VEHICLES/VEH_866832_HI.BNDL",
+    "VEHICLES/VEH_866832_LO.BNDL"
+   ],
+   "paint": [
+    110,
+    10,
+    20
+   ],
+   "driveFormId": "0x01001026",
+   "driveEdid": "MMWMitsubishiLancerEvolutionXDrive",
+   "staticFormId": "0x01001027",
+   "staticEdid": "MMWMitsubishiLancerEvolutionXParked",
+   "engineSound": "eng_mw_866832",
+   "handling": 96,
+   "topSpeedMph": 160
+  },
+  {
+   "id": "mw_1085091",
+   "label": "Lamborghini Countach",
+   "game": "mw",
+   "vehicleId": 1085091,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_1085091_HI.BNDL",
+    "VEHICLES/VEH_1085091_LO.BNDL"
+   ],
+   "paint": [
+    178,
+    24,
+    28
+   ],
+   "driveFormId": "0x01001028",
+   "driveEdid": "MMWLamborghiniCountachDrive",
+   "staticFormId": "0x01001029",
+   "staticEdid": "MMWLamborghiniCountachParked",
+   "engineSound": "eng_mw_1085091",
+   "handling": 90,
+   "topSpeedMph": 170
+  },
+  {
+   "id": "mw_1085186",
+   "label": "Porsche 911 Turbo 3.0",
+   "game": "mw",
+   "vehicleId": 1085186,
+   "pack": "base",
+   "class": "classic",
+   "bundles": [
+    "VEHICLES/VEH_1085186_HI.BNDL",
+    "VEHICLES/VEH_1085186_LO.BNDL"
+   ],
+   "paint": [
+    240,
+    140,
+    20
+   ],
+   "driveFormId": "0x0100102A",
+   "driveEdid": "MMWPorsche911Turbo30Drive",
+   "staticFormId": "0x0100102B",
+   "staticEdid": "MMWPorsche911Turbo30Parked",
+   "engineSound": "eng_mw_1085186",
+   "handling": 82,
+   "topSpeedMph": 161
+  },
+  {
+   "id": "mw_1085511",
+   "label": "Lexus LFA",
+   "game": "mw",
+   "vehicleId": 1085511,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_1085511_HI.BNDL",
+    "VEHICLES/VEH_1085511_LO.BNDL"
+   ],
+   "paint": [
+    30,
+    60,
+    160
+   ],
+   "driveFormId": "0x0100102C",
+   "driveEdid": "MMWLexusLfaDrive",
+   "staticFormId": "0x0100102D",
+   "staticEdid": "MMWLexusLfaParked",
+   "engineSound": "eng_mw_1085511",
+   "handling": 90,
+   "topSpeedMph": 202
+  },
+  {
+   "id": "mw_1085576",
+   "label": "Shelby Cobra 427",
+   "game": "mw",
+   "vehicleId": 1085576,
+   "pack": "base",
+   "class": "classic",
+   "bundles": [
+    "VEHICLES/VEH_1085576_HI.BNDL",
+    "VEHICLES/VEH_1085576_LO.BNDL"
+   ],
+   "paint": [
+    20,
+    20,
+    22
+   ],
+   "driveFormId": "0x0100102E",
+   "driveEdid": "MMWShelbyCobra427Drive",
+   "staticFormId": "0x0100102F",
+   "staticEdid": "MMWShelbyCobra427Parked",
+   "engineSound": "eng_mw_1085576",
+   "handling": 82,
+   "topSpeedMph": 150
+  },
+  {
+   "id": "mw_1085633",
+   "label": "Lamborghini Gallardo",
+   "game": "mw",
+   "vehicleId": 1085633,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_1085633_HI.BNDL",
+    "VEHICLES/VEH_1085633_LO.BNDL"
+   ],
+   "paint": [
+    225,
+    225,
+    220
+   ],
+   "driveFormId": "0x01001030",
+   "driveEdid": "MMWLamborghiniGallardoDrive",
+   "staticFormId": "0x01001031",
+   "staticEdid": "MMWLamborghiniGallardoParked",
+   "engineSound": "eng_mw_1085633",
+   "handling": 90,
+   "topSpeedMph": 201
+  },
+  {
+   "id": "mw_1085698",
+   "label": "Alfa Romeo 4C Concept",
+   "game": "mw",
+   "vehicleId": 1085698,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_1085698_HI.BNDL",
+    "VEHICLES/VEH_1085698_LO.BNDL"
+   ],
+   "paint": [
+    200,
+    170,
+    20
+   ],
+   "driveFormId": "0x01001032",
+   "driveEdid": "MMWAlfaRomeo4CConceptDrive",
+   "staticFormId": "0x01001033",
+   "staticEdid": "MMWAlfaRomeo4CConceptParked",
+   "engineSound": "eng_mw_1085698",
+   "handling": 90,
+   "topSpeedMph": 180
+  },
+  {
+   "id": "mw_1085764",
+   "label": "Tesla Roadster Sport",
+   "game": "mw",
+   "vehicleId": 1085764,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_1085764_HI.BNDL",
+    "VEHICLES/VEH_1085764_LO.BNDL"
+   ],
+   "paint": [
+    20,
+    110,
+    60
+   ],
+   "driveFormId": "0x01001034",
+   "driveEdid": "MMWTeslaRoadsterSportDrive",
+   "staticFormId": "0x01001035",
+   "staticEdid": "MMWTeslaRoadsterSportParked",
+   "engineSound": "eng_mw_1085764",
+   "handling": 90,
+   "topSpeedMph": 125
+  },
+  {
+   "id": "mw_1085830",
+   "label": "Porsche 918 Spyder Concept",
+   "game": "mw",
+   "vehicleId": 1085830,
+   "pack": "base",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_1085830_HI.BNDL",
+    "VEHICLES/VEH_1085830_LO.BNDL"
+   ],
+   "paint": [
+    90,
+    20,
+    120
+   ],
+   "driveFormId": "0x01001036",
+   "driveEdid": "MMWPorsche918SpyderConceptDrive",
+   "staticFormId": "0x01001037",
+   "staticEdid": "MMWPorsche918SpyderConceptParked",
+   "engineSound": "eng_mw_1085830",
+   "handling": 88,
+   "topSpeedMph": 195
+  },
+  {
+   "id": "mw_1085958",
+   "label": "Range Rover Evoque",
+   "game": "mw",
+   "vehicleId": 1085958,
+   "pack": "base",
+   "class": "offroad",
+   "bundles": [
+    "VEHICLES/VEH_1085958_HI.BNDL",
+    "VEHICLES/VEH_1085958_LO.BNDL"
+   ],
+   "paint": [
+    150,
+    150,
+    155
+   ],
+   "driveFormId": "0x01001038",
+   "driveEdid": "MMWRangeRoverEvoqueDrive",
+   "staticFormId": "0x01001039",
+   "staticEdid": "MMWRangeRoverEvoqueParked",
+   "engineSound": "eng_mw_1085958",
+   "handling": 72,
+   "topSpeedMph": 135,
+   "archFit": true,
+   "cockpit": {
+    "eye": [
+     -28.6,
+     6,
+     86
+    ],
+    "hood": [
+     47.6,
+     98.5
+    ],
+    "floor": 28,
+    "recline": 14,
+    "lever": [
+     -4,
+     28,
+     48
+    ]
+   },
+   "screen": {
+    "texture": "1000000000d6dc8",
+    "uv": [
+     0.4531,
+     0.1445,
+     0.584,
+     0.2005
+    ]
+   }
+  },
+  {
+   "id": "mw_1097100",
+   "label": "Lancia Delta HF Integrale",
+   "game": "mw",
+   "vehicleId": 1097100,
+   "pack": "base",
+   "class": "tuner",
+   "bundles": [
+    "VEHICLES/VEH_1097100_HI.BNDL",
+    "VEHICLES/VEH_1097100_LO.BNDL"
+   ],
+   "paint": [
+    10,
+    120,
+    170
+   ],
+   "driveFormId": "0x0100103A",
+   "driveEdid": "MMWLanciaDeltaHfIntegraleDrive",
+   "staticFormId": "0x0100103B",
+   "staticEdid": "MMWLanciaDeltaHfIntegraleParked",
+   "engineSound": "eng_mw_1097100",
+   "handling": 96,
+   "topSpeedMph": 150
+  },
+  {
+   "id": "mw_1160025",
+   "label": "BAC Mono",
+   "game": "mw",
+   "vehicleId": 1160025,
+   "pack": "base",
+   "class": "track",
+   "bundles": [
+    "VEHICLES/VEH_1160025_HI.BNDL",
+    "VEHICLES/VEH_1160025_LO.BNDL"
+   ],
+   "paint": [
+    230,
+    90,
+    10
+   ],
+   "driveFormId": "0x0100103C",
+   "driveEdid": "MMWBacMonoDrive",
+   "staticFormId": "0x0100103D",
+   "staticEdid": "MMWBacMonoParked",
+   "engineSound": "eng_mw_1160025",
+   "handling": 104,
+   "topSpeedMph": 150,
+   "seats": 1,
+   "cockpit": {
+    "eye": [
+     0,
+     -2,
+     56
+    ],
+    "floor": 12,
+    "recline": 40,
+    "lever": [
+     8.5,
+     24.5,
+     40
+    ]
+   },
+   "lamps": {
+    "material": "dc82c",
+    "reach": 3.6,
+    "mirror": true,
+    "units": [
+     {
+      "at": [
+       3,
+       -113.9,
+       20
+      ],
+      "role": "tail"
+     }
+    ]
+   },
+   "suspension": "links"
+  },
+  {
+   "id": "mw_1160082",
+   "label": "Ariel Atom 500 V8",
+   "game": "mw",
+   "vehicleId": 1160082,
+   "pack": "base",
+   "class": "track",
+   "bundles": [
+    "VEHICLES/VEH_1160082_HI.BNDL",
+    "VEHICLES/VEH_1160082_LO.BNDL"
+   ],
+   "paint": [
+    110,
+    10,
+    20
+   ],
+   "driveFormId": "0x0100103E",
+   "driveEdid": "MMWArielAtom500V8Drive",
+   "staticFormId": "0x0100103F",
+   "staticEdid": "MMWArielAtom500V8Parked",
+   "engineSound": "eng_mw_1160082",
+   "handling": 104,
+   "topSpeedMph": 150,
+   "lamps": {
+    "material": "b21ab",
+    "reach": 2.6,
+    "mirror": true,
+    "units": [
+     {
+      "at": [
+       36,
+       98.3,
+       31.7
+      ],
+      "role": "head"
+     },
+     {
+      "at": [
+       30.6,
+       98.3,
+       30.9
+      ],
+      "role": "head"
+     },
+     {
+      "at": [
+       38.7,
+       -90.4,
+       34.1
+      ],
+      "role": "tail"
+     },
+     {
+      "at": [
+       33.5,
+       -90.4,
+       32.6
+      ],
+      "role": "brake"
+     },
+     {
+      "at": [
+       7.7,
+       -87.6,
+       32.2
+      ],
+      "role": "brake"
+     },
+     {
+      "at": [
+       3.8,
+       -87.6,
+       32.2
+      ],
+      "role": "tail"
+     },
+     {
+      "at": [
+       3.8,
+       -87.6,
+       28.2
+      ],
+      "role": "reverse"
+     },
+     {
+      "at": [
+       7.7,
+       -87.6,
+       28.2
+      ],
+      "role": "none"
+     }
+    ]
+   },
+   "shiftLights": {
+    "texture": "95fc8",
+    "leds": [
+     [
+      0.1529,
+      0.0366
+     ],
+     [
+      0.1758,
+      0.0366
+     ],
+     [
+      0.1988,
+      0.0366
+     ],
+     [
+      0.2428,
+      0.0366
+     ],
+     [
+      0.2662,
+      0.0366
+     ],
+     [
+      0.2897,
+      0.0366
+     ]
+    ],
+    "colors": [
+     [
+      40,
+      255,
+      60
+     ],
+     [
+      40,
+      255,
+      60
+     ],
+     [
+      255,
+      170,
+      0
+     ],
+     [
+      255,
+      170,
+      0
+     ],
+     [
+      255,
+      25,
+      15
+     ],
+     [
+      255,
+      25,
+      15
+     ]
+    ],
+    "radius": 0.2
+   },
+   "suspension": "links",
+   "dashGadgets": {
+    "pipboy": {
+     "at": [
+      -0.852,
+      28.95,
+      55.988
+     ],
+     "rot": [
+      -0.18486,
+      -0.59917,
+      -0.77899,
+      -0.57612,
+      -0.57609,
+      0.57983,
+      -0.79618,
+      0.55598,
+      -0.2387
+     ],
+     "scale": 0.65
+    },
+    "speaker": {
+     "centre": [
+      9.327,
+      24.888,
+      52.616
+     ],
+     "axis": [
+      0.72261,
+      -0.67109,
+      0.16575
+     ],
+     "up": [
+      -0.11429,
+      0.12049,
+      0.98611
+     ],
+     "radius": 1.75,
+     "length": 8.0,
+     "socket": -1,
+     "stand": {
+      "gap": 0.5
+     }
+    },
+    "cable": {
+     "points": [
+      [
+       -0.557,
+       21.013,
+       51.343
+      ],
+      [
+       -0.345,
+       20.946,
+       51.121
+      ],
+      [
+       -0.117,
+       20.973,
+       50.895
+      ],
+      [
+       0.125,
+       21.085,
+       50.669
+      ],
+      [
+       0.38,
+       21.272,
+       50.646
+      ],
+      [
+       0.645,
+       21.526,
+       50.616
+      ],
+      [
+       0.92,
+       21.838,
+       50.58
+      ],
+      [
+       1.203,
+       22.198,
+       50.54
+      ],
+      [
+       1.492,
+       22.598,
+       50.496
+      ],
+      [
+       1.785,
+       23.027,
+       50.45
+      ],
+      [
+       2.081,
+       23.478,
+       50.401
+      ],
+      [
+       2.378,
+       23.941,
+       50.351
+      ],
+      [
+       2.674,
+       24.406,
+       50.301
+      ],
+      [
+       2.968,
+       24.866,
+       50.251
+      ],
+      [
+       3.258,
+       25.309,
+       50.199
+      ],
+      [
+       3.543,
+       25.729,
+       50.145
+      ],
+      [
+       3.82,
+       26.114,
+       50.095
+      ],
+      [
+       4.088,
+       26.457,
+       50.049
+      ],
+      [
+       4.346,
+       26.748,
+       50.009
+      ],
+      [
+       4.591,
+       26.977,
+       49.976
+      ],
+      [
+       4.822,
+       27.137,
+       50.147
+      ],
+      [
+       5.038,
+       27.217,
+       50.364
+      ],
+      [
+       5.237,
+       27.209,
+       50.599
+      ],
+      [
+       5.416,
+       27.103,
+       50.85
+      ],
+      [
+       5.85,
+       26.701,
+       50.95
+      ]
+     ],
+     "radius": 0.11
+    }
+   }
+  },
+  {
+   "id": "mw_1160139",
+   "label": "Audi A1 clubsport quattro",
+   "game": "mw",
+   "vehicleId": 1160139,
+   "pack": "base",
+   "class": "hatch",
+   "bundles": [
+    "VEHICLES/VEH_1160139_HI.BNDL",
+    "VEHICLES/VEH_1160139_LO.BNDL"
+   ],
+   "paint": [
+    178,
+    24,
+    28
+   ],
+   "driveFormId": "0x01001040",
+   "driveEdid": "MMWAudiA1ClubsportQuattroDrive",
+   "staticFormId": "0x01001041",
+   "staticEdid": "MMWAudiA1ClubsportQuattroParked",
+   "engineSound": "eng_mw_1160139",
+   "handling": 95,
+   "topSpeedMph": 170,
+   "archGap": 2.5,
+   "cockpit": {
+    "eye": [
+     -23.4,
+     -1,
+     73
+    ],
+    "floor": 24,
+    "recline": 20
+   }
+  },
+  {
+   "id": "mw_1160350",
+   "label": "SRT Viper GTS",
+   "game": "mw",
+   "vehicleId": 1160350,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_1160350_HI.BNDL",
+    "VEHICLES/VEH_1160350_LO.BNDL"
+   ],
+   "paint": [
+    240,
+    140,
+    20
+   ],
+   "driveFormId": "0x01001042",
+   "driveEdid": "MMWSrtViperGtsDrive",
+   "staticFormId": "0x01001043",
+   "staticEdid": "MMWSrtViperGtsParked",
+   "engineSound": "eng_mw_1160350",
+   "handling": 90,
+   "topSpeedMph": 203
+  },
+  {
+   "id": "mw_1160480",
+   "label": "Ford Focus RS500",
+   "game": "mw",
+   "vehicleId": 1160480,
+   "pack": "base",
+   "class": "hatch",
+   "bundles": [
+    "VEHICLES/VEH_1160480_HI.BNDL",
+    "VEHICLES/VEH_1160480_LO.BNDL"
+   ],
+   "paint": [
+    30,
+    60,
+    160
+   ],
+   "driveFormId": "0x01001044",
+   "driveEdid": "MMWFordFocusRs500Drive",
+   "staticFormId": "0x01001045",
+   "staticEdid": "MMWFordFocusRs500Parked",
+   "engineSound": "eng_mw_1160480",
+   "handling": 95,
+   "topSpeedMph": 160,
+   "archGap": 2.5,
+   "cockpit": {
+    "eye": [
+     -22.6,
+     0,
+     76
+    ],
+    "floor": 20,
+    "recline": 18
+   },
+   "screen": {
+    "texture": "100000000095f43,100000000126b02",
+    "uv": [
+     0.373,
+     0.2383,
+     0.4395,
+     0.25
+    ],
+    "kind": "din"
+   },
+   "lamps": {
+    "material": "b21c3",
+    "reach": 9,
+    "mirror": true,
+    "units": [
+     {
+      "at": [
+       41.5,
+       -109,
+       74
+      ],
+      "role": "tail"
+     },
+     {
+      "at": [
+       40,
+       -91,
+       81
+      ],
+      "role": "brake"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mw_1399322",
+   "label": "Dodge Charger SRT8",
+   "game": "mw",
+   "vehicleId": 1399322,
+   "pack": "base",
+   "class": "muscle",
+   "bundles": [
+    "VEHICLES/VEH_1399322_HI.BNDL",
+    "VEHICLES/VEH_1399322_LO.BNDL"
+   ],
+   "paint": [
+    20,
+    20,
+    22
+   ],
+   "driveFormId": "0x01001046",
+   "driveEdid": "MMWDodgeChargerSrt8Drive",
+   "staticFormId": "0x01001047",
+   "staticEdid": "MMWDodgeChargerSrt8Parked",
+   "engineSound": "eng_mw_1399322",
+   "handling": 78,
+   "topSpeedMph": 175
+  },
+  {
+   "id": "mw_1399539",
+   "label": "Ford Focus ST",
+   "game": "mw",
+   "vehicleId": 1399539,
+   "pack": "base",
+   "class": "hatch",
+   "bundles": [
+    "VEHICLES/VEH_1399539_HI.BNDL",
+    "VEHICLES/VEH_1399539_LO.BNDL"
+   ],
+   "paint": [
+    225,
+    225,
+    220
+   ],
+   "driveFormId": "0x01001048",
+   "driveEdid": "MMWFordFocusStDrive",
+   "staticFormId": "0x01001049",
+   "staticEdid": "MMWFordFocusStParked",
+   "engineSound": "eng_mw_1399539",
+   "handling": 95,
+   "topSpeedMph": 150,
+   "archGap": 2.5,
+   "cockpit": {
+    "eye": [
+     -23.6,
+     0,
+     79
+    ],
+    "floor": 22,
+    "recline": 18
+   },
+   "screen": {
+    "texture": "1000000000d4126",
+    "uv": [
+     0.0527,
+     0.5234,
+     0.1426,
+     0.5723
+    ]
+   }
+  },
+  {
+   "id": "mw_1399602",
+   "label": "Jaguar XKR-S",
+   "game": "mw",
+   "vehicleId": 1399602,
+   "pack": "base",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_1399602_HI.BNDL",
+    "VEHICLES/VEH_1399602_LO.BNDL"
+   ],
+   "paint": [
+    200,
+    170,
+    20
+   ],
+   "driveFormId": "0x0100104A",
+   "driveEdid": "MMWJaguarXkrSDrive",
+   "staticFormId": "0x0100104B",
+   "staticEdid": "MMWJaguarXkrSParked",
+   "engineSound": "eng_mw_1399602",
+   "handling": 90,
+   "topSpeedMph": 174
+  },
+  {
+   "id": "mw_1551590",
+   "label": "Marussia B2",
+   "game": "mw",
+   "vehicleId": 1551590,
+   "pack": "base",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_1551590_HI.BNDL",
+    "VEHICLES/VEH_1551590_LO.BNDL"
+   ],
+   "paint": [
+    20,
+    110,
+    60
+   ],
+   "driveFormId": "0x0100104C",
+   "driveEdid": "MMWMarussiaB2Drive",
+   "staticFormId": "0x0100104D",
+   "staticEdid": "MMWMarussiaB2Parked",
+   "engineSound": "eng_mw_1551590",
+   "handling": 90,
+   "topSpeedMph": 195
+  },
+  {
+   "id": "mw_2076005",
+   "label": "Bugatti Veyron Grand Sport Vitesse",
+   "game": "mw",
+   "vehicleId": 2076005,
+   "pack": "Ultimate Speed Pack",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_2076005_HI.BNDL",
+    "VEHICLES/VEH_2076005_LO.BNDL"
+   ],
+   "paint": [
+    90,
+    20,
+    120
+   ],
+   "driveFormId": "0x0100104E",
+   "driveEdid": "MMWBugattiVeyronGrandSportVitesseDrive",
+   "staticFormId": "0x0100104F",
+   "staticEdid": "MMWBugattiVeyronGrandSportVitesseParked",
+   "engineSound": "eng_mw_2076005",
+   "handling": 88,
+   "topSpeedMph": 268
+  },
+  {
+   "id": "mw_2076070",
+   "label": "McLaren F1 LM",
+   "game": "mw",
+   "vehicleId": 2076070,
+   "pack": "Ultimate Speed Pack",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_2076070_HI.BNDL",
+    "VEHICLES/VEH_2076070_LO.BNDL"
+   ],
+   "paint": [
+    150,
+    150,
+    155
+   ],
+   "driveFormId": "0x01001050",
+   "driveEdid": "MMWMclarenF1LmDrive",
+   "staticFormId": "0x01001051",
+   "staticEdid": "MMWMclarenF1LmParked",
+   "engineSound": "eng_mw_2076070",
+   "handling": 88,
+   "topSpeedMph": 225
+  },
+  {
+   "id": "mw_2076137",
+   "label": "Hennessey Venom GT",
+   "game": "mw",
+   "vehicleId": 2076137,
+   "pack": "Ultimate Speed Pack",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_2076137_HI.BNDL",
+    "VEHICLES/VEH_2076137_LO.BNDL"
+   ],
+   "paint": [
+    10,
+    120,
+    170
+   ],
+   "driveFormId": "0x01001052",
+   "driveEdid": "MMWHennesseyVenomGtDrive",
+   "staticFormId": "0x01001053",
+   "staticEdid": "MMWHennesseyVenomGtParked",
+   "engineSound": "eng_mw_2076137",
+   "handling": 88,
+   "topSpeedMph": 245
+  },
+  {
+   "id": "mw_2076203",
+   "label": "Lamborghini Aventador J",
+   "game": "mw",
+   "vehicleId": 2076203,
+   "pack": "Ultimate Speed Pack",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_2076203_HI.BNDL",
+    "VEHICLES/VEH_2076203_LO.BNDL"
+   ],
+   "paint": [
+    230,
+    90,
+    10
+   ],
+   "driveFormId": "0x01001054",
+   "driveEdid": "MMWLamborghiniAventadorJDrive",
+   "staticFormId": "0x01001055",
+   "staticEdid": "MMWLamborghiniAventadorJParked",
+   "engineSound": "eng_mw_2076203",
+   "handling": 88,
+   "topSpeedMph": 184
+  },
+  {
+   "id": "mw_2076266",
+   "label": "Pagani Zonda R",
+   "game": "mw",
+   "vehicleId": 2076266,
+   "pack": "Ultimate Speed Pack",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_2076266_HI.BNDL",
+    "VEHICLES/VEH_2076266_LO.BNDL"
+   ],
+   "paint": [
+    110,
+    10,
+    20
+   ],
+   "driveFormId": "0x01001056",
+   "driveEdid": "MMWPaganiZondaRDrive",
+   "staticFormId": "0x01001057",
+   "staticEdid": "MMWPaganiZondaRParked",
+   "engineSound": "eng_mw_2076266",
+   "handling": 88,
+   "topSpeedMph": 217
+  },
+  {
+   "id": "mw_393276",
+   "label": "BMW M3 GTR",
+   "game": "mw",
+   "vehicleId": 393276,
+   "pack": "NFS Heroes Pack",
+   "class": "tuner",
+   "bundles": [
+    "VEHICLES/VEH_393276_HI.BNDL",
+    "VEHICLES/VEH_393276_LO.BNDL"
+   ],
+   "paint": [
+    178,
+    24,
+    28
+   ],
+   "driveFormId": "0x01001058",
+   "driveEdid": "MMWBmwM3GtrDrive",
+   "staticFormId": "0x01001059",
+   "staticEdid": "MMWBmwM3GtrParked",
+   "engineSound": "eng_mw_393276",
+   "handling": 96,
+   "topSpeedMph": 180
+  },
+  {
+   "id": "mw_2076339",
+   "label": "Lamborghini Diablo SV",
+   "game": "mw",
+   "vehicleId": 2076339,
+   "pack": "NFS Heroes Pack",
+   "class": "super",
+   "bundles": [
+    "VEHICLES/VEH_2076339_HI.BNDL",
+    "VEHICLES/VEH_2076339_LO.BNDL"
+   ],
+   "paint": [
+    240,
+    140,
+    20
+   ],
+   "driveFormId": "0x0100105A",
+   "driveEdid": "MMWLamborghiniDiabloSvDrive",
+   "staticFormId": "0x0100105B",
+   "staticEdid": "MMWLamborghiniDiabloSvParked",
+   "engineSound": "eng_mw_2076339",
+   "handling": 90,
+   "topSpeedMph": 204
+  },
+  {
+   "id": "mw_2076399",
+   "label": "Porsche 911 GT2",
+   "game": "mw",
+   "vehicleId": 2076399,
+   "pack": "NFS Heroes Pack",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_2076399_HI.BNDL",
+    "VEHICLES/VEH_2076399_LO.BNDL"
+   ],
+   "paint": [
+    30,
+    60,
+    160
+   ],
+   "driveFormId": "0x0100105C",
+   "driveEdid": "MMWPorsche911Gt2Drive",
+   "staticFormId": "0x0100105D",
+   "staticEdid": "MMWPorsche911Gt2Parked",
+   "engineSound": "eng_mw_2076399",
+   "handling": 90,
+   "topSpeedMph": 189
+  },
+  {
+   "id": "mw_2076462",
+   "label": "Nissan 350Z",
+   "game": "mw",
+   "vehicleId": 2076462,
+   "pack": "NFS Heroes Pack",
+   "class": "tuner",
+   "bundles": [
+    "VEHICLES/VEH_2076462_HI.BNDL",
+    "VEHICLES/VEH_2076462_LO.BNDL"
+   ],
+   "paint": [
+    20,
+    20,
+    22
+   ],
+   "driveFormId": "0x0100105E",
+   "driveEdid": "MMWNissan350ZDrive",
+   "staticFormId": "0x0100105F",
+   "staticEdid": "MMWNissan350ZParked",
+   "engineSound": "eng_mw_2076462",
+   "handling": 96,
+   "topSpeedMph": 190,
+   "snow": {
+    "windshieldY": [
+     5,
+     54
+    ],
+    "wipers": [
+     {
+      "pivot": [
+       -33.2,
+       49.4,
+       57.0
+      ],
+      "arm": [
+       [
+        -33.2,
+        49.4,
+        57.0
+       ],
+       [
+        -2.8,
+        47.1,
+        61.6
+       ]
+      ],
+      "blade": [
+       [
+        -22.7,
+        45.8,
+        60.7
+       ],
+       [
+        13.5,
+        47.4,
+        60.1
+       ]
+      ],
+      "tube": 2.5
+     },
+     {
+      "pivot": [
+       7.5,
+       55.7,
+       57.1
+      ],
+      "arm": [
+       [
+        7.5,
+        55.7,
+        57.1
+       ],
+       [
+        30.6,
+        43.6,
+        61.1
+       ]
+      ],
+      "blade": [
+       [
+        11.9,
+        49.6,
+        60.2
+       ],
+       [
+        45.3,
+        37.9,
+        59.6
+       ]
+      ],
+      "tube": 2.5
+     }
+    ]
+   }
+  },
+  {
+   "id": "mw_2076524",
+   "label": "Nissan Skyline GT-R (R34)",
+   "game": "mw",
+   "vehicleId": 2076524,
+   "pack": "NFS Heroes Pack",
+   "class": "tuner",
+   "bundles": [
+    "VEHICLES/VEH_2076524_HI.BNDL",
+    "VEHICLES/VEH_2076524_LO.BNDL"
+   ],
+   "paint": [
+    225,
+    225,
+    220
+   ],
+   "driveFormId": "0x01001060",
+   "driveEdid": "MMWNissanSkylineGtRR34Drive",
+   "staticFormId": "0x01001061",
+   "staticEdid": "MMWNissanSkylineGtRR34Parked",
+   "engineSound": "eng_mw_2076524",
+   "handling": 96,
+   "topSpeedMph": 190
+  },
+  {
+   "id": "mw_2196000",
+   "label": "Porsche 918 Spyder",
+   "game": "mw",
+   "vehicleId": 2196000,
+   "pack": "Terminal Velocity Pack",
+   "class": "hyper",
+   "bundles": [
+    "VEHICLES/VEH_2196000_HI.BNDL",
+    "VEHICLES/VEH_2196000_LO.BNDL"
+   ],
+   "paint": [
+    200,
+    170,
+    20
+   ],
+   "driveFormId": "0x01001062",
+   "driveEdid": "MMWPorsche918SpyderDrive",
+   "staticFormId": "0x01001063",
+   "staticEdid": "MMWPorsche918SpyderParked",
+   "engineSound": "eng_mw_2196000",
+   "handling": 88,
+   "topSpeedMph": 202
+  },
+  {
+   "id": "mw_2196065",
+   "label": "BMW 1 Series M Coupé",
+   "game": "mw",
+   "vehicleId": 2196065,
+   "pack": "Terminal Velocity Pack",
+   "class": "tuner",
+   "bundles": [
+    "VEHICLES/VEH_2196065_HI.BNDL",
+    "VEHICLES/VEH_2196065_LO.BNDL"
+   ],
+   "paint": [
+    20,
+    110,
+    60
+   ],
+   "driveFormId": "0x01001064",
+   "driveEdid": "MMWBmw1SeriesMCoupéDrive",
+   "staticFormId": "0x01001065",
+   "staticEdid": "MMWBmw1SeriesMCoupéParked",
+   "engineSound": "eng_mw_2196065",
+   "handling": 96,
+   "topSpeedMph": 183
+  },
+  {
+   "id": "mw_2196131",
+   "label": "Audi RS3 Sportback",
+   "game": "mw",
+   "vehicleId": 2196131,
+   "pack": "Terminal Velocity Pack",
+   "class": "hatch",
+   "bundles": [
+    "VEHICLES/VEH_2196131_HI.BNDL",
+    "VEHICLES/VEH_2196131_LO.BNDL"
+   ],
+   "paint": [
+    90,
+    20,
+    120
+   ],
+   "driveFormId": "0x01001066",
+   "driveEdid": "MMWAudiRs3SportbackDrive",
+   "staticFormId": "0x01001067",
+   "staticEdid": "MMWAudiRs3SportbackParked",
+   "engineSound": "eng_mw_2196131",
+   "handling": 95,
+   "topSpeedMph": 160,
+   "archGap": 2.5,
+   "cockpit": {
+    "eye": [
+     -22.9,
+     -4,
+     74
+    ],
+    "floor": 22,
+    "recline": 18
+   },
+   "screen": {
+    "texture": "1000000000a905c",
+    "uv": [
+     0.3281,
+     0.2676,
+     0.4023,
+     0.3086
+    ]
+   }
+  },
+  {
+   "id": "mw_2196197",
+   "label": "Ford Fiesta ST",
+   "game": "mw",
+   "vehicleId": 2196197,
+   "pack": "Terminal Velocity Pack",
+   "class": "hatch",
+   "bundles": [
+    "VEHICLES/VEH_2196197_HI.BNDL",
+    "VEHICLES/VEH_2196197_LO.BNDL"
+   ],
+   "paint": [
+    150,
+    150,
+    155
+   ],
+   "driveFormId": "0x01001068",
+   "driveEdid": "MMWFordFiestaStDrive",
+   "staticFormId": "0x01001069",
+   "staticEdid": "MMWFordFiestaStParked",
+   "engineSound": "eng_mw_2196197",
+   "handling": 95,
+   "topSpeedMph": 150,
+   "archGap": 2.5,
+   "cockpit": {
+    "eye": [
+     -20,
+     0,
+     78
+    ],
+    "floor": 20,
+    "recline": 18
+   },
+   "lamps": {
+    "material": "211928",
+    "reach": 7,
+    "mirror": true,
+    "units": [
+     {
+      "at": [
+       41,
+       -104,
+       70
+      ],
+      "role": "none"
+     },
+     {
+      "at": [
+       41,
+       -104,
+       65.5
+      ],
+      "role": "reverse"
+     },
+     {
+      "at": [
+       41,
+       -110,
+       68.5
+      ],
+      "role": "none"
+     },
+     {
+      "at": [
+       39,
+       -102,
+       76
+      ],
+      "role": "tail"
+     },
+     {
+      "at": [
+       45,
+       -97,
+       72
+      ],
+      "role": "tail"
+     },
+     {
+      "at": [
+       47,
+       -94,
+       65
+      ],
+      "role": "tail"
+     },
+     {
+      "at": [
+       36,
+       -114,
+       60
+      ],
+      "role": "brake"
+     },
+     {
+      "at": [
+       43,
+       -108,
+       60
+      ],
+      "role": "brake"
+     },
+     {
+      "at": [
+       41,
+       -112,
+       63
+      ],
+      "role": "brake"
+     }
+    ]
+   },
+   "screen": {
+    "texture": "1000000000973bc,10000000022bfad",
+    "uv": [
+     0.2976,
+     0.5374,
+     0.3286,
+     0.5534
+    ]
+   }
+  },
+  {
+   "id": "mw_2196263",
+   "label": "Alfa Romeo MiTo",
+   "game": "mw",
+   "vehicleId": 2196263,
+   "pack": "Terminal Velocity Pack",
+   "class": "hatch",
+   "bundles": [
+    "VEHICLES/VEH_2196263_HI.BNDL",
+    "VEHICLES/VEH_2196263_LO.BNDL"
+   ],
+   "paint": [
+    10,
+    120,
+    170
+   ],
+   "driveFormId": "0x0100106A",
+   "driveEdid": "MMWAlfaRomeoMitoDrive",
+   "staticFormId": "0x0100106B",
+   "staticEdid": "MMWAlfaRomeoMitoParked",
+   "engineSound": "eng_mw_2196263",
+   "handling": 95,
+   "topSpeedMph": 140,
+   "archGap": 2.5,
+   "cockpit": {
+    "eye": [
+     -20,
+     3,
+     72
+    ],
+    "floor": 21,
+    "recline": 20
+   },
+   "screen": {
+    "texture": "1000000000a9066",
+    "uv": [
+     0.5762,
+     0.916,
+     0.6543,
+     0.9414
+    ],
+    "kind": "din"
+   }
+  },
+  {
+   "id": "mw_2196334",
+   "label": "Shelby GT500 (1967)",
+   "game": "mw",
+   "vehicleId": 2196334,
+   "pack": "Movie Legends Pack",
+   "class": "classic",
+   "bundles": [
+    "VEHICLES/VEH_2196334_HI.BNDL",
+    "VEHICLES/VEH_2196334_LO.BNDL"
+   ],
+   "paint": [
+    230,
+    90,
+    10
+   ],
+   "driveFormId": "0x0100106C",
+   "driveEdid": "MMWShelbyGt5001967Drive",
+   "staticFormId": "0x0100106D",
+   "staticEdid": "MMWShelbyGt5001967Parked",
+   "engineSound": "eng_mw_2196334",
+   "handling": 82,
+   "topSpeedMph": 150
+  },
+  {
+   "id": "mw_2196399",
+   "label": "Pontiac Firebird Trans Am (1977)",
+   "game": "mw",
+   "vehicleId": 2196399,
+   "pack": "Movie Legends Pack",
+   "class": "classic",
+   "bundles": [
+    "VEHICLES/VEH_2196399_HI.BNDL",
+    "VEHICLES/VEH_2196399_LO.BNDL"
+   ],
+   "paint": [
+    110,
+    10,
+    20
+   ],
+   "driveFormId": "0x0100106E",
+   "driveEdid": "MMWPontiacFirebirdTransAm1977Drive",
+   "staticFormId": "0x0100106F",
+   "staticEdid": "MMWPontiacFirebirdTransAm1977Parked",
+   "engineSound": "eng_mw_2196399",
+   "handling": 82,
+   "topSpeedMph": 160
+  },
+  {
+   "id": "mw_2196466",
+   "label": "Dodge Charger R/T (1970)",
+   "game": "mw",
+   "vehicleId": 2196466,
+   "pack": "Movie Legends Pack",
+   "class": "classic",
+   "bundles": [
+    "VEHICLES/VEH_2196466_HI.BNDL",
+    "VEHICLES/VEH_2196466_LO.BNDL"
+   ],
+   "paint": [
+    178,
+    24,
+    28
+   ],
+   "driveFormId": "0x01001070",
+   "driveEdid": "MMWDodgeChargerRT1970Drive",
+   "staticFormId": "0x01001071",
+   "staticEdid": "MMWDodgeChargerRT1970Parked",
+   "engineSound": "eng_mw_2196466",
+   "handling": 82,
+   "topSpeedMph": 180
+  },
+  {
+   "id": "mw_2196529",
+   "label": "Aston Martin DB5",
+   "game": "mw",
+   "vehicleId": 2196529,
+   "pack": "Movie Legends Pack",
+   "class": "classic",
+   "bundles": [
+    "VEHICLES/VEH_2196529_HI.BNDL",
+    "VEHICLES/VEH_2196529_LO.BNDL"
+   ],
+   "paint": [
+    240,
+    140,
+    20
+   ],
+   "driveFormId": "0x01001072",
+   "driveEdid": "MMWAstonMartinDb5Drive",
+   "staticFormId": "0x01001073",
+   "staticEdid": "MMWAstonMartinDb5Parked",
+   "engineSound": "eng_mw_2196529",
+   "handling": 82,
+   "topSpeedMph": 150
+  },
+  {
+   "id": "mw_2196595",
+   "label": "Aston Martin DBS",
+   "game": "mw",
+   "vehicleId": 2196595,
+   "pack": "Movie Legends Pack",
+   "class": "sports",
+   "bundles": [
+    "VEHICLES/VEH_2196595_HI.BNDL",
+    "VEHICLES/VEH_2196595_LO.BNDL"
+   ],
+   "paint": [
+    30,
+    60,
+    160
+   ],
+   "driveFormId": "0x01001074",
+   "driveEdid": "MMWAstonMartinDbsDrive",
+   "staticFormId": "0x01001075",
+   "staticEdid": "MMWAstonMartinDbsParked",
+   "engineSound": "eng_mw_2196595",
+   "handling": 90,
+   "topSpeedMph": 190
+  },
+  {
+   "id": "fnv_pickup",
+   "label": "Wasteland Pickup",
+   "game": "fnv",
+   "model": "meshes\\vehicles\\nv_truck.nif",
+   "pack": "base",
+   "class": "offroad",
+   "bundles": [],
+   "paint": [
+    150,
+    110,
+    80
+   ],
+   "driveFormId": "0x01001100",
+   "driveEdid": "MMWDriveFnvPickup",
+   "staticFormId": "0x01001101",
+   "staticEdid": "MMWCarFnvPickupStatic",
+   "handling": 65,
+   "topSpeedMph": 75,
+   "front": "-x",
+   "wheelsFrom": "meshes\\vehicles\\nv_woodcart.nif",
+   "tyreRadius": 37,
+   "rideRaise": 3,
+   "eyeDown": 10,
+   "steeringFrom": "meshes\\vehicles\\frontloader\\frontloader01.nif",
+   "dashGadgets": {
+    "shelf": {
+     "min": [
+      -55.0,
+      42.0,
+      104.0
+     ],
+     "max": [
+      55.0,
+      57.5,
+      121.0
+     ]
+    },
+    "stand": {
+     "base": [
+      -10.398,
+      50.648,
+      133.977
+     ],
+     "top": [
+      -10.398,
+      50.648,
+      139.477
+     ],
+     "normal": [
+      0,
+      0,
+      1
+     ],
+     "plate": 3.2
+    },
+    "pipboy": {
+     "at": [
+      -5.332,
+      59.721,
+      155.258
+     ],
+     "rot": [
+      -0.07405,
+      -0.67019,
+      -0.73848,
+      -0.37218,
+      -0.66844,
+      0.64395,
+      -0.9252,
+      0.32253,
+      -0.19993
+     ],
+     "scale": 1.45
+    },
+    "props": [
+     {
+      "model": "meshes\\clutter\\vintageradio\\vintageradio01.nif",
+      "at": [
+       -10.506,
+       49.874,
+       121.083
+      ],
+      "rot": [
+       0.94698,
+       -0.3213,
+       0.0,
+       0.3213,
+       0.94698,
+       0.0,
+       0.0,
+       0.0,
+       1.0
+      ],
+      "scale": 0.42
+     }
+    ],
+    "cable": {
+     "points": [
+      [
+       -18.522,
+       52.708,
+       149.14
+      ],
+      [
+       -18.843,
+       52.857,
+       148.984
+      ],
+      [
+       -19.13,
+       52.907,
+       148.537
+      ],
+      [
+       -19.381,
+       52.868,
+       147.832
+      ],
+      [
+       -19.598,
+       52.751,
+       146.902
+      ],
+      [
+       -19.779,
+       52.569,
+       145.782
+      ],
+      [
+       -19.923,
+       52.331,
+       144.504
+      ],
+      [
+       -20.032,
+       52.051,
+       143.101
+      ],
+      [
+       -20.103,
+       51.738,
+       141.607
+      ],
+      [
+       -20.138,
+       51.404,
+       140.055
+      ],
+      [
+       -20.136,
+       51.061,
+       138.477
+      ],
+      [
+       -20.095,
+       50.719,
+       136.908
+      ],
+      [
+       -20.017,
+       50.39,
+       135.381
+      ],
+      [
+       -19.901,
+       50.085,
+       133.928
+      ],
+      [
+       -19.746,
+       49.816,
+       132.583
+      ],
+      [
+       -19.551,
+       49.593,
+       131.38
+      ],
+      [
+       -19.318,
+       49.429,
+       130.351
+      ],
+      [
+       -19.045,
+       49.333,
+       129.53
+      ],
+      [
+       -18.732,
+       49.319,
+       128.949
+      ],
+      [
+       -18.378,
+       49.396,
+       128.643
+      ],
+      [
+       -17.81,
+       49.589,
+       128.643
+      ]
+     ],
+     "radius": 0.16
+    }
+   }
+  }
+ ]
+}

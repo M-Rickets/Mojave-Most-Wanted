@@ -1,0 +1,54 @@
+{
+ "sheet": "games",
+ "about": "The three games.",
+ "columns": {
+  "id": "row key",
+  "name": "name",
+  "role": "Melty recipe role",
+  "meltySlug": "Melty slug",
+  "steamAppId": "Steam app id",
+  "installDirName": "folder under steamapps/common (appmanifest installdir)",
+  "exe": "a file that proves the install",
+  "bundleVersion": "Criterion bnd2 version",
+  "ptr64": "64-bit resource pointers",
+  "posScale": "metres represented by int16 vertex positions (SNORM x scale)"
+ },
+ "rows": [
+  {
+   "id": "fnv",
+   "name": "Fallout: New Vegas",
+   "role": "primary",
+   "meltySlug": "fallout-new-vegas",
+   "steamAppId": 22380,
+   "installDirName": "Fallout New Vegas",
+   "exe": "FalloutNV.exe",
+   "bundleVersion": 0,
+   "ptr64": false,
+   "posScale": 0
+  },
+  {
+   "id": "mw",
+   "name": "Need for Speed Most Wanted (2012)",
+   "role": "secondary",
+   "meltySlug": "custom-need-for-speed-most-wanted",
+   "steamAppId": 1262560,
+   "installDirName": "Need for Speed(TM) Most Wanted",
+   "exe": "NFS13.exe",
+   "bundleVersion": 5,
+   "ptr64": false,
+   "posScale": 10
+  },
+  {
+   "id": "hp",
+   "name": "Need for Speed Hot Pursuit Remastered",
+   "role": "secondary",
+   "meltySlug": "custom-need-for-speed-hot-pursuit-remastered",
+   "steamAppId": 1328660,
+   "installDirName": "Need For Speed Hot Pursuit Remastered",
+   "exe": "NFS11Remastered.exe",
+   "bundleVersion": 3,
+   "ptr64": true,
+   "posScale": 8
+  }
+ ]
+}

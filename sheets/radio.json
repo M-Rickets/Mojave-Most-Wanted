@@ -1,0 +1,33 @@
+{
+ "sheet": "radio",
+ "about": "The in-car radio: both games' soundtracks repacked from EALayer3 (.SPS) to MP3 by the launcher into its own folder ({managed}\\radio) and played by the plugin (MCI) while driving; New Vegas's music is muted meanwhile.",
+ "columns": {
+  "id": "row key",
+  "game": "ref games.id",
+  "songsDir": "folder of.SPS songs",
+  "metaBundle": "song list bundle",
+  "langBundle": "English language table",
+  "codec": "EA SNR codec id",
+  "station": "name shown"
+ },
+ "rows": [
+  {
+   "id": "radio_mw",
+   "game": "mw",
+   "songsDir": "UI/SONGS",
+   "metaBundle": "UI/SONGS/SONGS.BNDL",
+   "langBundle": "UI/LANGUAGE/0001.BNDL",
+   "codec": 5,
+   "station": "Need for Speed Most Wanted"
+  },
+  {
+   "id": "radio_hp",
+   "game": "hp",
+   "songsDir": "UI/SONGS",
+   "metaBundle": "UI/SONGS/SONGS.BNDL",
+   "langBundle": "UI/LANGUAGE/0001.BNDL",
+   "codec": 5,
+   "station": "Need for Speed Hot Pursuit"
+  }
+ ]
+}

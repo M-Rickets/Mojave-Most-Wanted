@@ -1,0 +1,503 @@
+{
+ "sheet": "sounds",
+ "about": "Sounds the mashup plays.",
+ "columns": {
+  "id": "row key",
+  "game": "ref games.id (where the launcher looks first)",
+  "source": "where the converter finds it",
+  "kind": "engine | siren | skid",
+  "outFile": "file under the plugin's sound folder"
+ },
+ "rows": [
+  {
+   "id": "eng_mw_1085007",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085007.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122704",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122704.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122714",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122714.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_300097",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_300097.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122672",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122672.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122675",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122675.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122682",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122682.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122692",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122692.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122701",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122701.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122716",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122716.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122757",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122757.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122765",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122765.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122769",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122769.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122773",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122773.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_122814",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_122814.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_392074",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_392074.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_393001",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_393001.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_435169",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_435169.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_535435",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_535435.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_535621",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_535621.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_589261",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_589261.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_621053",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_621053.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_866774",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_866774.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_866832",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_866832.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1085091",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085091.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1085186",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085186.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1085511",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085511.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1085576",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085576.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1085633",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085633.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1085698",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085698.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1085764",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085764.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1085830",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085830.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1085958",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1085958.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1097100",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1097100.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1160025",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1160025.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1160082",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1160082.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1160139",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1160139.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1160350",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1160350.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1160480",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1160480.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1399322",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1399322.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1399539",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1399539.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1399602",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1399602.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_1551590",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_1551590.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2076005",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2076005.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2076070",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2076070.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2076137",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2076137.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2076203",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2076203.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2076266",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2076266.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_393276",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_393276.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2076339",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2076339.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2076399",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2076399.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2076462",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2076462.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2076524",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2076524.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196000",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196000.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196065",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196065.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196131",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196131.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196197",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196197.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196263",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196263.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196334",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196334.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196399",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196399.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196466",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196466.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196529",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196529.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "eng_mw_2196595",
+   "game": "mw",
+   "source": "car bundle: the Gnsu (0x80) pair with the most grains; louder = on throttle, quieter = off (audio.PickEngine)",
+   "kind": "engine",
+   "outFile": "eng_mw_2196595.mmwe (+ _off.mmwe)"
+  },
+  {
+   "id": "siren",
+   "game": "hp",
+   "source": "VEHICLES/WAVES.BNDL wave 0x100000000023016 (Hot Pursuit first, then Most Wanted, same id)",
+   "kind": "siren",
+   "outFile": "siren.wav"
+  },
+  {
+   "id": "skidHigh",
+   "game": "mw",
+   "source": "SOUND/GLOBAL.BNDL wave 0x1000000000f357a",
+   "kind": "skid",
+   "outFile": "skid_hi.wav"
+  },
+  {
+   "id": "skidMid",
+   "game": "mw",
+   "source": "SOUND/GLOBAL.BNDL wave 0x1000000000f357e",
+   "kind": "skid",
+   "outFile": "skid_mid.wav"
+  },
+  {
+   "id": "skidBody",
+   "game": "mw",
+   "source": "SOUND/GLOBAL.BNDL wave 0x1000000000f357e, played at 0.62 and high-passed at 160 Hz",
+   "kind": "skid",
+   "outFile": "skid_body.wav"
+  },
+  {
+   "id": "crashLight",
+   "game": "mw",
+   "source": "SOUND/METALCAR.BNDL wave 0x1000000000b3927",
+   "kind": "crash",
+   "outFile": "crash_light.wav"
+  },
+  {
+   "id": "crashMid",
+   "game": "mw",
+   "source": "SOUND/METALCAR.BNDL wave 0x1000000000b3915",
+   "kind": "crash",
+   "outFile": "crash_mid.wav"
+  },
+  {
+   "id": "crashHeavy",
+   "game": "mw",
+   "source": "SOUND/METALCAR.BNDL wave 0x10000000014e0b1",
+   "kind": "crash",
+   "outFile": "crash_heavy.wav"
+  }
+ ]
+}

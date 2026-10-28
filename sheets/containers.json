@@ -1,0 +1,20 @@
+{
+ "sheet": "containers",
+ "about": "Containers of ours in MojaveMostWanted.esp (tools/gen_esp.py writes the CONT records, tools/gen.py the kCont_ constants).",
+ "columns": {
+  "id": "the name in code (kCont_<id>)",
+  "edid": "editor id",
+  "formId": "form id (01 = this plugin)",
+  "name": "what the game shows",
+  "model": "any model of the game's (the box is placed hidden)"
+ },
+ "rows": [
+  {
+   "id": "tradeBox",
+   "edid": "MMWTradeBox",
+   "formId": "0x010009A0",
+   "name": "Trade offer",
+   "model": "Clutter\\Junk\\MilkCarton01.nif"
+  }
+ ]
+}

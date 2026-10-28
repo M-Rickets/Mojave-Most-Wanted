@@ -1,0 +1,72 @@
+{
+ "sheet": "lights",
+ "about": "Light sources that follow the car you drive.",
+ "columns": {
+  "id": "row key: head (on while you drive) or brake (on while you brake)",
+  "formId": "LIGH form id in MojaveMostWanted.esp",
+  "edid": "editor id",
+  "radius": "light radius, game units",
+  "color": "RGB",
+  "forward": "game units ahead of the nose (head lights) or of the tail (brake; negative = behind it). A minimum: the plugin moves a light further out until its radius no longer reaches the cabin (lightCabin* in tuning)",
+  "up": "game units above the ground",
+  "fade": "LIGH fade value (brightness)"
+ },
+ "rows": [
+  {
+   "id": "head",
+   "formId": "0x01000950",
+   "edid": "MMWHeadlightBeam",
+   "radius": 1600,
+   "color": [
+    255,
+    244,
+    222
+   ],
+   "forward": 760,
+   "up": 60,
+   "fade": 3.2
+  },
+  {
+   "id": "headNear",
+   "formId": "0x01000952",
+   "edid": "MMWHeadlightNear",
+   "radius": 600,
+   "color": [
+    255,
+    246,
+    230
+   ],
+   "forward": 170,
+   "up": 48,
+   "fade": 3.0
+  },
+  {
+   "id": "brake",
+   "formId": "0x01000951",
+   "edid": "MMWBrakelightGlow",
+   "radius": 300,
+   "color": [
+    255,
+    24,
+    12
+   ],
+   "forward": -60,
+   "up": 45,
+   "fade": 1.4
+  },
+  {
+   "id": "muzzle",
+   "formId": "0x01000953",
+   "edid": "MMWMuzzleFlashLight",
+   "radius": 420,
+   "color": [
+    255,
+    196,
+    120
+   ],
+   "forward": 0,
+   "up": 0,
+   "fade": 2.2
+  }
+ ]
+}

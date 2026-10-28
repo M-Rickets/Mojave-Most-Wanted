@@ -1,0 +1,103 @@
+{
+ "_about": "Our first-person weapon animations",
+ "keep": "^(Sneak)?((1hp|1hm|2hr|2ha|2hl|2hh|2hm|h2h|1lm)(Equip|Unequip|Reload|Jam)|(1gt|1md))",
+ "sets": {
+  "hit-anniversary": {
+   "dir": "anniversary",
+   "category": "Generic",
+   "generic": "Meshes/Characters/_1stPerson",
+   "credit": "Hitman47101 - Anniversary Anim Pack (nexusmods 70158): every weapon type's draw, holster, reloads and jams, with permission",
+   "_note": "Replaces the game's own first-person animations for every weapon of a type: one kNVSE entry with no form, so any weapon's own set wins over it"
+  },
+  "hit-10mm": {
+   "dir": "redux-10mm_Pistol",
+   "category": "Pistols",
+   "extraForms": {
+    "FalloutNV.esm": [
+     "1735D4"
+    ]
+   },
+   "credit": "Hitman47101 - Hit - 10mm Pistol Anim Set Redux (nexusmods 83534), with permission",
+   "_note": "Weathered 10mm (1735D4) added: same gun"
+  },
+  "hit-9mm": {
+   "dir": "redux-9mm_Pistol",
+   "category": "Pistols",
+   "credit": "Hitman47101 - Hit - 9mm Pistol Anim Set Redux (nexusmods 78876), with permission",
+   "soundStandIns": {
+    "fx\\Hit\\9mmPistolMagHitWell.wav": "redux-9mm_Pistol/Sound/FX/Hit/9mmPistolMagHit.wav"
+   }
+  },
+  "hit-45auto": {
+   "dir": "redux-_45_Auto_Pistol",
+   "category": "Pistols",
+   "credit": "Hitman47101 - Hit - .45 Auto Pistol Anim Set Redux (nexusmods 85002), with permission",
+   "soundStandIns": {
+    "fx\\Hit\\1911Return.wav": "redux-10mm_Pistol/Sound/FX/Hit/PistolReturn.wav",
+    "fx\\Hit\\1911MagHitWell.wav": "redux-10mm_Pistol/Sound/FX/Hit/10mmPistolMagHitWell.wav"
+   }
+  },
+  "hit-357": {
+   "dir": "hit357",
+   "category": "Pistols",
+   "json": "zzz_revolver_357.json",
+   "credit": "Hitman47101 - Hit - The Gunslinger - .357 Anims (nexusmods 98013), with permission"
+  },
+  "hit-servicerifle": {
+   "dir": "redux-Service_Rifle",
+   "category": "Rifles",
+   "credit": "Hitman47101 - Hit - Service Rifle Anim Set Redux (nexusmods 84119), with permission"
+  },
+  "hit-assaultrifle": {
+   "dir": "redux-Assault_Rifle",
+   "category": "Rifles",
+   "credit": "Hitman47101 - Hit - Assault Rifle Anim Set Redux (nexusmods 84232; Fallout 3 / TTW weapons), with permission",
+   "soundStandIns": {
+    "fx\\Hit\\G3MagRelesae.wav": "redux-Assault_Rifle/Sound/FX/Hit/G3MagRelease.wav"
+   }
+  },
+  "hit-singleshotgun": {
+   "dir": "redux-Single_Shotgun",
+   "category": "Shotguns",
+   "credit": "Hitman47101 - Hit - Single Shotgun Anim Set Redux (nexusmods 84183), with permission"
+  },
+  "hit-varmint": {
+   "dir": "varmint",
+   "category": "Rifles",
+   "credit": "Hitman47101 - Hit - Varmint Rifle Anim Set (nexusmods 73450), with permission"
+  },
+  "hit-ntw20": {
+   "dir": "ntw20",
+   "category": "Rifles",
+   "credit": "Hitman47101 - Hit - NTW-20 (nexusmods 98904), with permission",
+   "_note": "His weapon (HitNTW20.esp): plays when that plugin is in (its pack)"
+  },
+  "hit-m60": {
+   "dir": "m60",
+   "category": "Automatics",
+   "credit": "Hitman47101 - Hit - M60 (nexusmods 98447), with permission",
+   "_note": "His weapon (HitM60.esp); its Round13..1 folders are the belt's last rounds in the reload"
+  },
+  "hit-stoner": {
+   "dir": "stoner",
+   "category": "Automatics",
+   "credit": "Hitman47101 - Hit - Stoner 63 LMG (nexusmods 98573), with permission",
+   "_note": "His weapon (HitStoner63.esp)"
+  },
+  "hit-explosives": {
+   "dir": "explosives",
+   "category": "Explosives",
+   "credit": "Hitman47101 - Hit - Explosives - Reduced Cut (nexusmods 89503), with permission",
+   "_note": "His weapons (HitExplosives.esp): play when that plugin is in (its pack)"
+  },
+  "nvao-melee": {
+   "dir": "nvao-melee",
+   "category": "Melee",
+   "credit": "Rockbiter68, Stentorious, Hitman47101 - New Vegas Animation Overhaul - Melee (nexusmods 88830), with permission",
+   "_note": "One- and two-handed melee and fists, vanilla, DLC, GRA and TTW's Fallout 3 weapons: draws and holsters only (the split); its swings stay out"
+  }
+ },
+ "_split": ". Other authors' sets supply only draw (Equip), holster (Unequip), reloads (incl. tactical and looped starts) and jam clears",
+ "_soundStandIns": "Sounds a set's keys play but it doesn't carry (some are typos in the keys: G3MagRelesae, ServiceRifleFoley..): the nearest of his own sounds.",
+ "_keep": "Draw (Equip), holster (Unequip), reloads, jam clears - and everything for thrown (1gt) and placed (1md) explosives: a throw has no recoil, sway or aim of ours to keep."
+}

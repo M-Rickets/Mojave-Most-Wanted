@@ -1,0 +1,78 @@
+{
+ "sheet": "roads",
+ "about": "Clean roads: New Vegas textures the launcher repaves at Play from the player's own Fallout - Textures2.bsa (nothing of Bethesda's is shipped).",
+ "columns": {
+  "path": "texture path inside the archive and under Data",
+  "kind": "atlas = road surface atlas (lane markings kept, repainted fresh, asphalt repaved, alpha kept); ground = tiling landscape asphalt (repaved); decal = crack/patch overlay (made fully transparent); normal = normal map (flattened, low specular)"
+ },
+ "rows": [
+  {
+   "path": "textures\\landscape\\roads\\roadwasteland01.dds",
+   "kind": "atlas"
+  },
+  {
+   "path": "textures\\landscape\\roads\\roadwastelandstrip01.dds",
+   "kind": "atlas"
+  },
+  {
+   "path": "textures\\landscape\\roads\\roadwasteland01_lod.dds",
+   "kind": "atlas"
+  },
+  {
+   "path": "textures\\landscape\\roads\\roadwasteland01_n.dds",
+   "kind": "normal"
+  },
+  {
+   "path": "textures\\landscape\\roads\\roaddetails01.dds",
+   "kind": "decal"
+  },
+  {
+   "path": "textures\\landscape\\roads\\roaddetails01_n.dds",
+   "kind": "normal"
+  },
+  {
+   "path": "textures\\landscape\\asphaltstrip.dds",
+   "kind": "ground"
+  },
+  {
+   "path": "textures\\landscape\\asphalt02.dds",
+   "kind": "ground"
+  },
+  {
+   "path": "textures\\landscape\\asphalt03.dds",
+   "kind": "ground"
+  },
+  {
+   "path": "textures\\landscape\\asphaltwasteland01.dds",
+   "kind": "ground"
+  },
+  {
+   "path": "textures\\landscape\\asphaltwasteland02.dds",
+   "kind": "ground"
+  },
+  {
+   "path": "textures\\landscape\\asphaltwasteland03.dds",
+   "kind": "ground"
+  },
+  {
+   "path": "textures\\landscape\\asphalt02_n.dds",
+   "kind": "normal"
+  },
+  {
+   "path": "textures\\landscape\\asphalt03_n.dds",
+   "kind": "normal"
+  },
+  {
+   "path": "textures\\landscape\\asphaltwasteland01_n.dds",
+   "kind": "normal"
+  },
+  {
+   "path": "textures\\landscape\\asphaltwasteland02_n.dds",
+   "kind": "normal"
+  },
+  {
+   "path": "textures\\landscape\\asphaltwasteland03_n.dds",
+   "kind": "normal"
+  }
+ ]
+}

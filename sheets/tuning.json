@@ -1,0 +1,3046 @@
+{
+ "sheet": "tuning",
+ "about": "Gameplay numbers the plugin uses (Heat, pursuit, crashes).",
+ "columns": {
+  "id": "row key, also the mmw.ini override name",
+  "value": "number",
+  "about": "what it does"
+ },
+ "rows": [
+  {
+   "id": "hitDamagePerMs",
+   "value": 6,
+   "about": "Damage to a run-over actor per m/s of car speed"
+  },
+  {
+   "id": "crashDamagePerMs",
+   "value": 2.5,
+   "about": "Damage to the Courier per m/s of impact above 12 m/s"
+  },
+  {
+   "id": "obstacleRayUnits",
+   "value": 40,
+   "about": "Height of the bumper ray above the car's ground point (game units); lower things are just driven over"
+  },
+  {
+   "id": "obstacleStepUnits",
+   "value": 35,
+   "about": "A second ray this much higher tells a slope or rock (drive on) from a wall (stop)"
+  },
+  {
+   "id": "obstacleLowUnits",
+   "value": 20,
+   "about": "A third ray this high above the car's ground point (game units) tells how steep what the bumper ray met is: a slope (it meets it nearer) is driven up, a wall or an overhang stops the car"
+  },
+  {
+   "id": "groundStepMaxUnits",
+   "value": 55,
+   "about": "Under the car, a surface more than this above the car's own plane (game units) is the top of something it hit, not ground, and is ignored (the landscape always counts)"
+  },
+  {
+   "id": "maxClimbDegrees",
+   "value": 42,
+   "about": "Surfaces steeper than this between the two rays stop the car"
+  },
+  {
+   "id": "crashInsetUnits",
+   "value": 20,
+   "about": "The sweep rays start this far inside the car's outline (game units)"
+  },
+  {
+   "id": "crashRestitution",
+   "value": 0.2,
+   "about": "Share of the speed into a wall that bounces back"
+  },
+  {
+   "id": "crashFriction",
+   "value": 0.15,
+   "about": "Scraping along a wall: speed lost along it per m/s of impact"
+  },
+  {
+   "id": "crashSpinGain",
+   "value": 6,
+   "about": "How hard an off-centre hit turns the car (degrees per second per m/s x metre of lever)"
+  },
+  {
+   "id": "crashScrapeDegrees",
+   "value": 45,
+   "about": "Hitting a wall at less than this angle is a scrape (you carry on along it); steeper, you bounce off"
+  },
+  {
+   "id": "crashAlign",
+   "value": 0.6,
+   "about": "In a scrape, share of the angle to the wall the nose swings round at once"
+  },
+  {
+   "id": "crashPushMinUnits",
+   "value": 3,
+   "about": "If the car's outline ends up deeper than this inside something (a spin after a hit swings the corners in), it is pushed back out (game units)"
+  },
+  {
+   "id": "looseMaxUnits",
+   "value": 130,
+   "about": "Things up to this size (bound radius, game units) that the game moves don't stop the car: dynamic Havok bodies (cans, boxes) are knocked away, moveable statics on their own animation (tumbleweeds) are driven through"
+  },
+  {
+   "id": "looseKickScale",
+   "value": 1.3,
+   "about": "A loose thing the car meets is sent off at this times the car's speed, along its way (plus a third of that out to the side)"
+  },
+  {
+   "id": "looseKickUpMs",
+   "value": 2.5,
+   "about": "And upwards at this (m/s) plus 0.15 x the car's speed"
+  },
+  {
+   "id": "crashSoundMinMs",
+   "value": 1.5,
+   "about": "Impacts slower than this (m/s) make no crash sound"
+  },
+  {
+   "id": "crashVolume",
+   "value": 0.9,
+   "about": "Crash sound volume"
+  },
+  {
+   "id": "hitPushPerMs",
+   "value": 1.6,
+   "about": "A person you hit is knocked flying with this force per m/s of your speed (PushActorAway)"
+  },
+  {
+   "id": "hitMinMs",
+   "value": 1.2,
+   "about": "People and creatures the car's outline touches above this speed (m/s) are knocked over"
+  },
+  {
+   "id": "hitHurtFromMs",
+   "value": 4,
+   "about": "Above this speed (m/s) a hit also hurts them, slows you and adds Heat; slower is only a shove (your companions are never hurt)"
+  },
+  {
+   "id": "hitPushMin",
+   "value": 6,
+   "about": "The weakest knock (PushActorAway force), so even a slow bump puts them on the ground"
+  },
+  {
+   "id": "hitRadiusUnits",
+   "value": 22,
+   "about": "A person's width either side of their centre (game units) for the hit test against the car's outline"
+  },
+  {
+   "id": "hitCooldownSeconds",
+   "value": 1.5,
+   "about": "The same person can't be hit again for this long (they are still tumbling)"
+  },
+  {
+   "id": "lightCabinAheadUnits",
+   "value": 110,
+   "about": "The cabin reaches this far ahead of the driver's seat (game units, roomy enough for mid-engine cars): the headlight sources are kept far enough ahead that their light stops short of it"
+  },
+  {
+   "id": "lightCabinBehindUnits",
+   "value": 40,
+   "about": "The cabin reaches this far behind the driver's seat (game units): the brake glow stops short of it"
+  },
+  {
+   "id": "lightCabinGapUnits",
+   "value": 20,
+   "about": "Extra room between a light's reach and the cabin (game units)"
+  },
+  {
+   "id": "highBeamReachUnits",
+   "value": 1800,
+   "about": "High beams: a third headlight source this far beyond the main beam (game units), lighting the road much further ahead"
+  },
+  {
+   "id": "highBeamUpUnits",
+   "value": 25,
+   "about": "High beams: how much higher than the main beam that third source sits (game units)"
+  },
+  {
+   "id": "maxSteerDegrees",
+   "value": 30,
+   "about": "How far the front wheels turn at full lock (less at speed)"
+  },
+  {
+   "id": "steeringWheelDegreesAtLock",
+   "value": 220,
+   "about": "How far the steering wheel turns at full lock (degrees)"
+  },
+  {
+   "id": "steeringWheelSign",
+   "value": 1,
+   "about": "1, or -1 if the steering wheel turns the wrong way"
+  },
+  {
+   "id": "lookReturnSeconds",
+   "value": 2,
+   "about": "Seconds after you stop moving the mouse before the camera swings back behind the car"
+  },
+  {
+   "id": "mouseLookScale",
+   "value": 1.0,
+   "about": "Camera turn per mouse movement, times the game's own mouse sensitivity"
+  },
+  {
+   "id": "suspensionHz",
+   "value": 1.2,
+   "about": "Body bounce frequency (Hz): lower is softer"
+  },
+  {
+   "id": "suspensionDamping",
+   "value": 0.8,
+   "about": "Body bounce damping (1 = no overshoot)"
+  },
+  {
+   "id": "suspensionSag",
+   "value": 9,
+   "about": "Game units the body may sink below its resting height before the bump stop"
+  },
+  {
+   "id": "tiltHz",
+   "value": 1.5,
+   "about": "Pitch/roll spring frequency (Hz)"
+  },
+  {
+   "id": "tiltDamping",
+   "value": 0.7,
+   "about": ""
+  },
+  {
+   "id": "groundBlurUnits",
+   "value": 40,
+   "about": "Each wheel averages the ground over a patch this far ahead/behind (half as far sideways): cracks and seams average out"
+  },
+  {
+   "id": "pitchPerAccel",
+   "value": 0.45,
+   "about": "Degrees of squat (nose up) per m/s2 of acceleration; braking dives"
+  },
+  {
+   "id": "rollPerAccel",
+   "value": 0.5,
+   "about": "Degrees of body roll per m/s2 of cornering"
+  },
+  {
+   "id": "maxBodyTilt",
+   "value": 5,
+   "about": "Most squat/dive/roll from weight transfer, degrees"
+  },
+  {
+   "id": "wheelBump",
+   "value": 9,
+   "about": "How far a wheel can move up into its arch, game units"
+  },
+  {
+   "id": "wheelDroop",
+   "value": 14,
+   "about": "How far a wheel can drop below rest, game units"
+  },
+  {
+   "id": "cameraFollowHz",
+   "value": 3.0,
+   "about": "How quickly the chase camera follows the car's height (Hz)"
+  },
+  {
+   "id": "steerResponse",
+   "value": 4.0,
+   "about": "How quickly steering builds up and unwinds (per second); lower feels heavier"
+  },
+  {
+   "id": "airGravityScale",
+   "value": 1.6,
+   "about": "Gravity multiplier while airborne (heavier landings)"
+  },
+  {
+   "id": "hitSlowdown",
+   "value": 0.92,
+   "about": "Your speed is multiplied by this when you run someone over"
+  },
+  {
+   "id": "radioVolumeDefault",
+   "value": 0.8,
+   "about": "Car radio volume before you change it (0-1, times the game's master volume)"
+  },
+  {
+   "id": "radioClickVolume",
+   "value": 0.35,
+   "about": "Loudness of the radio's button clicks (power on when you get in, source M, next/previous N/B, volume and subwoofer knobs); 0 turns them off"
+  },
+  {
+   "id": "screenVideoBrightness",
+   "value": 0.55,
+   "about": "The dash screen's video brightness (0-1): the screen is self-lit on top of the light around it, so the browser's picture is toned down"
+  },
+  {
+   "id": "groundSmoothHz",
+   "value": 6,
+   "about": "The ground under each wheel is low-passed at this frequency (one odd sample can't kick the car)"
+  },
+  {
+   "id": "showroomDistance",
+   "value": 9,
+   "about": "Paint shop: metres in front of you where the car stands beside the menus"
+  },
+  {
+   "id": "showroomSide",
+   "value": 4.5,
+   "about": "Paint shop: metres to the right, so the menu box doesn't cover the car"
+  },
+  {
+   "id": "showroomLiveDistance",
+   "value": 7,
+   "about": "Live color editor: metres in front of you (centred, no menu in the way)"
+  },
+  {
+   "id": "showroomSpin",
+   "value": 12,
+   "about": "Paint shop: the car turns this many degrees per second"
+  },
+  {
+   "id": "bayMoveMetres",
+   "value": 7,
+   "about": "A garage bay on bad ground (dirt pile, pump island, broken slabs) moves at most this far to level, clear ground"
+  },
+  {
+   "id": "radioOutsideVolume",
+   "value": 0.6,
+   "about": "Car radio heard standing next to the parked car, as a share of its in-car volume"
+  },
+  {
+   "id": "radioOutsideFullMetres",
+   "value": 3,
+   "about": "Within this many metres of the parked car the radio is at its outside volume"
+  },
+  {
+   "id": "radioOutsideFadeMetres",
+   "value": 30,
+   "about": "The radio fades out (squared) by this distance from the car"
+  },
+  {
+   "id": "radioOutsideOffMetres",
+   "value": 40,
+   "about": "Further than this from the parked car (or indoors, or the car gone) the radio switches off"
+  },
+  {
+   "id": "subDefaultLevel",
+   "value": 3,
+   "about": "Subwoofer level (0-10) before you change it with PageUp / PageDown"
+  },
+  {
+   "id": "subCrossoverHz",
+   "value": 120,
+   "about": "subwoofer: the bass band is everything under this (Hz)"
+  },
+  {
+   "id": "subBassDbPerLevel",
+   "value": 1.4,
+   "about": "subwoofer: bass band boost per level (dB)"
+  },
+  {
+   "id": "subThumpHz",
+   "value": 55,
+   "about": "subwoofer: the deep thump on top of the bass (Hz)"
+  },
+  {
+   "id": "subThumpQ",
+   "value": 0.9,
+   "about": "subwoofer: width of the thump (Q)"
+  },
+  {
+   "id": "subThumpDbPerLevel",
+   "value": 0.6,
+   "about": "subwoofer: thump boost per level (dB)"
+  },
+  {
+   "id": "subBassCeiling",
+   "value": 0.8,
+   "about": "subwoofer: the bass band is compressed to stay under this share of full scale (clean, never clipped)"
+  },
+  {
+   "id": "subThickFromLevel",
+   "value": 1,
+   "about": "Above this level the bass is saturated and low-passed: its harmonics make low notes heard on any speaker"
+  },
+  {
+   "id": "subThickMax",
+   "value": 3,
+   "about": "subwoofer: saturation drive at level 10"
+  },
+  {
+   "id": "subHighDbPerLevel",
+   "value": -0.9,
+   "about": "The music above the bass turned down per subwoofer level (dB): the bass takes over"
+  },
+  {
+   "id": "subHighShelfHz",
+   "value": 2500,
+   "about": "Corner of the top-end roll-off (Hz)"
+  },
+  {
+   "id": "subHighShelfDbPerLevel",
+   "value": -0.8,
+   "about": "Top end rolled off per subwoofer level (dB): no tinny highs"
+  },
+  {
+   "id": "radioOutsideLowpassHz",
+   "value": 220,
+   "about": "Outside the car the radio is low-passed here (Hz): mostly the bass gets out"
+  },
+  {
+   "id": "radioOutsideBleed",
+   "value": 0.12,
+   "about": "Outside the car: share of the full sound that still gets out"
+  },
+  {
+   "id": "subRattleFromLevel",
+   "value": 4,
+   "about": "The car's loose parts (trunk lid, licence plate, mirrors and trim, a door panel) rattle above this level"
+  },
+  {
+   "id": "subRattleGain",
+   "value": 0.25,
+   "about": "Rattle loudness at level 10"
+  },
+  {
+   "id": "subShakeFromLevel",
+   "value": 2,
+   "about": "The car shakes with the bass above this level"
+  },
+  {
+   "id": "subShakeDegrees",
+   "value": 1.6,
+   "about": "Each new bass hit rocks the body this many degrees per unit the bass jumps above its recent level - nose and tail in turn"
+  },
+  {
+   "id": "subShakeUnits",
+   "value": 5,
+   "about": "The whole body drops this far (game units) on a full bass hit and springs back up through its rest - front and rear together"
+  },
+  {
+   "id": "subShakeRollDegrees",
+   "value": 0.35,
+   "about": "At level 10 on a full bass hit, the body buzzes side to side up to this (degrees)"
+  },
+  {
+   "id": "subShakeHz",
+   "value": 6,
+   "about": "How fast the body bounces on its springs under the bass (Hz; the rocking at 0.8 of it)"
+  },
+  {
+   "id": "subShakeDamping",
+   "value": 0.3,
+   "about": "How quickly each bounce dies away (1 = no bounce back)"
+  },
+  {
+   "id": "burnoutMaxSpeedMs",
+   "value": 3,
+   "about": "W + Space below this speed is a burnout (the car stays put, rear wheels spin)"
+  },
+  {
+   "id": "burnoutPivotDegPerSec",
+   "value": 65,
+   "about": "burnout: A / D swing the tail round the front wheels this fast"
+  },
+  {
+   "id": "burnoutRevs",
+   "value": 0.86,
+   "about": "burnout: engine revs, as a share of the recording's RPM range (bouncing off it)"
+  },
+  {
+   "id": "burnoutWheelMs",
+   "value": 28,
+   "about": "burnout: how fast the rear tyres turn (m/s at the tread)"
+  },
+  {
+   "id": "launchSeconds",
+   "value": 1.4,
+   "about": "Letting go of Space after a burnout: how long the launch boost lasts"
+  },
+  {
+   "id": "launchBoost",
+   "value": 1.45,
+   "about": "launch: acceleration multiplier at the start (fades to 1 over launchSeconds)"
+  },
+  {
+   "id": "skidVolume",
+   "value": 0.4,
+   "about": "Tyre squeal volume at full slip, times the game's effects volume"
+  },
+  {
+   "id": "smokeLingerSeconds",
+   "value": 1.2,
+   "about": "Tyre smoke keeps going this long after the burnout ends"
+  },
+  {
+   "id": "skidPitch",
+   "value": 0.85,
+   "about": "Burnout sound playback rate"
+  },
+  {
+   "id": "skidLayerBody",
+   "value": 1.0,
+   "about": "Burnout sound: share of the low squeal (the tyre squeal slowed down)"
+  },
+  {
+   "id": "skidLayerMid",
+   "value": 0.6,
+   "about": "Burnout sound: share of the mid tyre squeal"
+  },
+  {
+   "id": "skidLayerHigh",
+   "value": 0.1,
+   "about": "Burnout sound: share of the high tyre squeal"
+  },
+  {
+   "id": "driftMinSpeedMs",
+   "value": 9,
+   "about": "Below this speed the handbrake just stops the car; above it, it starts a slide"
+  },
+  {
+   "id": "driftHandbrakeDecel",
+   "value": 4,
+   "about": "Handbrake braking (m/s2) while sliding at speed"
+  },
+  {
+   "id": "driftHandbrakeGrip",
+   "value": 0.18,
+   "about": "Rear grip with the handbrake on at speed (1 = full)"
+  },
+  {
+   "id": "driftThrottleGrip",
+   "value": 0.28,
+   "about": "Rear grip while sliding on the throttle (power oversteer holds the slide)"
+  },
+  {
+   "id": "driftGripRate",
+   "value": 5.5,
+   "about": "How fast full rear grip pulls the direction of travel round to the nose (per second)"
+  },
+  {
+   "id": "driftOversteer",
+   "value": 85,
+   "about": "Degrees per second the tail keeps swinging out when the rear is loose, unless you countersteer"
+  },
+  {
+   "id": "driftSpinDegrees",
+   "value": 75,
+   "about": "Slides past this angle become a spin"
+  },
+  {
+   "id": "driftScrub",
+   "value": 0.6,
+   "about": "Speed lost per second sliding fully sideways (share of speed)"
+  },
+  {
+   "id": "driftSlideDegrees",
+   "value": 12,
+   "about": "Slip angle (degrees) past which a car at speed is sliding even without the handbrake"
+  },
+  {
+   "id": "driftPeakDegrees",
+   "value": 10,
+   "about": "Slip angle (degrees) the rear tyres must get back under before their grip comes back"
+  },
+  {
+   "id": "driftSlideGrip",
+   "value": 0.55,
+   "about": "Rear grip while sliding off the throttle"
+  },
+  {
+   "id": "driftGripReturn",
+   "value": 0.8,
+   "about": "How fast the rear grip comes back after a slide (share of full grip per second)"
+  },
+  {
+   "id": "driftSlideG",
+   "value": 0.85,
+   "about": "In a slide, the most the direction of travel can bend (sideways g): the car keeps its momentum"
+  },
+  {
+   "id": "driftStraighten",
+   "value": 40,
+   "about": "Degrees per second a gripping rear pulls the tail back in line in a slide"
+  },
+  {
+   "id": "gripRateNormal",
+   "value": 12,
+   "about": "Driving normally (no slide), how fast the direction of travel follows the nose (per second)"
+  },
+  {
+   "id": "driftLayerBody",
+   "value": 0.5,
+   "about": "Slide sound: share of the low squeal (the tyre squeal slowed down)"
+  },
+  {
+   "id": "driftLayerMid",
+   "value": 1.0,
+   "about": "Slide sound: share of the lower tyre squeal loop"
+  },
+  {
+   "id": "driftLayerHigh",
+   "value": 0.25,
+   "about": "Slide sound: share of the high tyre squeal loop"
+  },
+  {
+   "id": "driftSkidPitch",
+   "value": 0.9,
+   "about": "Slide sound playback rate"
+  },
+  {
+   "id": "driftSkidVolume",
+   "value": 0.45,
+   "about": "Slide sound volume"
+  },
+  {
+   "id": "wheelieLaunchDegrees",
+   "value": 10,
+   "about": "Muscle/classic: nose lift launching out of a burnout"
+  },
+  {
+   "id": "wheelieStartDegrees",
+   "value": 4,
+   "about": "Small wheelie when you floor it from a standstill (once per start)"
+  },
+  {
+   "id": "wheelieStartSeconds",
+   "value": 1.0,
+   "about": "How long the standing-start lift lasts (seconds)"
+  },
+  {
+   "id": "wheelieHz",
+   "value": 0.9,
+   "about": "Wheelie spring frequency (low: the car is heavy and slow to lift)"
+  },
+  {
+   "id": "wheelieDamping",
+   "value": 0.55,
+   "about": "Wheelie damping while the nose rises"
+  },
+  {
+   "id": "wheelieHold",
+   "value": 2.4,
+   "about": "How long a launch holds the nose up (higher: full lift for more of launchSeconds)"
+  },
+  {
+   "id": "wheelieRiseDegPerSec",
+   "value": 12,
+   "about": "How fast the lift a launch aims for builds (degrees per second): the nose climbs slowly"
+  },
+  {
+   "id": "wheelieDropDamping",
+   "value": 0.2,
+   "about": "Wheelie damping while the nose falls (low: it drops with weight)"
+  },
+  {
+   "id": "wheelieBounce",
+   "value": 0.25,
+   "about": "Share of the landing speed the nose bounces back with"
+  },
+  {
+   "id": "ridersOn",
+   "value": 1,
+   "about": "1: you (and a human companion close by) sit in the car as posed copies of your 3D; 0: off"
+  },
+  {
+   "id": "ridersCompanionReachUnits",
+   "value": 1500,
+   "about": "A human companion this close (game units) when you get in rides in the passenger seat; ED-E and animals never do (they follow as usual)"
+  },
+  {
+   "id": "ridersFloorAboveClearance",
+   "value": 4,
+   "about": "The cabin floor sits this far above the car's underbody (game units): feet rest just above it, hips never below it"
+  },
+  {
+   "id": "ridersReclineDegrees",
+   "value": 22,
+   "about": "How far the seat back leans back (degrees)"
+  },
+  {
+   "id": "ridersWheelRimScale",
+   "value": 0.82,
+   "about": "The steering wheel's rim radius as a share of its node's bounding radius (the bound takes in the column and hub too)"
+  },
+  {
+   "id": "ridersShiftSeconds",
+   "value": 0.45,
+   "about": "A gear change takes the right hand off the wheel to the lever and back in this long"
+  },
+  {
+   "id": "seatEye",
+   "value": 70,
+   "about": "The driver's seat camera: eye height above the ground under the car's centre (game units); your seated body is placed under it"
+  },
+  {
+   "id": "seatCameraLiftUnits",
+   "value": 5,
+   "about": "The driver-seat camera this far above the seated eye (game units; every car): enough to see the road over the hood."
+  },
+  {
+   "id": "ridersFingerCurlDegrees",
+   "value": 55,
+   "about": "How far the fingers close round the steering wheel (degrees at the middle joints; base and tip joints 70% of it; resting hands 35%)"
+  },
+  {
+   "id": "ridersHandsFollowDegrees",
+   "value": 45,
+   "about": "Your hands go round with the steering wheel this far each way (degrees), then the wheel slides through them"
+  },
+  {
+   "id": "driftCamFollow",
+   "value": 1.0,
+   "about": "Drift camera (as in NFS Heat): in a slide the chase camera turns this share of the way from the car's heading to the way it is travelling, so you see it go sideways"
+  },
+  {
+   "id": "driftCamFromDegrees",
+   "value": 4,
+   "about": "The drift camera starts at this slip angle (degrees between heading and travel)"
+  },
+  {
+   "id": "driftCamFromMs",
+   "value": 6,
+   "about": "No drift camera below this speed (m/s)"
+  },
+  {
+   "id": "driftCamInHz",
+   "value": 6,
+   "about": "How fast the drift camera eases in (per second)"
+  },
+  {
+   "id": "driftCamOutHz",
+   "value": 2.5,
+   "about": "How fast it eases back out when the slide ends (per second)"
+  },
+  {
+   "id": "driftCamPullBack",
+   "value": -0.2,
+   "about": "In a drift the chase camera's distance changes by this share (negative: it comes in close behind the rear wheels)"
+  },
+  {
+   "id": "driftCamLowerUnits",
+   "value": 0,
+   "about": "(replaced by driftCamHeightUnits)"
+  },
+  {
+   "id": "driftCamFullOverDegrees",
+   "value": 12,
+   "about": "And is full this many degrees past it"
+  },
+  {
+   "id": "driftCamSwingBoost",
+   "value": 8,
+   "about": "In a drift the chase camera swings round this much faster (added to chaseSwing, per second)"
+  },
+  {
+   "id": "driftCamHeightUnits",
+   "value": 80,
+   "about": "In a drift the chase camera comes down to this height over the road (game units), by the rear wheels"
+  },
+  {
+   "id": "driftCamLookDownUnits",
+   "value": 20,
+   "about": "And aims this much lower on the car (so it looks a little up at it, not at the sky)"
+  },
+  {
+   "id": "driftCamFovAdd",
+   "value": 22,
+   "about": "The drift camera's fishbowl: the view widens by this many degrees over your normal field of view"
+  },
+  {
+   "id": "driftCamFovInHz",
+   "value": 1.2,
+   "about": "How fast the view widens (per second: slower than the camera move, so it creeps in)"
+  },
+  {
+   "id": "driftCamFovOutHz",
+   "value": 1.8,
+   "about": "How fast it narrows again after the drift (per second)"
+  },
+  {
+   "id": "leanOutUnits",
+   "value": 10,
+   "about": "Leaning out to shoot: your eye goes this far past the car's side (game units, outside its body width)"
+  },
+  {
+   "id": "leanUpUnits",
+   "value": 10,
+   "about": "And how much higher (game units)"
+  },
+  {
+   "id": "leanStartYaw",
+   "value": -40,
+   "about": "Leaning out starts looking this way (degrees from straight ahead; negative is left, out of your window)"
+  },
+  {
+   "id": "leanSteerCut",
+   "value": 0.6,
+   "about": "While leaning out, steering is cut by this share (one hand on the wheel)"
+  },
+  {
+   "id": "leanBodyDegrees",
+   "value": 28,
+   "about": "Your seated body leans toward the window this far (degrees) while you're out of it"
+  },
+  {
+   "id": "leanInSeconds",
+   "value": 0.45,
+   "about": "Leaning out takes this long (seconds), eased in and out"
+  },
+  {
+   "id": "leanOutSeconds",
+   "value": 0.35,
+   "about": "And sitting back this long"
+  },
+  {
+   "id": "leanArcUnits",
+   "value": 5,
+   "about": "On the way out and back your eye rises this much over the door sill, highest half-way (game units)"
+  },
+  {
+   "id": "engineLoadOnSeconds",
+   "value": 0.25,
+   "about": "Pressing W, the engine sound eases from the off-throttle recording to the on-throttle one over this long (seconds); it keeps the RPM it was at"
+  },
+  {
+   "id": "engineLoadOffSeconds",
+   "value": 0.4,
+   "about": "Letting go of W, the engine sound eases back to the off-throttle recording over this long (seconds)"
+  },
+  {
+   "id": "limiterHz",
+   "value": 13,
+   "about": "Rev limiter bounces a second"
+  },
+  {
+   "id": "limiterDrop",
+   "value": 0.045,
+   "about": "Each bounce dips the revs by this share"
+  },
+  {
+   "id": "driftLimiterDegrees",
+   "value": 10,
+   "about": "Drifting on the throttle past this slip angle runs the engine up to the limiter"
+  },
+  {
+   "id": "exhaustOn",
+   "value": 1,
+   "about": "1: the rev limiter bouncing while drifting (and at the top of a low gear); 0: off"
+  },
+  {
+   "id": "limiterCut",
+   "value": 0.45,
+   "about": "How deep each bounce of the rev limiter cuts the engine sound (0 none.. 1 full)"
+  },
+  {
+   "id": "paintBrightKnee",
+   "value": 0.7,
+   "about": "Paint brightness (0-1) above which light colours are squeezed, so whites look lit rather than self-lit"
+  },
+  {
+   "id": "paintBrightSqueeze",
+   "value": 0.5,
+   "about": "How much of the brightness above paintBrightKnee is kept (1 all of it)"
+  },
+  {
+   "id": "paintBrightReflectionCut",
+   "value": 0.6,
+   "about": "How much of a finish's sky reflection is taken off light colours (0 none.. 1 all, near-white paint)"
+  },
+  {
+   "id": "shiftLightFirst",
+   "value": 0.5,
+   "about": "Shift lights: the first (leftmost) LED lights at this share of the heard rev range; the rest one by one up to shiftLightLast"
+  },
+  {
+   "id": "shiftLightLast",
+   "value": 0.86,
+   "about": "Shift lights: the last (rightmost) LED lights here"
+  },
+  {
+   "id": "shiftLightFlash",
+   "value": 0.9,
+   "about": "Shift lights: all blink once the gearbox's own revs in this gear pass this (it changes up at 0.96; the heard revs lag it a little), or on the limiter"
+  },
+  {
+   "id": "shiftLightBlinkHz",
+   "value": 8,
+   "about": "Shift lights: blinks per second at the shift point"
+  },
+  {
+   "id": "vibeOn",
+   "value": 1,
+   "about": "The companion vibes to the music: nods to its beat and looks round now and then (0 off)"
+  },
+  {
+   "id": "vibeNodDegrees",
+   "value": 3.5,
+   "about": "How far the companion's head dips on each beat (degrees) when the beat is clear"
+  },
+  {
+   "id": "vibeSwayDegrees",
+   "value": 1.2,
+   "about": "And how far it sways side to side at half time (degrees)"
+  },
+  {
+   "id": "vibeLookYawDegrees",
+   "value": 50,
+   "about": "The farthest the companion turns their head to look round (degrees)"
+  },
+  {
+   "id": "vibeLookTurnSeconds",
+   "value": 1.8,
+   "about": "How long a look round takes to turn there (a little longer back)"
+  },
+  {
+   "id": "vibeLookMinSeconds",
+   "value": 10,
+   "about": "The companion looks round again after this many seconds at the least"
+  },
+  {
+   "id": "vibeLookMaxSeconds",
+   "value": 26,
+   "about": "And at the most"
+  },
+  {
+   "id": "snowFadeSeconds",
+   "value": 25,
+   "about": "Snowfall eases in and out over this long when K turns it on or off"
+  },
+  {
+   "id": "snowBuildMinutes",
+   "value": 6,
+   "about": "Light snowfall time for the cars' piles to grow from bare to full (about 15 cm in the middle of flat panels); heavy snow and blizzards build faster (snowHeavyFactor, snowBlizzardFactor)"
+  },
+  {
+   "id": "snowMeltMinutes",
+   "value": 15,
+   "about": "Time for a full cover to melt away once it stops snowing"
+  },
+  {
+   "id": "snowGlassBuildMinutes",
+   "value": 2,
+   "about": "Light snowfall time for a clear windshield to fill (heavy and blizzard faster by the same factors)"
+  },
+  {
+   "id": "snowHeightUnits",
+   "value": 600,
+   "about": "How high over you the snow starts falling (game units, 70 a metre)"
+  },
+  {
+   "id": "snowLeadSeconds",
+   "value": 1.6,
+   "about": "The snowfall is kept ahead of you by your speed times this, so you drive into it"
+  },
+  {
+   "id": "wiperCycleSeconds",
+   "value": 1.25,
+   "about": "One wiper sweep, up and back"
+  },
+  {
+   "id": "snowHeavyFactor",
+   "value": 2.5,
+   "about": "Heavy snow piles up this many times faster than light snow"
+  },
+  {
+   "id": "snowBlizzardFactor",
+   "value": 5,
+   "about": "A blizzard piles up this many times faster than light snow"
+  },
+  {
+   "id": "snowDefrostSeconds",
+   "value": 20,
+   "about": "Driving a car without wipers, its windshield clears over this long (the defroster); it still fills when parked"
+  },
+  {
+   "id": "snowHeavyFogFar",
+   "value": 6500,
+   "about": "Heavy snow: the fog closes in to this far (game units, 70 a metre), by day; night 2/3 of it"
+  },
+  {
+   "id": "snowBlizzardFogFar",
+   "value": 1500,
+   "about": "blizzard: the fog closes in to this far (game units, 70 a metre: ~20 m), by day; night 3/4 of it"
+  },
+  {
+   "id": "snowBlizzardWhiteout",
+   "value": 1.0,
+   "about": "blizzard: how far the sky's colours go to the fog's grey-white (0 none, 1 all)"
+  },
+  {
+   "id": "snowBlizzardUpwindUnits",
+   "value": 600,
+   "about": "blizzard: the wall the flakes blow from is kept this far upwind of you"
+  },
+  {
+   "id": "snowStormBlendSeconds",
+   "value": 20,
+   "about": "The fog and sky move to the new storm level over this long"
+  },
+  {
+   "id": "snowBlizzardSunDim",
+   "value": 0.7,
+   "about": "blizzard: how much of the sun's light (and its disc) the storm takes away"
+  },
+  {
+   "id": "snowWindVolume",
+   "value": 0.5,
+   "about": "Blizzard wind: the howl's loudness outside (heavy snow about a sixth of it; in the car muffled to a quarter)"
+  },
+  {
+   "id": "nightDarkness",
+   "value": 1.0,
+   "about": "Realistic nights: 0 the game's own nights, 1 midnight near pitch black (every weather's night and midnight colours; read once when the game starts)"
+  },
+  {
+   "id": "nightKeep",
+   "value": 0.4,
+   "about": "Realistic nights: how much of its own light the evening/early-morning \"night\" colour keeps (midnight goes to near black)"
+  },
+  {
+   "id": "nightFlakeMin",
+   "value": 0.12,
+   "about": "Realistic nights: the falling snow's brightness at midnight (it is unlit; full by day)"
+  },
+  {
+   "id": "handlingStrength",
+   "value": 1.0,
+   "about": "Bodycam handling: times every kick, sway and lag (0 = off; U toggles it on foot)"
+  },
+  {
+   "id": "handlingUpSign",
+   "value": -1.0,
+   "about": "The player's view pitch (rot X) that looks up: -1 if a smaller X looks up (Bethesda's convention), +1 if not"
+  },
+  {
+   "id": "handlingAimSway",
+   "value": 0.45,
+   "about": "Aiming down the sights: sway times this (kick x0.85, lag x1.15)"
+  },
+  {
+   "id": "handlingSneakSway",
+   "value": 0.7,
+   "about": "crouched: sway and kick times this"
+  },
+  {
+   "id": "handlingMoveSwayDeg",
+   "value": 0.6,
+   "about": "Extra sway at a run (degrees), less at a walk; follows your footsteps"
+  },
+  {
+   "id": "handlingMaxLagSec",
+   "value": 0.07,
+   "about": "The view never trails the mouse by more than this (seconds)"
+  },
+  {
+   "id": "inertiaTurnSec",
+   "value": 0.07,
+   "about": "The gun trails a turn: degrees of lag per degree-per-second of turning, at the type's refWeight (heavier: more)"
+  },
+  {
+   "id": "inertiaMaxDeg",
+   "value": 26,
+   "about": "The gun never trails the view by more than this (degrees)"
+  },
+  {
+   "id": "inertiaHz",
+   "value": 4.0,
+   "about": "The gun's spring back to centre (lower = looser, heavier swing)"
+  },
+  {
+   "id": "inertiaDamping",
+   "value": 0.42,
+   "about": "The gun spring's damping: under 1 it overshoots - the whip past centre when you stop turning"
+  },
+  {
+   "id": "inertiaRoll",
+   "value": 0.7,
+   "about": "The gun cants into a turn: degrees of roll per degree it trails sideways"
+  },
+  {
+   "id": "inertiaSwayScale",
+   "value": 3.0,
+   "about": "The gun's own breathing sway, times the type's swayDeg (the view keeps a little of it)"
+  },
+  {
+   "id": "inertiaViewSway",
+   "value": 0.4,
+   "about": "Share of the breathing sway still on the view, now that the gun sways"
+  },
+  {
+   "id": "inertiaMoveDeg",
+   "value": 2.4,
+   "about": "The gun bobs with your steps at a run (degrees), less at a walk; it cants when you strafe"
+  },
+  {
+   "id": "hipViewKick",
+   "value": 0.55,
+   "about": "From the hip the view kicks this much of its aimed kick"
+  },
+  {
+   "id": "hipKickSpread",
+   "value": 1.1,
+   "about": "From the hip each kick also throws the gun sideways and cants it by up to this share of its kick"
+  },
+  {
+   "id": "adsKickScale",
+   "value": 0.9,
+   "about": "Down the sights the gun kicks this many times the view's kick"
+  },
+  {
+   "id": "kickBackUnits",
+   "value": 3.5,
+   "about": "Each kick shoves the gun back toward you (game units, at refDamage)"
+  },
+  {
+   "id": "adsSettleDeg",
+   "value": 1.0,
+   "about": "Going to or from the sights throws the gun off by up to this (degrees) and it settles on its spring"
+  },
+  {
+   "id": "gunMassPounds",
+   "value": 5.0,
+   "about": "A gun this heavy (pounds) swings and settles at inertiaHz; lighter is quicker, heavier slower, wider and less snappy (linear in weight)"
+  },
+  {
+   "id": "inertiaRateSmoothSec",
+   "value": 0.05,
+   "about": "The turn speed the gun reacts to is smoothed over this (seconds)"
+  },
+  {
+   "id": "kickHeatPerShot",
+   "value": 0.12,
+   "about": "Each shot adds this to the heat; every kick is (1 + heat) times as strong"
+  },
+  {
+   "id": "kickHeatMax",
+   "value": 1.2,
+   "about": "The most heat sustained fire builds"
+  },
+  {
+   "id": "kickHeatDecay",
+   "value": 1.0,
+   "about": "Heat drains this much a second"
+  },
+  {
+   "id": "adsTransitionSec",
+   "value": 0.45,
+   "about": "After going to or from the sights the gun's spring runs at 0.6 x speed for this long (the gun is brought in)"
+  },
+  {
+   "id": "hipKickOneHand",
+   "value": 1.5,
+   "about": "From the hip a one-handed gun (pistol types) kicks this many times the view's kick"
+  },
+  {
+   "id": "hipKickTwoHand",
+   "value": 2.3,
+   "about": "From the hip a two-handed gun kicks this many times the view's kick (braced: less wild)"
+  },
+  {
+   "id": "adsViewKick",
+   "value": 1.0,
+   "about": "Aimed, a semi-automatic's view kicks this share (the gun flips about the grip instead)"
+  },
+  {
+   "id": "adsViewKickAuto",
+   "value": 1.05,
+   "about": "Aimed, an automatic's view climbs this share - the recoil you pull against"
+  },
+  {
+   "id": "autoClimb",
+   "value": 1.15,
+   "about": "An automatic's per-shot climb on the gun, times its kick (heat adds to it)"
+  },
+  {
+   "id": "autoSway",
+   "value": 0.55,
+   "about": "An automatic's back-and-forth (a slow pattern, not random) on the gun, times its kick"
+  },
+  {
+   "id": "autoDamping",
+   "value": 0.72,
+   "about": "An automatic's gun spring damping at least this (no dance)"
+  },
+  {
+   "id": "wobbleDeg",
+   "value": 1.6,
+   "about": "Each shot sets the barrel wobbling about the grip by up to this (degrees; x1.4 from the hip)"
+  },
+  {
+   "id": "wobbleHz",
+   "value": 11,
+   "about": "The barrel wobble's frequency"
+  },
+  {
+   "id": "wobbleDamping",
+   "value": 0.22,
+   "about": "The barrel wobble's damping (low: it rings a few times)"
+  },
+  {
+   "id": "handlingViewLagScale",
+   "value": 0.35,
+   "about": "The view trails the mouse by the gun's lagSec times this (the gun's own swing carries the weight)"
+  },
+  {
+   "id": "adsFlipDeg",
+   "value": 3.5,
+   "about": "aimed: each shot flips the muzzle up by about this (degrees) about a point forward along the barrel, so the rear sight dips"
+  },
+  {
+   "id": "adsFlipHz",
+   "value": 6.5,
+   "about": "aimed: the flip's spring (it dips and comes back)"
+  },
+  {
+   "id": "adsFlipDamping",
+   "value": 0.32,
+   "about": "aimed: the flip's damping"
+  },
+  {
+   "id": "adsFlipPivotUnits",
+   "value": 9,
+   "about": "aimed: the flip's pivot is this far forward of the wrist along the barrel for a one-handed gun (game units)"
+  },
+  {
+   "id": "adsFlipLongArm",
+   "value": 2.2,
+   "about": "aimed: a long arm's flip pivot is this many times further forward"
+  },
+  {
+   "id": "adsRiseDelaySec",
+   "value": 0.03,
+   "about": "aimed: the barrel's climb (the view's kick) comes this long after the flip"
+  },
+  {
+   "id": "adsSemiScale",
+   "value": 2.4,
+   "about": "aimed: a semi-automatic's muzzle flip is this many times an automatic's"
+  },
+  {
+   "id": "adsOneHandFlip",
+   "value": 1.2,
+   "about": "aimed: and a one-handed gun's (pistols, revolvers) this many times more again"
+  },
+  {
+   "id": "adsSemiKick",
+   "value": 2.0,
+   "about": "aimed: a semi-automatic's kick at the wrist is this many times an automatic's"
+  },
+  {
+   "id": "adsSemiWobble",
+   "value": 2.0,
+   "about": "aimed: a semi-automatic's barrel wobble factor (automatics 1.2)"
+  },
+  {
+   "id": "adsSemiClimb",
+   "value": 1.4,
+   "about": "aimed: a semi-automatic's barrel climb (the view's kick) times this"
+  },
+  {
+   "id": "shotgunViewScale",
+   "value": 0.25,
+   "about": "A shotgun's (more than one projectile) view kick and climb times this"
+  },
+  {
+   "id": "shotgunLiftScale",
+   "value": 0.3,
+   "about": "A shotgun's lift at the wrist times this"
+  },
+  {
+   "id": "shotgunTiltScale",
+   "value": 1.0,
+   "about": "A shotgun's muzzle flip (aimed) and roll from the hip times this"
+  },
+  {
+   "id": "adsOneHandWobble",
+   "value": 1.3,
+   "about": "aimed: a one-handed semi-automatic's barrel wobble times this"
+  },
+  {
+   "id": "shotgunBackScale",
+   "value": 0.15,
+   "about": "A shotgun's shove back toward you times this"
+  },
+  {
+   "id": "shotgunWobble",
+   "value": 1.8,
+   "about": "A shotgun's barrel wobble times this"
+  },
+  {
+   "id": "kickBackMaxUnits",
+   "value": 5,
+   "about": "No shot shoves the gun back further than this (game units) - it stays clear of the camera"
+  },
+  {
+   "id": "moveOn",
+   "value": 1,
+   "about": "Climbing, mantling and wall kicks on foot (1 on, 0 off)"
+  },
+  {
+   "id": "moveProbeUnits",
+   "value": 70,
+   "about": "How far ahead of you (game units, from your centre) a wall counts for a ledge"
+  },
+  {
+   "id": "moveMinLedge",
+   "value": 35,
+   "about": "A ledge lower than this above your feet is a step the game handles itself"
+  },
+  {
+   "id": "moveVaultMax",
+   "value": 80,
+   "about": "Up to this height above your feet the climb is a quick vault"
+  },
+  {
+   "id": "moveMantleMax",
+   "value": 150,
+   "about": "standing: the highest ledge you can mantle (about head height and a little above)"
+  },
+  {
+   "id": "moveAirReach",
+   "value": 175,
+   "about": "In the air: how far above your feet your hands reach for a ledge"
+  },
+  {
+   "id": "moveClearUnits",
+   "value": 100,
+   "about": "Standing room you need on top of a ledge"
+  },
+  {
+   "id": "moveVaultSec",
+   "value": 0.5,
+   "about": "How long a vault takes"
+  },
+  {
+   "id": "moveMantleSec",
+   "value": 1.1,
+   "about": "How long a standing mantle takes"
+  },
+  {
+   "id": "moveClimbSec",
+   "value": 1.4,
+   "about": "How long pulling up from a jump or a kick takes"
+  },
+  {
+   "id": "moveWallUnits",
+   "value": 80,
+   "about": "In the air: a wall this close past your body can be kicked off"
+  },
+  {
+   "id": "moveKickUpUnits",
+   "value": 90,
+   "about": "Kicking up a wall you face: how much higher it lifts you (sets the kick's upward speed)"
+  },
+  {
+   "id": "moveKickAwayUp",
+   "value": 80,
+   "about": "Kicking off a wall beside or behind you: how much higher it lifts you"
+  },
+  {
+   "id": "moveKickSpeed",
+   "value": 380,
+   "about": "Kicking off a wall beside or behind you: your speed away from it (game units a second)"
+  },
+  {
+   "id": "moveKicksMax",
+   "value": 3,
+   "about": "Wall kicks per jump (back on the ground resets them)"
+  },
+  {
+   "id": "moveUpKicksMax",
+   "value": 2,
+   "about": "Of those, kicks up a wall you face"
+  },
+  {
+   "id": "moveHintUnits",
+   "value": 90,
+   "about": "A ledge this close (past your body) gets the left hand reaching for it"
+  },
+  {
+   "id": "moveReachInSec",
+   "value": 0.18,
+   "about": "How fast the left hand reaches out and comes back"
+  },
+  {
+   "id": "moveHandLeftUnits",
+   "value": 12,
+   "about": "The left hand grabs this far left of where you look"
+  },
+  {
+   "id": "moveCamDipDeg",
+   "value": 8,
+   "about": "The view dips this much as you grab and pull up"
+  },
+  {
+   "id": "moveGunDropDeg",
+   "value": 35,
+   "about": "The gun swings down this much while you climb"
+  },
+  {
+   "id": "moveBodyRadius",
+   "value": 20,
+   "about": "Your body's radius if the game's capsule can't be read"
+  },
+  {
+   "id": "moveHintMax",
+   "value": 360,
+   "about": "The left hand reaches for ledges up to this high above your feet, even ones you can't climb at once"
+  },
+  {
+   "id": "moveGravity",
+   "value": 690,
+   "about": "A kick's flight: gravity (game units a second squared; about 9.8 m/s2)"
+  },
+  {
+   "id": "moveAirControl",
+   "value": 500,
+   "about": "A kick's flight: how hard W/A/S/D steer it (game units a second squared)"
+  },
+  {
+   "id": "moveAirMaxSpeed",
+   "value": 320,
+   "about": "A kick's flight: steering never takes you faster than this (or the kick's own speed)"
+  },
+  {
+   "id": "moveArmReachExtend",
+   "value": 0.85,
+   "about": "Reaching for a ledge, the arm stretches to this share of its length (the elbow keeps a bend)"
+  },
+  {
+   "id": "moveArmGripExtend",
+   "value": 0.96,
+   "about": "Holding the edge on a climb, the arm stretches to this share"
+  },
+  {
+   "id": "moveWristUp",
+   "value": 0.5,
+   "about": "reaching: the wrist cocks back (palm toward the edge) by this much"
+  },
+  {
+   "id": "moveWristHook",
+   "value": 0.6,
+   "about": "Holding the edge: the hand points forward and down over it by this much"
+  },
+  {
+   "id": "moveFingerCurl",
+   "value": 1.2,
+   "about": "Holding the edge: the fingers curl down over it by this much"
+  },
+  {
+   "id": "moveFingerAmount",
+   "value": 0.9,
+   "about": "How fully the fingers open (reaching) or curl (holding), 0 to 1"
+  },
+  {
+   "id": "moveHandSway",
+   "value": 0.5,
+   "about": "The reaching hand's faint unsteadiness (game units)"
+  },
+  {
+   "id": "moveShowArmsHolstered",
+   "value": 0,
+   "about": "With no weapon out, show the arms while the left hand reaches (1) or not (0)"
+  },
+  {
+   "id": "moveFullBody",
+   "value": 1,
+   "about": "Vaults, mantles, climbs and kicks are shown on a full body (a posed copy of yours, both hands, legs over), 1 on, 0 off"
+  },
+  {
+   "id": "moveLookAt",
+   "value": 0.8,
+   "about": "During a climb the view is drawn this far (0..1) toward your hands as they land, then your knee coming over (Dying Light style)"
+  },
+  {
+   "id": "sprintOn",
+   "value": 1,
+   "about": "The two-tier sprint on foot (1 on, 0 off)"
+  },
+  {
+   "id": "sprintSpeedMult",
+   "value": 1.7,
+   "about": "Sprinting (hold Shift going forward): your run speed times this"
+  },
+  {
+   "id": "tacSprintSpeedMult",
+   "value": 2.1,
+   "about": "Tac sprint (double-tap Shift): your run speed times this"
+  },
+  {
+   "id": "tacSprintSec",
+   "value": 3.5,
+   "about": "How long a tac sprint lasts before it drops to a sprint"
+  },
+  {
+   "id": "tacSprintRechargeSec",
+   "value": 4,
+   "about": "How long after a tac sprint before it starts coming back (it refills over 1.5 s)"
+  },
+  {
+   "id": "sprintDoubleTapSec",
+   "value": 0.35,
+   "about": "Two Shift presses this close make a tac sprint"
+  },
+  {
+   "id": "sprintPoseHz",
+   "value": 5,
+   "about": "How fast the gun goes into and out of the sprint poses (1/seconds)"
+  },
+  {
+   "id": "sprintBobDeg",
+   "value": 3.5,
+   "about": "The gun's running bob (degrees)"
+  },
+  {
+   "id": "sprintGunPitch",
+   "value": -25,
+   "about": "sprinting: the gun's pitch (deg, + muzzle up): lowered"
+  },
+  {
+   "id": "sprintGunHeading",
+   "value": -22,
+   "about": "sprinting: the gun's heading (deg, + right): across you to the left"
+  },
+  {
+   "id": "sprintGunRoll",
+   "value": -28,
+   "about": "sprinting: the gun's roll (deg, + cant right)"
+  },
+  {
+   "id": "sprintGunX",
+   "value": -2,
+   "about": "sprinting: the gun moved right (units)"
+  },
+  {
+   "id": "sprintGunZ",
+   "value": -4,
+   "about": "sprinting: the gun moved up (units)"
+  },
+  {
+   "id": "tacGunPitch",
+   "value": 55,
+   "about": "Tac sprint: the gun's pitch: muzzle up by the shoulder"
+  },
+  {
+   "id": "tacGunHeading",
+   "value": -18,
+   "about": "Tac sprint: the gun's heading"
+  },
+  {
+   "id": "tacGunRoll",
+   "value": -25,
+   "about": "Tac sprint: the gun's roll"
+  },
+  {
+   "id": "tacGunX",
+   "value": -4,
+   "about": "Tac sprint: the gun moved right (units)"
+  },
+  {
+   "id": "tacGunZ",
+   "value": 2,
+   "about": "Tac sprint: the gun moved up (units)"
+  },
+  {
+   "id": "sprintFovAdd",
+   "value": 5,
+   "about": "Sprinting widens the view by this (degrees)"
+  },
+  {
+   "id": "tacFovAdd",
+   "value": 10,
+   "about": "Tac sprint widens it by this"
+  },
+  {
+   "id": "sprintClimbScale",
+   "value": 0.8,
+   "about": "Out of a sprint, climbs take this share of their time (tac a little less)"
+  },
+  {
+   "id": "sprintCadence",
+   "value": 1.15,
+   "about": "Sprinting, your steps come this much faster than running (the rest of the speed is longer strides); 1.45 would be the old patter"
+  },
+  {
+   "id": "tacCadence",
+   "value": 1.25,
+   "about": "Tac sprint: your steps come this much faster than running (the rest is longer strides)"
+  },
+  {
+   "id": "lightRealism",
+   "value": 1.0,
+   "about": "Realistic daylight: 0 the game's own light, 1 lower bluish sky fill, white sun by day and gold at sunrise/sunset, bluish haze, deeper sky (read when the game starts; F11 compares)"
+  },
+  {
+   "id": "lightBloomCut",
+   "value": 0.4,
+   "about": "Realistic daylight: this share of the image spaces' bloom taken away outside (70% of it inside)"
+  },
+  {
+   "id": "lightSaturation",
+   "value": 0.05,
+   "about": "Realistic daylight: the image spaces' colour saturation raised by this share"
+  },
+  {
+   "id": "lightContrast",
+   "value": 0.06,
+   "about": "Realistic daylight: the image spaces' contrast raised by this share"
+  },
+  {
+   "id": "tpShoulderScale",
+   "value": 0.6,
+   "about": "Third person: both arms and the gun turn together about the base of the neck by this share of the first-person gun's turn (lag, whip, sway, kick)"
+  },
+  {
+   "id": "tpBackScale",
+   "value": 0.5,
+   "about": "Third person: the shoulders are shoved back this share of the first-person gun's shove per shot (units)"
+  },
+  {
+   "id": "tpGunFlip",
+   "value": 0.7,
+   "about": "Third person: the gun turns about the grip by this share of the aimed muzzle flip"
+  },
+  {
+   "id": "tpGunWobble",
+   "value": 1.0,
+   "about": "Third person: the gun's barrel wobble after a shot, this share of the first-person one"
+  },
+  {
+   "id": "tpGunPitch",
+   "value": 0.25,
+   "about": "Third person: this share of the first-person gun's pitch (the kick) also turns the gun about the grip"
+  },
+  {
+   "id": "tpViewSway",
+   "value": 0.5,
+   "about": "Third person: the view's breathing and step sway, this share of first person's (the recoil climb stays the same)"
+  },
+  {
+   "id": "tpLeanOn",
+   "value": 1,
+   "about": "Third person: contextual aiming leans the upper body out round cover (1 on, 0 off); the same cover search as first person, from your head"
+  },
+  {
+   "id": "tpLeanHz",
+   "value": 1.2,
+   "about": "Third person: how quickly the body leans into place (spring frequency, Hz; ~0.6 s, slower than first person's view)"
+  },
+  {
+   "id": "tpLeanMaxDeg",
+   "value": 22,
+   "about": "Third person: the furthest the upper body tips to the side about the spine's base (degrees)"
+  },
+  {
+   "id": "tpLeanUpMax",
+   "value": 10,
+   "about": "Third person: the most the upper body rises to see over (units; first person's rise is larger)"
+  },
+  {
+   "id": "tpLeanDownMax",
+   "value": 12,
+   "about": "Third person: the most the upper body dips to see under (units)"
+  },
+  {
+   "id": "tpLeanSign",
+   "value": 1,
+   "about": "Third person: which way the side lean turns (1; -1 if the body leans away from the spot)"
+  },
+  {
+   "id": "tpSpineInertia",
+   "value": 0.35,
+   "about": "Third person: the whole upper body turns this share of the gun's lag and sway (heading and pitch) about the spine's base, so the body's weight shows on turns as well as the arms'"
+  },
+  {
+   "id": "tpCamShake",
+   "value": 0.85,
+   "about": "Third person: the view's recoil shake, this share of first person's"
+  },
+  {
+   "id": "tpCamRoll",
+   "value": 0.6,
+   "about": "Third person: the camera's recoil roll and strafe cant, this share of first person's (on the game's camera)"
+  },
+  {
+   "id": "tpShoulderSec",
+   "value": 0.35,
+   "about": "Third person: how long the camera takes to glide to the other shoulder (X), eased at both ends"
+  },
+  {
+   "id": "tpShoulderLeftExtraUnits",
+   "value": 12,
+   "about": ""
+  },
+  {
+   "id": "tpStrafeRockDeg",
+   "value": 14,
+   "about": "Third person: strafing at full speed banks the upper body this far into the strafe (degrees, about the spine's base)"
+  },
+  {
+   "id": "tpStrafeRockHz",
+   "value": 2.0,
+   "about": "Third person: how quickly the strafe bank follows (spring frequency, Hz)"
+  },
+  {
+   "id": "tpStrafeRockDamping",
+   "value": 0.5,
+   "about": "Third person: the strafe bank's damping (below 1: it rocks back past centre a little when you stop or change direction)"
+  },
+  {
+   "id": "tpStrafeRockAds",
+   "value": 0.8,
+   "about": "Third person aiming down sights: the strafe bank is this share of the hip-fire one at the same strafe effort (aimed walking is slower, so the strafe is measured against tpStrafeRockAdsSpeed instead)"
+  },
+  {
+   "id": "tpStrafeRockAdsSpeed",
+   "value": 110,
+   "about": "Third person aiming down sights: the sideways speed (units/s) that counts as a full strafe for the bank"
+  },
+  {
+   "id": "tpBarrelShots",
+   "value": 1,
+   "about": "Third person: every shot leaves the muzzle along the barrel as the body holds it, not toward the crosshair (1 on, 0 off)"
+  },
+  {
+   "id": "blockMarkOn",
+   "value": 1,
+   "about": "Third person: a small X in the crosshair, in the HUD's colour, while aiming down the sights when the world is in the barrel's way within blockNearMetres of the muzzle (1 on, 0 off)"
+  },
+  {
+   "id": "blockMaxUnits",
+   "value": 6000,
+   "about": "Third person, blocked-shot X: how far out the crosshair's spot is looked for (game units)"
+  },
+  {
+   "id": "blockMarginUnits",
+   "value": 32,
+   "about": "Third person, blocked-shot X: the barrel's line must be stopped this much short of the crosshair's spot to count as blocked (game units)"
+  },
+  {
+   "id": "blockNearMetres",
+   "value": 1,
+   "about": "Third person, blocked-shot X: only the world within this many metres of the muzzle counts as blocking the barrel"
+  },
+  {
+   "id": "blockMarkSize",
+   "value": 0.004,
+   "about": "Third person, blocked-shot X: half its width, a share of the screen's height"
+  },
+  {
+   "id": "muzzleLightOn",
+   "value": 1,
+   "about": "A warm light at the muzzle for every shot, lighting the world round you (1 on, 0 off; sheets/lights.json muzzle: its radius and colour)"
+  },
+  {
+   "id": "muzzleLightSec",
+   "value": 0.06,
+   "about": "How long the muzzle light stays on per shot (seconds)"
+  },
+  {
+   "id": "tracerOn",
+   "value": 1,
+   "about": "multiplayer: friends' (and their fighters') shots draw a bright streak from the muzzle to where the bullet lands (1 on, 0 off)"
+  },
+  {
+   "id": "tracerSpeed",
+   "value": 12000,
+   "about": "multiplayer: how fast a friend's bullet streak flies (game units a second; it shows for 0.03-0.4 s)"
+  },
+  {
+   "id": "moveBlendInSec",
+   "value": 0.15,
+   "about": "Third person: the parkour double's pose blends in from your body's over this long at the start of a move"
+  },
+  {
+   "id": "moveBlendOutSec",
+   "value": 0.2,
+   "about": "Third person: the parkour double's pose blends back into your body's over this long at the end of a move"
+  },
+  {
+   "id": "moveSlingGun",
+   "value": 1,
+   "about": "Third person: 1 carries your drawn gun on the double through a climb (long guns across the back, pistols at the hip), 0 lets it vanish as before"
+  },
+  {
+   "id": "moveSlingBack",
+   "value": 9,
+   "about": "Third person: how far behind the upper spine a slung long gun's grip sits (units)"
+  },
+  {
+   "id": "barrelFollow",
+   "value": 1,
+   "about": "Hip fire: each shot leaves along the gun as you see it (its swing, kick and wobble) instead of the screen centre (1 on, 0 off; aimed shots always go to the sights)"
+  },
+  {
+   "id": "barrelFollowScale",
+   "value": 1.0,
+   "about": "Hip fire: the share of the gun's turn the shot follows"
+  },
+  {
+   "id": "barrelFollowMaxDeg",
+   "value": 14,
+   "about": "Hip fire: a shot never leaves further than about this from the screen centre (degrees, soft limit)"
+  },
+  {
+   "id": "spreadWalkDeg",
+   "value": 1.2,
+   "about": "Hip fire: moving at a run widens where shots land by up to this (degrees, a cone around the barrel), less at a walk"
+  },
+  {
+   "id": "spreadSprintDeg",
+   "value": 3.5,
+   "about": "Hip fire: sprinting adds this (degrees)"
+  },
+  {
+   "id": "spreadAirDeg",
+   "value": 5.0,
+   "about": "Hip fire: in the air (a jump, a fall) adds this (degrees)"
+  },
+  {
+   "id": "spreadCrouchScale",
+   "value": 0.6,
+   "about": "Hip fire: crouched, the movement spread times this"
+  },
+  {
+   "id": "spreadAdsScale",
+   "value": 0.35,
+   "about": "aimed: the movement spread times this"
+  },
+  {
+   "id": "spreadSettleSec",
+   "value": 0.45,
+   "about": "The movement spread fades this long after you stop (standing still is the tightest)"
+  },
+  {
+   "id": "hipShotPitchFollow",
+   "value": 1.0,
+   "about": "Hip fire: the share of the gun's kick (pitch) the shots follow - sustained fire climbs with the barrel"
+  },
+  {
+   "id": "reloadFeel",
+   "value": 1,
+   "about": "reloads: the gun dips, cants and carries its weight through the reload; +1 in the chamber and lost rounds by the sheet's feed (1 on, 0 off)"
+  },
+  {
+   "id": "chamberRound",
+   "value": 1,
+   "about": "reloads: a 'box' gun reloaded with rounds left keeps one in the chamber (+1) (1 on, 0 off)"
+  },
+  {
+   "id": "dropMagLosesRounds",
+   "value": 1,
+   "about": "reloads: the rounds left in the dropped magazine are lost ('box' and 'open' guns) (1 on, 0 off)"
+  },
+  {
+   "id": "reloadEmptySpeed",
+   "value": 0.8,
+   "about": "reloads: an empty gun's reload plays at this speed (the slide or bolt is racked too); 1 = as the game"
+  },
+  {
+   "id": "reloadGunPitch",
+   "value": -16,
+   "about": "reloading: the gun's pitch (deg, + muzzle up) - tipped down to the magazine"
+  },
+  {
+   "id": "reloadGunRoll",
+   "value": 26,
+   "about": "reloading: the gun's roll (deg, + cant right) - the magazine well turned toward the left hand"
+  },
+  {
+   "id": "reloadGunHeading",
+   "value": 7,
+   "about": "reloading: the gun's heading (deg, + right)"
+  },
+  {
+   "id": "reloadPoseHz",
+   "value": 6,
+   "about": "How fast the gun goes into and out of the reload pose (1/seconds)"
+  },
+  {
+   "id": "reloadJoltDeg",
+   "value": 5,
+   "about": "reloading: the magazine going out and in jolts the gun by about this (degrees)"
+  },
+  {
+   "id": "autoViewHeat",
+   "value": 0.8,
+   "about": "automatics: the view's climb per shot grows with the heat by this (1 + heat x this) - sustained fire climbs harder"
+  },
+  {
+   "id": "pistolFireAnimSpeed",
+   "value": 3.0,
+   "about": "Semi-automatic pistols: their attack animation plays this many times faster, so they fire as fast as you pull (1 = the game's limit)"
+  },
+  {
+   "id": "reloadJoltHz",
+   "value": 7,
+   "about": "reloads: how sharp the magazine's jolts are (higher = snappier)"
+  },
+  {
+   "id": "hipWristFlipDeg",
+   "value": 8,
+   "about": "From the hip a one-handed gun flips up in the hand, about the wrist, by about this per shot (degrees, at refDamage) - the barrel lifts, the arms stay"
+  },
+  {
+   "id": "hipWristFlipHz",
+   "value": 3.2,
+   "about": "The in-hand flip's spring (1/seconds)"
+  },
+  {
+   "id": "hipWristFlipDamping",
+   "value": 0.32,
+   "about": "The in-hand flip's damping (low: it overshoots once as the wrist brings it back)"
+  },
+  {
+   "id": "hipOneHandBack",
+   "value": 0.35,
+   "about": "From the hip a one-handed gun's shove back toward you, times this (it flips instead)"
+  },
+  {
+   "id": "hipHeavyBack",
+   "value": 0.7,
+   "about": "From the hip a two-handed gun's shove back grows with its weight: times sqrt(weight / gunMassPounds) x this - heavy guns push into you, and come back slower"
+  },
+  {
+   "id": "moveCopySettleSec",
+   "value": 3.0,
+   "about": "The climbing double (a copy of your body) is only made once your 3D has been unchanged this long and no weapon is going in or out"
+  },
+  {
+   "id": "camShakeDeg",
+   "value": 0.8,
+   "about": "Each shot shakes the camera (a kick up, a little sideways, a roll) by about this (degrees, at refDamage); only the view, not where you aim; 0 = off"
+  },
+  {
+   "id": "camShakeAds",
+   "value": 0.6,
+   "about": "aimed: the camera shake times this"
+  },
+  {
+   "id": "camShakeHz",
+   "value": 9,
+   "about": "The camera shake's spring (heavier guns lower: / weight^0.25)"
+  },
+  {
+   "id": "camShakeDamping",
+   "value": 0.3,
+   "about": "The camera shake's damping (low: it rings a little)"
+  },
+  {
+   "id": "sprintHeavyPitch",
+   "value": -30,
+   "about": "Sprinting with a heavy two-handed gun: its pitch (deg, + muzzle up) - carried low"
+  },
+  {
+   "id": "sprintHeavyHeading",
+   "value": -30,
+   "about": "Sprinting with a heavy gun: its heading (deg, + right) - across the body"
+  },
+  {
+   "id": "sprintHeavyRoll",
+   "value": -22,
+   "about": "Sprinting with a heavy gun: its roll (deg, + cant right)"
+  },
+  {
+   "id": "sprintHeavyX",
+   "value": -4,
+   "about": "Sprinting with a heavy gun: moved right (units)"
+  },
+  {
+   "id": "sprintHeavyZ",
+   "value": -7,
+   "about": "Sprinting with a heavy gun: moved up (units)"
+  },
+  {
+   "id": "hipWristTwist",
+   "value": 0.45,
+   "about": "From the hip a pistol's flip also twists left or right by this share of it (a different way each shot)"
+  },
+  {
+   "id": "hipWristCant",
+   "value": 0.9,
+   "about": "From the hip a pistol's flip also cants by this share of it"
+  },
+  {
+   "id": "hipViewKickOneHand",
+   "value": 0.9,
+   "about": "From the hip a one-handed gun's view kicks this share of its aimed kick (two-handed: hipViewKick)"
+  },
+  {
+   "id": "hipSideOneHand",
+   "value": 1.7,
+   "about": "From the hip a one-handed gun's sideways view kick times this"
+  },
+  {
+   "id": "adsKeepFov",
+   "value": 1,
+   "about": "The sights keep your field of view - no zoom when aiming (the game's bIronSightsZoomEnable off in memory) (1 on, 0 the game's zoom)"
+  },
+  {
+   "id": "camRollDeg",
+   "value": 3.2,
+   "about": "Each shot rolls the camera by about this either way (degrees, at refDamage; heavier guns a little more, aimed x camShakeAds), on our node above Camera1st, settling on the shake's spring"
+  },
+  {
+   "id": "fovKickDeg",
+   "value": 3,
+   "about": "Each shot pulls the view in (narrower) by about this much and lets it back out (FOV degrees, x the weapon's power, both views)"
+  },
+  {
+   "id": "fovKickHz",
+   "value": 3,
+   "about": "How quickly the FOV kick comes and goes (spring frequency, Hz)"
+  },
+  {
+   "id": "fovKickDamping",
+   "value": 0.65,
+   "about": "The FOV kick's damping (below 1: it swings back past a little - in and out)"
+  },
+  {
+   "id": "fovKickAds",
+   "value": 0.7,
+   "about": "Aiming down the sights: this share of the FOV kick"
+  },
+  {
+   "id": "strafeCantDeg",
+   "value": 2.0,
+   "about": "Strafing at a run cants the camera this far toward the side you move (degrees; less at a walk; weapon out); negative leans the other way"
+  },
+  {
+   "id": "coverAim",
+   "value": 1,
+   "about": ""
+  },
+  {
+   "id": "coverAimHip",
+   "value": 0,
+   "about": "Cover aiming also at the hip, not only in the sights (1 on, 0 sights only)"
+  },
+  {
+   "id": "coverProbeUnits",
+   "value": 280,
+   "about": "Something in your line of fire within this far ahead counts as cover (game units, ~70 a metre)"
+  },
+  {
+   "id": "coverPastUnits",
+   "value": 90,
+   "about": "A cover spot must see this far past the cover (units)"
+  },
+  {
+   "id": "coverHeadUnits",
+   "value": 8,
+   "about": "Room the head needs: the way to a spot must be clear this much further (units)"
+  },
+  {
+   "id": "coverStepUnits",
+   "value": 5,
+   "about": "The spots tried are this far apart (units)"
+  },
+  {
+   "id": "coverUpStand",
+   "value": 14,
+   "about": "standing: how far you can rise to see over (units: on your toes, chin up)"
+  },
+  {
+   "id": "coverUpCrouch",
+   "value": 44,
+   "about": "crouched: how far you can rise to see over (units: up toward standing)"
+  },
+  {
+   "id": "coverDownStand",
+   "value": 30,
+   "about": "standing: how far you can dip to see under (units)"
+  },
+  {
+   "id": "coverDownCrouch",
+   "value": 10,
+   "about": "crouched: how far you can dip to see under (units)"
+  },
+  {
+   "id": "coverSideUnits",
+   "value": 40,
+   "about": "How far you can lean out to either side (units)"
+  },
+  {
+   "id": "coverCostUp",
+   "value": 1.0,
+   "about": "Preference between spots: cost per unit up (lowest cost wins)"
+  },
+  {
+   "id": "coverCostSide",
+   "value": 1.15,
+   "about": "Cost per unit to the side"
+  },
+  {
+   "id": "coverCostDown",
+   "value": 1.6,
+   "about": "Cost per unit down"
+  },
+  {
+   "id": "coverMaxRays",
+   "value": 160,
+   "about": "Most rays one search casts"
+  },
+  {
+   "id": "coverSearchSec",
+   "value": 0.08,
+   "about": "While blocked, a new spot is looked for at most this often (seconds)"
+  },
+  {
+   "id": "coverRetrySec",
+   "value": 0.3,
+   "about": "After a search found nothing, the next one waits this long (seconds)"
+  },
+  {
+   "id": "coverReleaseSec",
+   "value": 0.8,
+   "about": "The line of fire clear from where you stand this long brings you back (seconds)"
+  },
+  {
+   "id": "coverMaxDownDeg",
+   "value": 40,
+   "about": "No cover aiming while looking down more than this (degrees)"
+  },
+  {
+   "id": "coverHz",
+   "value": 2.0,
+   "about": "How quickly you move to a spot (spring frequency, Hz; ~0.45 s)"
+  },
+  {
+   "id": "coverDamping",
+   "value": 1.0,
+   "about": "The move's damping (1 no overshoot)"
+  },
+  {
+   "id": "coverLeanRollDeg",
+   "value": 10,
+   "about": "A full side lean rolls the view, arms and gun this much about the eye (degrees; less for a smaller lean)"
+  },
+  {
+   "id": "coverCostMove",
+   "value": 0.5,
+   "about": "A new spot costs this much more per unit away from the spot in use (keeps you near where you are instead of jumping)"
+  },
+  {
+   "id": "coverMarginUnits",
+   "value": 6,
+   "about": "A spot found is taken this much further past the edge (units), so a small turn doesn't lose it"
+  },
+  {
+   "id": "coverLoseSec",
+   "value": 0.8,
+   "about": "A spot that stops working is kept this long while a new one is looked for (seconds)"
+  },
+  {
+   "id": "coverSmoothHz",
+   "value": 1.8,
+   "about": "The spot is smoothed at this rate before the spring follows it (Hz): moves start and stop softly"
+  },
+  {
+   "id": "blindFire",
+   "value": 1,
+   "about": ""
+  },
+  {
+   "id": "blindUpUnits",
+   "value": 60,
+   "about": "How high over your eye the hands can hold the gun (units)"
+  },
+  {
+   "id": "blindSideUnits",
+   "value": 42,
+   "about": "How far out to the side the hands can hold the gun round a corner (units)"
+  },
+  {
+   "id": "blindForwardUnits",
+   "value": 10,
+   "about": "The gun goes this far forward too, arms out (units)"
+  },
+  {
+   "id": "blindMaxDistUnits",
+   "value": 55,
+   "about": "Blind fire only at cover this close (units; ~70 a metre)"
+  },
+  {
+   "id": "blindHz",
+   "value": 2.5,
+   "about": "How quickly the gun goes up (spring frequency, Hz)"
+  },
+  {
+   "id": "blindRollDeg",
+   "value": 65,
+   "about": "Over the head the gun turns on its side this far, top to the left (degrees)"
+  },
+  {
+   "id": "blindSideRollDeg",
+   "value": 80,
+   "about": "Round a corner the gun turns on its side this far, top outward (degrees)"
+  },
+  {
+   "id": "blindSpreadDeg",
+   "value": 3,
+   "about": "Blind shots go up to this far off where you aim (degrees)"
+  },
+  {
+   "id": "blindDelaySec",
+   "value": 0.5,
+   "about": "Blind fire only after this long held behind cover with no spot to lean to, never straight out of a lean (seconds)"
+  },
+  {
+   "id": "blindTiltDeg",
+   "value": 14,
+   "about": "Blind fire tips the view up this much toward the gun"
+  },
+  {
+   "id": "blindArmExtend",
+   "value": 0.97,
+   "about": "The arms reach to at most this share of their length (a human arm keeps a bend)"
+  },
+  {
+   "id": "blindElbowDown",
+   "value": 0.6,
+   "about": "The elbows point out to the side and this much down while the arms are up (0 straight out)"
+  },
+  {
+   "id": "netSendHz",
+   "value": 30,
+   "about": "Playing together: how many times a second your state and body pose go to friends; 20 before plugin 145"
+  },
+  {
+   "id": "dropkickOn",
+   "value": 1,
+   "about": "The dropkick: sprinting, jump, then right-click with your weapon holstered (0 off)"
+  },
+  {
+   "id": "dropkickSprintSec",
+   "value": 0.8,
+   "about": "How recently you must have been sprinting on the ground for the jump to allow a dropkick (seconds)"
+  },
+  {
+   "id": "dropkickMinSpeed",
+   "value": 200,
+   "about": "And at least this fast across the ground when you right-click (units a second)"
+  },
+  {
+   "id": "dropkickBoost",
+   "value": 320,
+   "about": "The lunge: speed added along your view when the kick starts (units a second)"
+  },
+  {
+   "id": "dropkickLift",
+   "value": 150,
+   "about": "The lunge: upward speed added when it starts (units a second)"
+  },
+  {
+   "id": "dropkickTiltDeg",
+   "value": 88,
+   "about": "How far back your body lays out in the air (degrees; 90 is flat, parallel to the ground)"
+  },
+  {
+   "id": "dropkickGetUpSec",
+   "value": 1.3,
+   "about": "After landing flat on your back: sitting up, over your feet into a crouch and standing (seconds)"
+  },
+  {
+   "id": "dropkickReach",
+   "value": 70,
+   "about": "How far past your body the feet reach for someone (units)"
+  },
+  {
+   "id": "dropkickPush",
+   "value": 55,
+   "about": "How hard whoever you hit is sent flying (PushActorAway force; the cars use up to 80)"
+  },
+  {
+   "id": "dropkickDamagePct",
+   "value": 0.15,
+   "about": "Damage as a share of their full health - never more than leaves them 1 health (the kick never kills)"
+  },
+  {
+   "id": "dropkickBounce",
+   "value": 0.35,
+   "about": "After the hit you bounce back by this share of your speed"
+  },
+  {
+   "id": "dropkickCamDeg",
+   "value": 8,
+   "about": "First person, lying flat: the view tips down this much toward your feet (degrees)"
+  },
+  {
+   "id": "dropkickJoltDeg",
+   "value": 5,
+   "about": "First person: the view jolts this much at the impact (degrees)"
+  },
+  {
+   "id": "dropkickHitstopSec",
+   "value": 0.07,
+   "about": "The hit freezes the world for this long (real seconds) before they fly - its weight"
+  },
+  {
+   "id": "dropkickHitstopScale",
+   "value": 0.1,
+   "about": "How slow the world runs during that freeze (the game's time multiplier)"
+  },
+  {
+   "id": "dropkickLandDeg",
+   "value": 4,
+   "about": "First person: hitting the ground on your back thuds the view down this much (degrees)"
+  },
+  {
+   "id": "dropkickRollDeg",
+   "value": 3,
+   "about": "First person: the impact rolls the view this much, the landing back the other way (degrees)"
+  },
+  {
+   "id": "shareReachUnits",
+   "value": 8000,
+   "about": "A friend's game may kill an actor or change a container in yours only within this far of where that friend is"
+  },
+  {
+   "id": "shareKillsPer30s",
+   "value": 12,
+   "about": "At most this many kills from one friend's game in 30 s (more are dropped and logged)"
+  },
+  {
+   "id": "shareContainersPer30s",
+   "value": 40,
+   "about": "At most this many container changes from one friend's game in 30 s (more are dropped and logged)"
+  },
+  {
+   "id": "seasonWinterClear",
+   "value": 10,
+   "about": "winter: how often the weather rolled is clear"
+  },
+  {
+   "id": "seasonWinterOvercast",
+   "value": 15,
+   "about": "winter: how often the weather rolled is overcast"
+  },
+  {
+   "id": "seasonWinterRain",
+   "value": 0,
+   "about": "winter: how often the weather rolled is rain"
+  },
+  {
+   "id": "seasonWinterThunder",
+   "value": 0,
+   "about": "winter: how often the weather rolled is thunder"
+  },
+  {
+   "id": "seasonWinterSnow",
+   "value": 50,
+   "about": "winter: how often the weather rolled is snow"
+  },
+  {
+   "id": "seasonWinterBlizzard",
+   "value": 25,
+   "about": "winter: how often the weather rolled is blizzard"
+  },
+  {
+   "id": "seasonSpringClear",
+   "value": 35,
+   "about": "spring: how often the weather rolled is clear"
+  },
+  {
+   "id": "seasonSpringOvercast",
+   "value": 25,
+   "about": "spring: how often the weather rolled is overcast"
+  },
+  {
+   "id": "seasonSpringRain",
+   "value": 25,
+   "about": "spring: how often the weather rolled is rain"
+  },
+  {
+   "id": "seasonSpringThunder",
+   "value": 15,
+   "about": "spring: how often the weather rolled is thunder"
+  },
+  {
+   "id": "seasonSpringSnow",
+   "value": 0,
+   "about": "spring: how often the weather rolled is snow"
+  },
+  {
+   "id": "seasonSpringBlizzard",
+   "value": 0,
+   "about": "spring: how often the weather rolled is blizzard"
+  },
+  {
+   "id": "seasonSummerClear",
+   "value": 80,
+   "about": "summer: how often the weather rolled is clear"
+  },
+  {
+   "id": "seasonSummerOvercast",
+   "value": 12,
+   "about": "summer: how often the weather rolled is overcast"
+  },
+  {
+   "id": "seasonSummerRain",
+   "value": 6,
+   "about": "summer: how often the weather rolled is rain"
+  },
+  {
+   "id": "seasonSummerThunder",
+   "value": 2,
+   "about": "summer: how often the weather rolled is thunder"
+  },
+  {
+   "id": "seasonSummerSnow",
+   "value": 0,
+   "about": "summer: how often the weather rolled is snow"
+  },
+  {
+   "id": "seasonSummerBlizzard",
+   "value": 0,
+   "about": "summer: how often the weather rolled is blizzard"
+  },
+  {
+   "id": "seasonFallClear",
+   "value": 35,
+   "about": "fall: how often the weather rolled is clear"
+  },
+  {
+   "id": "seasonFallOvercast",
+   "value": 25,
+   "about": "fall: how often the weather rolled is overcast"
+  },
+  {
+   "id": "seasonFallRain",
+   "value": 25,
+   "about": "fall: how often the weather rolled is rain"
+  },
+  {
+   "id": "seasonFallThunder",
+   "value": 10,
+   "about": "fall: how often the weather rolled is thunder"
+  },
+  {
+   "id": "seasonFallSnow",
+   "value": 0,
+   "about": "fall: how often the weather rolled is snow"
+  },
+  {
+   "id": "seasonFallBlizzard",
+   "value": 0,
+   "about": "fall: how often the weather rolled is blizzard"
+  },
+  {
+   "id": "seasonEdgeSnow",
+   "value": 5,
+   "about": "Late November (from day 20) and early March (to day 10): the weight of snowfall then (none otherwise outside winter)"
+  },
+  {
+   "id": "seasonHeavyShare",
+   "value": 0.4,
+   "about": "Snowfall rolled: this share of it is heavy snow, the rest light"
+  },
+  {
+   "id": "seasonRollMinHours",
+   "value": 3,
+   "about": "A weather lasts at least this many game hours before the next roll"
+  },
+  {
+   "id": "seasonRollMaxHours",
+   "value": 8,
+   "about": "And at most this many"
+  },
+  {
+   "id": "groundLightPerHour",
+   "value": 0.06,
+   "about": "The world's snow cover (0 bare.. 1 full) gained per game hour of light snow"
+  },
+  {
+   "id": "groundHeavyPerHour",
+   "value": 0.13,
+   "about": "Gained per game hour of heavy snow"
+  },
+  {
+   "id": "groundBlizzardPerHour",
+   "value": 0.25,
+   "about": "Gained per game hour of a blizzard"
+  },
+  {
+   "id": "groundMeltWinter",
+   "value": 0.004,
+   "about": "Lost per game hour in winter when it isn't snowing (it stays cold)"
+  },
+  {
+   "id": "groundMeltMild",
+   "value": 0.06,
+   "about": "Lost per game hour in spring and fall when it isn't snowing"
+  },
+  {
+   "id": "groundMeltSummer",
+   "value": 0.3,
+   "about": "Lost per game hour in summer"
+  },
+  {
+   "id": "groundStage1",
+   "value": 0.12,
+   "about": "The cover from which the ground shows its first snow (stage 1 of 3)"
+  },
+  {
+   "id": "groundStage2",
+   "value": 0.42,
+   "about": "Stage 2: patches joining up"
+  },
+  {
+   "id": "groundStage3",
+   "value": 0.75,
+   "about": "Stage 3: snowed over"
+  },
+  {
+   "id": "rainVolume",
+   "value": 1,
+   "about": "The rain's sound outside"
+  },
+  {
+   "id": "rainIndoorVolume",
+   "value": 0,
+   "about": "The rain's sound indoors, dulled as on a roof (0: off - interiors are often underground)"
+  },
+  {
+   "id": "thunderWindLevel",
+   "value": 0.45,
+   "about": "The wind in a thunderstorm"
+  },
+  {
+   "id": "rainStormOffset",
+   "value": 768,
+   "about": "A thunderstorm's second middle rain box, this far ahead of the first (units; the boxes are 1536 wide)"
+  },
+  {
+   "id": "blizzardStreakTilt",
+   "value": 60,
+   "about": "The blizzard's white streaks tilted this far from falling straight down, into the wind (degrees)"
+  },
+  {
+   "id": "blizzardStreakUpwind",
+   "value": 700,
+   "about": "The blizzard streaks' model set this far upwind of you (units; its emitter is 1024 up in the model, tilted over you)"
+  },
+  {
+   "id": "bodyOn",
+   "value": 1,
+   "about": "Third person: the whole-body system on (1) or off (0) - foot IK, the hips, lean and bank, blended transitions, the head after the camera"
+  },
+  {
+   "id": "bodyIkOn",
+   "value": 1,
+   "about": "Each foot onto the ground under it (heel and toe), the knee bending in its own plane (1 on, 0 off)"
+  },
+  {
+   "id": "bodyIkWeight",
+   "value": 1,
+   "about": "How much of the foot placement, the hips lowered to the lower foot and the stairs' smoothing is used (0..1; F8: FOOT PLACEMENT)"
+  },
+  {
+   "id": "bodyRayUp",
+   "value": 45,
+   "about": "Foot IK: the ground is looked for from this far above where the game stands you (units; a step's height)"
+  },
+  {
+   "id": "bodyRayDown",
+   "value": 60,
+   "about": "Foot IK: and down to this far below it (units)"
+  },
+  {
+   "id": "bodyFootHz",
+   "value": 14,
+   "about": "Foot IK: how quickly each foot's ground height follows a new surface under it (spring frequency, Hz; critically damped)"
+  },
+  {
+   "id": "bodyFootSettleSec",
+   "value": 0.1,
+   "about": "feet: a jump in a foot's ground (a step's edge) has to hold this long before the foot takes it; the sole's slope eases over the same (seconds)"
+  },
+  {
+   "id": "bodyFootMaxDeg",
+   "value": 30,
+   "about": "Foot IK: the furthest a planted sole tilts to the surface (degrees)"
+  },
+  {
+   "id": "bodyFootPitchDeg",
+   "value": 25,
+   "about": "Foot IK: the heel-to-toe slope a sole follows; a step's edge further up under the toes lifts the whole foot instead (degrees)"
+  },
+  {
+   "id": "bodyDropMaxUnits",
+   "value": 28,
+   "about": "The hips go down at most this far so the lower foot reaches its ground (units)"
+  },
+  {
+   "id": "bodyDropDeadband",
+   "value": 2.5,
+   "about": "feet: a foot's ground this little lower than you is the knee's to reach - the hips don't drop for it (units)"
+  },
+  {
+   "id": "bodyDropHz",
+   "value": 8,
+   "about": "How quickly the hips go down or up to it (Hz, critically damped)"
+  },
+  {
+   "id": "bodyStairHz",
+   "value": 7,
+   "about": "stairs: the hips follow the game's step-ups and step-downs on a spring this quick (Hz), so they glide instead of popping"
+  },
+  {
+   "id": "bodyStairMaxUnits",
+   "value": 18,
+   "about": "stairs: the hips never lag the game's place by more than this (units)"
+  },
+  {
+   "id": "bodyAccelLean",
+   "value": 0.35,
+   "about": "The body leans forward as you speed up and back as you slow down: this share of the lean a real body needs for the acceleration (F8: BODY LEAN & BANK)"
+  },
+  {
+   "id": "bodyRunLeanDeg",
+   "value": 3.5,
+   "about": "Running to sprinting: the body leans this much further forward from the ankles (degrees)"
+  },
+  {
+   "id": "bodyLeanMaxDeg",
+   "value": 9,
+   "about": "The most the whole body leans forward or back (degrees)"
+  },
+  {
+   "id": "bodyLeanHz",
+   "value": 2.5,
+   "about": "The lean's spring (Hz)"
+  },
+  {
+   "id": "bodyLeanDamping",
+   "value": 0.55,
+   "about": "The lean's damping (below 1: a little rock back past upright as you stop)"
+  },
+  {
+   "id": "bodyBankScale",
+   "value": 0.9,
+   "about": "Running round a curve the body banks into it: this share of the bank the speed and the turn need"
+  },
+  {
+   "id": "bodyBankMaxDeg",
+   "value": 15,
+   "about": "The most the body banks (degrees)"
+  },
+  {
+   "id": "bodyBankHz",
+   "value": 3,
+   "about": "The bank's spring (Hz)"
+  },
+  {
+   "id": "bodyBankDamping",
+   "value": 0.7,
+   "about": "The bank's damping"
+  },
+  {
+   "id": "bodySlopeLeanUp",
+   "value": 0.3,
+   "about": "hills: the trunk leans forward up a hill this many degrees per degree of slope (x the curve)"
+  },
+  {
+   "id": "bodySlopeLeanDown",
+   "value": 0.2,
+   "about": "hills:... and back down one (degrees per degree, x the curve)"
+  },
+  {
+   "id": "bodySlopeBodyUp",
+   "value": 0.15,
+   "about": "hills: the whole body leans forward over the feet up a hill, degrees per degree of slope (x the curve)"
+  },
+  {
+   "id": "bodySlopeBodyDown",
+   "value": 0.08,
+   "about": "hills:... and back down one"
+  },
+  {
+   "id": "bodySlopeSide",
+   "value": 0.15,
+   "about": "hills: across a slope the body leans to its high side, degrees per degree (x the curve)"
+  },
+  {
+   "id": "bodySlopeCurveDeg",
+   "value": 30,
+   "about": "hills: the lean grows faster than the slope - x (1 + slope / this): x1.33 at 10 deg, x1.67 at 20, x2 at 30"
+  },
+  {
+   "id": "bodySlopeMinDeg",
+   "value": 5,
+   "about": "hills: no lean on a slope gentler than this; it comes in over the next 4 degrees"
+  },
+  {
+   "id": "bodySlopeStepUnits",
+   "value": 2.5,
+   "about": "hills: the plane round you (8 points, 16 and 32 units out) drops its worst point; stairs when 2+ points are still off it by more than this (units) - no hill lean on stairs"
+  },
+  {
+   "id": "bodySlopeSmoothSec",
+   "value": 0.4,
+   "about": "hills: the body's lean follows the hill eased over this long (seconds) - a rock or a facet doesn't rock it"
+  },
+  {
+   "id": "bodySlopeCrouchUnits",
+   "value": 3,
+   "about": "On a 20 degree slope the hips sit this much lower (knees softer; units)"
+  },
+  {
+   "id": "bodyAimScale",
+   "value": 0.4,
+   "about": "Aiming down the sights the lean, bank and torso use this share (a steady aim)"
+  },
+  {
+   "id": "bodyBlendSec",
+   "value": 0.25,
+   "about": "transitions: when the animation jumps (walk to run, a stop, crouching), the pose it left melts into the new one over this long (seconds; F8: ANIMATION BLEND TIME)"
+  },
+  {
+   "id": "bodyBlendJumpDeg",
+   "value": 8,
+   "about": "transitions: a hip or leg bone whose turn this frame differs from the frame before's by more than this counts as a jump (degrees at 60 fps; a swinging limb's turn changes smoothly)"
+  },
+  {
+   "id": "bodyBlendJumpUnits",
+   "value": 3,
+   "about": "transitions: or the pelvis's move changing by more than this in one frame (units at 60 fps)"
+  },
+  {
+   "id": "headLookOn",
+   "value": 1,
+   "about": "The head and neck turn after the camera (1 on, 0 off)"
+  },
+  {
+   "id": "headLookScale",
+   "value": 1,
+   "about": "How much of the turn toward the camera the head makes (F8: HEAD LOOK)"
+  },
+  {
+   "id": "headLookHz",
+   "value": 4.5,
+   "about": "How quickly the head follows the camera (Hz, critically damped: a moment behind)"
+  },
+  {
+   "id": "headYawMaxDeg",
+   "value": 75,
+   "about": "The furthest the head turns to the side (degrees)"
+  },
+  {
+   "id": "headUpMaxDeg",
+   "value": 40,
+   "about": "The furthest the head looks up (degrees)"
+  },
+  {
+   "id": "headDownMaxDeg",
+   "value": 50,
+   "about": "The furthest the head looks down (degrees)"
+  },
+  {
+   "id": "headNeckShare",
+   "value": 0.45,
+   "about": "The neck takes this share of the head's turn"
+  },
+  {
+   "id": "headWeaponOut",
+   "value": 0.6,
+   "about": "Weapon out, the head makes this share of the turn"
+  },
+  {
+   "id": "headAiming",
+   "value": 0.2,
+   "about": "Aiming down the sights, this share (the animation aims the head)"
+  },
+  {
+   "id": "freeLookOn",
+   "value": 1,
+   "about": "Third person free look (on by default, no key)"
+  },
+  {
+   "id": "freeLookMaxDeg",
+   "value": 105,
+   "about": "Free look: past this much to the side the body turns after the camera (degrees)"
+  },
+  {
+   "id": "freeLookCatchHz",
+   "value": 4,
+   "about": "Free look: how quickly the body turns to face the camera once you move (Hz)"
+  },
+  {
+   "id": "freeLookCatchFastHz",
+   "value": 9,
+   "about": "Free look: and when you fire from the hip (Hz)"
+  },
+  {
+   "id": "freeLookAimSec",
+   "value": 0.32,
+   "about": "Free look: aiming down the sights turns the body to the camera over this long (seconds, settled)"
+  },
+  {
+   "id": "moveAccelOn",
+   "value": 1,
+   "about": "Acceleration curves: on (1) or off (0) - setting off, changing gait and turning back on yourself take a moment"
+  },
+  {
+   "id": "moveAccelStart",
+   "value": 0.5,
+   "about": "Acceleration curves: from a standstill you set off at this much of the gait's speed"
+  },
+  {
+   "id": "moveAccelSec",
+   "value": 0.45,
+   "about": "Acceleration curves:... and come up to it over this long (seconds, settled; walk to run and run to sprint too)"
+  },
+  {
+   "id": "moveDecelSec",
+   "value": 0.35,
+   "about": "Acceleration curves: easing down to a slower gait (sprint to run, run to walk) over this long (seconds)"
+  },
+  {
+   "id": "moveTurnLoss",
+   "value": 0.7,
+   "about": "Acceleration curves: a change of direction costs this much of the speed when it's a full turn back (half of it at 90 deg)"
+  },
+  {
+   "id": "bodyBlendEventKeen",
+   "value": 0.33,
+   "about": "transitions: just after you crouch, stand up, start, stop, land, draw or aim, the jump test is this much keener (x the jump size) - the game swaps those over a few frames"
+  },
+  {
+   "id": "bodyBlendEventSec",
+   "value": 0.25,
+   "about": "transitions: and for this long after (seconds)"
+  },
+  {
+   "id": "headTorsoShare",
+   "value": 0.3,
+   "about": "The look: the chest turns this share of how far the camera is to the side (the neck and head do the rest; half with a weapon out, none aiming)"
+  },
+  {
+   "id": "headTorsoMaxDeg",
+   "value": 30,
+   "about": "The look: the most the chest turns (degrees)"
+  },
+  {
+   "id": "bodyStepUnits",
+   "value": 9,
+   "about": "standing: a planted foot stays put while the body turns over it, and steps once the animation would have it this far away (units; 0: no holding)"
+  },
+  {
+   "id": "bodyStepSec",
+   "value": 0.3,
+   "about": "standing: how long a step takes (seconds)"
+  },
+  {
+   "id": "bodyStepLift",
+   "value": 5,
+   "about": "standing: how high the foot lifts mid-step (units)"
+  },
+  {
+   "id": "lifeOn",
+   "value": 1,
+   "about": "The person in the body (1 on, 0 off): breathing, the weight from leg to leg, fidgets, the arms swinging on the shoulders, landings, a touch of asymmetry"
+  },
+  {
+   "id": "lifeBreathHz",
+   "value": 0.25,
+   "about": "Breaths a second at rest (15 a minute); out of breath up to 0.45 more"
+  },
+  {
+   "id": "lifeBreathDeg",
+   "value": 1.8,
+   "about": "How far the chest lifts back breathing in at rest (degrees; up to 3x out of breath)"
+  },
+  {
+   "id": "lifeBreathShoulder",
+   "value": 0.8,
+   "about": "How far the shoulders rise breathing in at rest (units; up to 3x out of breath)"
+  },
+  {
+   "id": "lifeTiredHunchDeg",
+   "value": 4,
+   "about": "Out of breath, standing: the trunk this much forward (degrees)"
+  },
+  {
+   "id": "lifeShiftHz",
+   "value": 0.5,
+   "about": "standing: how quickly the weight goes from one leg to the other (spring, Hz); every 4-10 s"
+  },
+  {
+   "id": "lifeShiftUnits",
+   "value": 2.2,
+   "about": "standing: the hips this far over the standing leg (units)"
+  },
+  {
+   "id": "lifeHipDeg",
+   "value": 3,
+   "about": "standing: the resting leg's hip drops this much (degrees)"
+  },
+  {
+   "id": "lifeShrugUnits",
+   "value": 3.5,
+   "about": "A shrug lifts the shoulders this much (units); fidgets come every 9-21 s standing with nothing in your hands"
+  },
+  {
+   "id": "lifeHeadDriftDeg",
+   "value": 2.5,
+   "about": "standing: the head's slow drift (degrees)"
+  },
+  {
+   "id": "lifeHeadTiltDeg",
+   "value": 1.5,
+   "about": "The head rests this much tilted (degrees, + right)"
+  },
+  {
+   "id": "lifeShoulderDropUnits",
+   "value": 0.5,
+   "about": "The left shoulder sits this much lower (units)"
+  },
+  {
+   "id": "lifeArmSwing",
+   "value": 1.0,
+   "about": "The arms swing on the shoulders: this share of a free 0.6 m pendulum's swing as you speed up, slow down or turn (none aiming, a fifth with a weapon out)"
+  },
+  {
+   "id": "lifeArmIdleDeg",
+   "value": 3,
+   "about": "The person: standing, the arms' own slow sway and breathing out from the sides (degrees; x the arm swing; less with a gun out)"
+  },
+  {
+   "id": "lifeArmHz",
+   "value": 0.95,
+   "about": "The arms' swing (Hz: a hanging arm's own)"
+  },
+  {
+   "id": "lifeArmDamping",
+   "value": 0.22,
+   "about": "The arms' damping"
+  },
+  {
+   "id": "lifeLandDip",
+   "value": 14,
+   "about": "Landing from a height: the hips dip at most this much (units), by how hard you came down"
+  },
+  {
+   "id": "lifeLandHz",
+   "value": 3.2,
+   "about": "The landing's dip and recovery (spring, Hz)"
+  },
+  {
+   "id": "lifeFlinchDeg",
+   "value": 6,
+   "about": "A hit: the trunk flinches back about this much, the head jerks and the arms come in; under 45% health you stand hunched and breathe harder"
+  },
+  {
+   "id": "lifeGlanceUnits",
+   "value": 600,
+   "about": "Someone within this far, in front of you, gets a look now and then (units; 0: nobody)"
+  },
+  {
+   "id": "coverPoseOn",
+   "value": 0,
+   "about": "Crouched behind cover the body keeps its head under the top: a deeper squat, then down on one knee (1 on, 0 off)"
+  },
+  {
+   "id": "coverReachUnits",
+   "value": 55,
+   "about": "cover: something this close in front of you while crouched counts (units)"
+  },
+  {
+   "id": "coverHeadMargin",
+   "value": 3,
+   "about": "cover: the top of your head stays this far under the cover's top (units)"
+  },
+  {
+   "id": "coverSquatMaxUnits",
+   "value": 9,
+   "about": "cover: a crouch goes at most this much lower (units); needing more, you go down on a knee"
+  },
+  {
+   "id": "coverKneelSec",
+   "value": 10,
+   "about": "cover: held low this long (seconds), you go down on a knee anyway - a deep crouch doesn't last"
+  },
+  {
+   "id": "coverKneelDropUnits",
+   "value": 7,
+   "about": "cover: on a knee the hips are this much lower again (units)"
+  },
+  {
+   "id": "coverKneelHz",
+   "value": 2.2,
+   "about": "cover: how quickly you go down on the knee and back up (Hz)"
+  },
+  {
+   "id": "coverKneelRight",
+   "value": 1,
+   "about": "cover: the right knee goes down (1), or the left (0)"
+  },
+  {
+   "id": "coverKneelToeDeg",
+   "value": 55,
+   "about": "cover: the kneeling leg's foot tips up onto its toes this much (degrees)"
+  },
+  {
+   "id": "coverHunchPerUnit",
+   "value": 1.6,
+   "about": "cover: the back rounds this much for each unit lower (degrees)"
+  },
+  {
+   "id": "coverWallLeanDeg",
+   "value": 7,
+   "about": "Standing still beside a wall you settle a shoulder against it - at most this far tipped from the feet (degrees; 0 off)"
+  },
+  {
+   "id": "coverWallReach",
+   "value": 34,
+   "about": "A wall this close beside you counts (units, from your middle at shoulder height)"
+  },
+  {
+   "id": "coverWallSec",
+   "value": 1.5,
+   "about": "Standing still this long before the shoulder goes to the wall (seconds)"
+  },
+  {
+   "id": "bodyStepUpMax",
+   "value": 14,
+   "about": "Foot IK: a surface more than this above the ground you stand on is not where a foot goes (a bench, a crate beside you) - the ray looks under it (units)"
+  },
+  {
+   "id": "coopAutoJoin",
+   "value": 1,
+   "about": "Co-op: joining a friend in setup takes you into their world by itself (1), or only with /join (0)"
+  },
+  {
+   "id": "coopDownRagdoll",
+   "value": 2,
+   "about": "Co-op: downed, you're knocked over with this push (the game's ragdoll) and kept down; 0 off"
+  },
+  {
+   "id": "coopXpShare",
+   "value": 1,
+   "about": "Co-op: every XP you gain (kills, lockpicks, hacks, places, skill checks, quests) also goes to each friend within coopXpRangeUnits of you (1), or none (0)"
+  },
+  {
+   "id": "coopXpRangeUnits",
+   "value": 7000,
+   "about": "Co-op: how near a friend has to be to share your XP; the gold ring of /ranges"
+  },
+  {
+   "id": "notifyTimeScale",
+   "value": 0.75,
+   "about": "Our notifications (the game's own HUD messages): how long each stays, against the time it asks for; a newer one of the same kind waits for it and only the newest goes"
+  },
+  {
+   "id": "coopListenRangeUnits",
+   "value": 700,
+   "about": "Co-op listen-in: how near a friend's conversation has to be for its lines to show as your subtitles (game units, 70 to the metre: 10 m); the violet ring of /ranges"
+  },
+  {
+   "id": "coopLootRoll",
+   "value": 1,
+   "about": "Co-op: each game rolls a body's random loot again for its own player the moment it dies, so friends find different things (1); 0: the same loot as the save had"
+  }
+ ]
+}

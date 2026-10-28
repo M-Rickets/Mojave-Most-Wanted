@@ -1,0 +1,377 @@
+{
+ "sheet": "keys",
+ "about": "Keys while driving.",
+ "columns": {
+  "action": "row key",
+  "vk": "Windows virtual-key code",
+  "label": "how hints name it",
+  "setup": "where setup's KEYBINDS panel lists it: \"foot\", \"gun\", \"coop\" (every game), \"drive\" and \"light\" (the full game only) or \"weather\" (only where the weather is on offer); none: not listed",
+  "help": "what the KEYBINDS panel says it does (short)",
+  "setupWith": "listed on the same KEYBINDS line as that action (its key joined to that one's: \"N / B\"; that one's help says what both do)"
+ },
+ "rows": [
+  {
+   "action": "accelerate",
+   "vk": "0x57",
+   "label": "W"
+  },
+  {
+   "action": "brake",
+   "vk": "0x53",
+   "label": "S"
+  },
+  {
+   "action": "steerLeft",
+   "vk": "0x41",
+   "label": "A"
+  },
+  {
+   "action": "steerRight",
+   "vk": "0x44",
+   "label": "D"
+  },
+  {
+   "action": "use",
+   "vk": "0x47",
+   "label": "G",
+   "setup": "drive",
+   "help": "Get in or out (walk up to a pickup)"
+  },
+  {
+   "action": "nextTrack",
+   "vk": "0x4E",
+   "label": "N",
+   "setup": "drive",
+   "help": "Next / previous song"
+  },
+  {
+   "action": "prevTrack",
+   "vk": "0x42",
+   "label": "B",
+   "about": "Previous song while driving (your music: the player's previous track)",
+   "setup": "drive",
+   "setupWith": "nextTrack"
+  },
+  {
+   "action": "musicSource",
+   "vk": "0x4D",
+   "label": "M",
+   "about": "Switch the car radio between the Need for Speed stations and your own music (Spotify, a YouTube video, any player in Windows' media controls)",
+   "setup": "drive",
+   "help": "Car radio: the stations or your own music"
+  },
+  {
+   "action": "screen",
+   "vk": "0x4A",
+   "label": "J",
+   "about": "The dash screen: equalizer on / off",
+   "setup": "drive",
+   "help": "Dash screen on / off"
+  },
+  {
+   "action": "handbrake",
+   "vk": "0x20",
+   "label": "Space",
+   "setup": "drive",
+   "help": "Handbrake"
+  },
+  {
+   "action": "camera",
+   "vk": "0x43",
+   "label": "C",
+   "about": "Cycle chase / hood / driver camera (NFS Most Wanted PC camera key; unbound in New Vegas)",
+   "setup": "drive",
+   "help": "Chase, hood or driver camera"
+  },
+  {
+   "action": "radioUp",
+   "vk": "0xBB",
+   "label": "= (or numpad +)",
+   "setup": "drive",
+   "help": "Radio louder / quieter (numpad + - too)"
+  },
+  {
+   "action": "radioDown",
+   "vk": "0xBD",
+   "label": "- (or numpad -)",
+   "setup": "drive",
+   "setupWith": "radioUp"
+  },
+  {
+   "action": "radioUpPad",
+   "vk": "0x6B",
+   "label": "numpad +"
+  },
+  {
+   "action": "radioDownPad",
+   "vk": "0x6D",
+   "label": "numpad -"
+  },
+  {
+   "action": "paintHueLeft",
+   "vk": "0x41",
+   "label": "A",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintHueRight",
+   "vk": "0x44",
+   "label": "D",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintBrighter",
+   "vk": "0x57",
+   "label": "W",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintDarker",
+   "vk": "0x53",
+   "label": "S",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintHueLeftAlt",
+   "vk": "0x25",
+   "label": "Left arrow",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintHueRightAlt",
+   "vk": "0x27",
+   "label": "Right arrow",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintBrighterAlt",
+   "vk": "0x26",
+   "label": "Up arrow",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintDarkerAlt",
+   "vk": "0x28",
+   "label": "Down arrow",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintLessColor",
+   "vk": "0x5A",
+   "label": "Z",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintMoreColor",
+   "vk": "0x58",
+   "label": "X",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintFinish",
+   "vk": "0x46",
+   "label": "F",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintKeep",
+   "vk": "0x0D",
+   "label": "Enter",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "paintUndo",
+   "vk": "0x08",
+   "label": "Backspace",
+   "about": "Live color editor (player controls are off while it runs, so movement keys are free)"
+  },
+  {
+   "action": "smokeStyle",
+   "vk": "0x46",
+   "label": "F",
+   "about": "During a burnout: switch between the tyre smoke candidates (while one is being chosen)"
+  },
+  {
+   "action": "subUp",
+   "vk": "0x21",
+   "label": "Page Up",
+   "about": "Subwoofer up a step (0-10) while driving",
+   "setup": "drive",
+   "help": "Subwoofer up / down"
+  },
+  {
+   "action": "subDown",
+   "vk": "0x22",
+   "label": "Page Down",
+   "about": "Subwoofer down a step (0-10) while driving",
+   "setup": "drive",
+   "setupWith": "subUp"
+  },
+  {
+   "action": "lean",
+   "vk": "0x51",
+   "label": "Q",
+   "setup": "drive",
+   "help": "Lean out"
+  },
+  {
+   "action": "headlights",
+   "vk": "0x4C",
+   "label": "L",
+   "about": "Headlights on / off while driving (they come back on as low or high beams, whichever you had)",
+   "setup": "drive",
+   "help": "Headlights on / off; high / low beams"
+  },
+  {
+   "action": "highBeams",
+   "vk": "0x48",
+   "label": "H",
+   "about": "High beams / low beams while driving (with the headlights off, turns them on as high beams)",
+   "setup": "drive",
+   "setupWith": "headlights"
+  },
+  {
+   "action": "screenTurnLeft",
+   "vk": "0x25",
+   "label": "Left arrow",
+   "about": "Holding J: turn the dash screen's picture counter-clockwise half a degree"
+  },
+  {
+   "action": "screenTurnRight",
+   "vk": "0x27",
+   "label": "Right arrow",
+   "about": "Holding J: turn the dash screen's picture clockwise half a degree"
+  },
+  {
+   "action": "screenSlantUp",
+   "vk": "0x26",
+   "label": "Up arrow",
+   "about": "Holding J: slant the dash screen's picture (its uprights lean right at the top) half a degree"
+  },
+  {
+   "action": "screenSlantDown",
+   "vk": "0x28",
+   "label": "Down arrow",
+   "about": "Holding J: slant the dash screen's picture the other way half a degree"
+  },
+  {
+   "action": "snow",
+   "vk": "0x4B",
+   "label": "K",
+   "about": "Seasons on or off: the weather and the snow on the ground follow the game's calendar (kept in season.ini)",
+   "setup": "weather",
+   "help": "Seasons on / off"
+  },
+  {
+   "action": "wipers",
+   "vk": "0x56",
+   "label": "V",
+   "about": "In the car: windshield wipers on or off",
+   "setup": "drive",
+   "help": "Wipers on / off"
+  },
+  {
+   "action": "snowStorm",
+   "vk": "0x59",
+   "label": "Y",
+   "about": "The weather: by the season, or held at clear, overcast, light snow, heavy snow or a blizzard (kept in season.ini)",
+   "setup": "weather",
+   "help": "The weather: by the season, or held at one"
+  },
+  {
+   "action": "handling",
+   "vk": "0x55",
+   "label": "U",
+   "setup": "gun",
+   "help": "Gun handling on / off (to compare)"
+  },
+  {
+   "action": "climb",
+   "vk": "0x20",
+   "label": "Space",
+   "setup": "foot",
+   "help": "At a ledge: vault, mantle or climb; in the air beside a wall: kick off it"
+  },
+  {
+   "action": "sprint",
+   "vk": "0x10",
+   "label": "Shift",
+   "setup": "foot",
+   "help": "Hold going forward to sprint; double-tap for a tactical sprint"
+  },
+  {
+   "action": "invite",
+   "vk": "0x49",
+   "label": "I",
+   "about": "While driving with friends in the game: offer a ride for 15 s - a friend within about 25 m presses G to get into your passenger seat",
+   "setup": "drive",
+   "help": "Driving: offer a friend near you a ride (they press G)"
+  },
+  {
+   "action": "chat",
+   "vk": "0x0D",
+   "label": "Enter",
+   "about": "Playing together: opens the chat box (JIP LN's text input); /name YourName sets the name friends see",
+   "setup": "coop",
+   "help": "Chat with your friends"
+  },
+  {
+   "action": "netTest",
+   "vk": "0x79",
+   "label": "F10"
+  },
+  {
+   "action": "lighting",
+   "vk": "0x7A",
+   "label": "F11",
+   "setup": "light",
+   "help": "Realistic daylight off / on (to compare)"
+  },
+  {
+   "action": "smoothAds",
+   "vk": "0x4F",
+   "label": "O",
+   "about": "Smooth ADS on or off (the camera easing onto the sights and the gun settling in); saved per game (Mojave Most Wanted / vanilla stable)",
+   "setup": "gun",
+   "help": "Smooth aiming on / off"
+  },
+  {
+   "action": "shoulder",
+   "vk": "0x58",
+   "label": "X",
+   "about": "Third person: the camera over the other shoulder (also follows a lean round cover to that side)",
+   "setup": "foot",
+   "help": "Third person: the camera over the other shoulder"
+  },
+  {
+   "action": "feel",
+   "vk": "0x77",
+   "label": "F8",
+   "about": "The feel menu: fine-tune weapon inertia, sway, kick, recoil, camera shake and roll, FOV kick, corner lean speed and the third-person body, live",
+   "setup": "gun",
+   "help": "The feel menu: inertia, sway, recoil, camera and body, live"
+  },
+  {
+   "action": "joinAccept",
+   "vk": "0x75",
+   "label": "F6",
+   "about": "hosting: let in the player asking to join (their name is on screen)",
+   "setup": "coop",
+   "help": "Hosting: let in / turn away the player asking to join"
+  },
+  {
+   "action": "joinRefuse",
+   "vk": "0x76",
+   "label": "F7",
+   "about": "hosting: refuse the player asking to join (for this session)",
+   "setup": "coop",
+   "setupWith": "joinAccept"
+  },
+  {
+   "action": "rtx",
+   "vk": "0x2D",
+   "label": "Insert",
+   "about": "With RTX Remix in the game (a Remix d3d9.dll in the game folder): its path tracing off and on, live, to compare (rtx.enableRaytracing through the Remix API)"
+  }
+ ]
+}

@@ -1,0 +1,95 @@
+{
+ "sheet": "garage",
+ "about": "Where the garage is.",
+ "columns": {
+  "id": "row key",
+  "worldspace": "editor id of the worldspace",
+  "worldFormId": "worldspace form id in FalloutNV.esm",
+  "anchor": "x,y,z in game units of the gas station",
+  "radius": "metres within which the garage prompt shows",
+  "slots": "parked car spots relative to the anchor: right/forward offsets in game units along the anchor heading, and the car's heading in degrees",
+  "classes": "garage menu groups in menu order: id (cars.class) and the button label"
+ },
+ "rows": [
+  {
+   "id": "goodsprings",
+   "worldspace": "WastelandNV",
+   "worldFormId": "0x000DA726",
+   "anchor": {
+    "x": -74621.1,
+    "y": 4723.29,
+    "z": 8784.72,
+    "heading": 91.11
+   },
+   "radius": 25,
+   "slots": [
+    {
+     "id": "slot1",
+     "right": -758.4,
+     "forward": 38.6,
+     "heading": 91.11,
+     "keep": true
+    },
+    {
+     "id": "slot2",
+     "right": -46.2,
+     "forward": 83.2,
+     "heading": 91.11,
+     "keep": true
+    },
+    {
+     "id": "slot3",
+     "right": 350.0,
+     "forward": 0.0,
+     "heading": 91.11,
+     "keep": true
+    },
+    {
+     "id": "slot4",
+     "right": 700.0,
+     "forward": 0.0,
+     "heading": 91.11,
+     "keep": true
+    }
+   ]
+  }
+ ],
+ "classes": [
+  {
+   "id": "hyper",
+   "label": "Hypercars"
+  },
+  {
+   "id": "super",
+   "label": "Supercars"
+  },
+  {
+   "id": "sports",
+   "label": "Sports & GT"
+  },
+  {
+   "id": "tuner",
+   "label": "Tuners"
+  },
+  {
+   "id": "muscle",
+   "label": "Muscle"
+  },
+  {
+   "id": "classic",
+   "label": "Classics"
+  },
+  {
+   "id": "hatch",
+   "label": "Hot hatches"
+  },
+  {
+   "id": "track",
+   "label": "Track toys"
+  },
+  {
+   "id": "offroad",
+   "label": "Off-road"
+  }
+ ]
+}
