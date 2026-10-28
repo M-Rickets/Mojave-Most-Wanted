@@ -1,5 +1,9 @@
 # Mojave Enhanced
 
+<h2 align="center"><a href="https://github.com/M-Rickets/Mojave-Most-Wanted/releases/download/v1.0.34/MojaveEnhanced-Setup-1.0.34.exe">⬇ Download Mojave Enhanced 1.0.34</a></h2>
+<p align="center">Windows setup, 13 MB · run it, press <b>MAKE IT WORK</b>, then <b>FIRST TIME START-UP</b> shows how to play with friends<br>
+<a href="../../releases">all versions</a></p>
+
 *Fallout: New Vegas*, enhanced: the game made stable and smooth, guns that feel weighty and alive, and co-op with
 your friends, all put in by one program with one button.
 
@@ -9,8 +13,8 @@ own pages, and everything in this repository is the mod's own work (plus the ope
 
 ## Download
 
-Get **MojaveEnhanced-Setup-&lt;version&gt;.exe** from [Releases](../../releases/latest), run it and press
-**MAKE IT WORK**. Play with the **Mojave Enhanced** shortcut it puts on your desktop.
+[Download the setup](https://github.com/M-Rickets/Mojave-Most-Wanted/releases/download/v1.0.34/MojaveEnhanced-Setup-1.0.34.exe) (or any version from [Releases](../../releases)), run it and press **MAKE IT WORK**.
+Play with the **Mojave Enhanced** shortcut it puts on your desktop.
 
 - You need Fallout: New Vegas (Steam or GOG) and a free Nexus Mods account (some of the tools are only on Nexus:
   setup opens each page and takes the file as soon as it's downloaded).
