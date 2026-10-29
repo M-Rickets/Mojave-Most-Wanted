@@ -173,9 +173,10 @@ func netPills() {
 var infoOpen string
 
 func showInfo(kind string) {
+	weather := unlockedByName("weather")
 	app.mu.Lock()
 	game := app.game
-	g := help.Game{Full: !man.Vanilla, Weather: unlockedByName("weather")}
+	g := help.Game{Full: !man.Vanilla, Weather: weather}
 	app.mu.Unlock()
 	var title string
 	var lines []scene.Line

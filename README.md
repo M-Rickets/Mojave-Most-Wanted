@@ -1,6 +1,6 @@
 # Mojave Enhanced
 
-<h2 align="center"><a href="https://github.com/M-Rickets/Mojave-Most-Wanted/releases/download/v1.0.34/MojaveEnhanced-Setup-1.0.34.exe">Download Mojave Enhanced 1.0.34</a></h2>
+<h2 align="center"><a href="https://github.com/M-Rickets/Mojave-Most-Wanted/raw/main/updates/MojaveEnhanced-Setup-1.0.35.exe">Download Mojave Enhanced 1.0.35</a></h2>
 <p align="center">Windows setup, 13 MB · run it, press <b>MAKE IT WORK</b>, then <b>FIRST TIME START-UP</b> shows how to play with friends<br>
 <a href="../../releases">all versions</a></p>
 
@@ -13,7 +13,7 @@ own pages, and everything in this repository is the mod's own work (plus the ope
 
 ## Download
 
-[Download the setup](https://github.com/M-Rickets/Mojave-Most-Wanted/releases/download/v1.0.34/MojaveEnhanced-Setup-1.0.34.exe) (or any version from [Releases](../../releases)), run it and press **MAKE IT WORK**.
+[Download the setup](https://github.com/M-Rickets/Mojave-Most-Wanted/raw/main/updates/MojaveEnhanced-Setup-1.0.35.exe) (or any version from [Releases](../../releases)), run it and press **MAKE IT WORK**.
 Play with the **Mojave Enhanced** shortcut it puts on your desktop.
 
 - You need Fallout: New Vegas (Steam or GOG) and a free Nexus Mods account (some of the tools are only on Nexus:
@@ -61,10 +61,9 @@ sh plugin/build.sh               # the plugin only: plugin/build/MojaveMostWante
 Go builds only from `converter/vendor/` (`GOFLAGS=-mod=vendor`, which `build_setup.sh` sets): the `replace` lines in
 `go.mod` name folders that aren't needed.
 
-**Checking a release against this code:** the plugin built from this repository is byte-for-byte the one inside setup
-1.0.34 except the two bytes of its build time stamp, and the `.esp` is identical. The Go code of the launcher and setup is
-token-for-token what 1.0.34 was built from; Go writes line numbers into its programs, so those differ until the next
-release, which is built from this repository as it is.
+**Checking a release against this code:** setup 1.0.35 and later are built from this repository as it is. Built
+here, the plugin matches the one inside setup byte for byte except the two bytes of its build time stamp, and the
+launcher and `.esp` match exactly; setup itself differs only by the dates of the files packed inside it.
 
 ## Licence
 

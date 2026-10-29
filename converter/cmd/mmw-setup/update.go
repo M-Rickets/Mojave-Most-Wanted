@@ -7,6 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -28,6 +29,7 @@ type updateInfo struct {
 	Unlocked []string `json:"unlocked"`
 	Setup    struct {
 		File   string `json:"file"`
+		URL    string `json:"url"`
 		Size   int64  `json:"size"`
 		SHA256 string `json:"sha256"`
 	} `json:"setup"`
@@ -71,7 +73,14 @@ func checkUpdate() {
 		return
 	}
 	app.logf("Updates: %s is out (%s)\n%s", u.Version, u.Date, u.Notes)
-	b, err := download(updateBase + u.Setup.File)
+	var b []byte
+	err = errors.New("no download")
+	if strings.HasPrefix(u.Setup.URL, "https://github.com/M-Rickets/") {
+		b, err = download(u.Setup.URL)
+	}
+	if err != nil && u.Setup.File != "" {
+		b, err = download(updateBase + u.Setup.File)
+	}
 	if err != nil || int64(len(b)) != u.Setup.Size || sha(b) != strings.ToLower(u.Setup.SHA256) {
 		app.logf("Updates: the download of %s didn't match its record (%v) - not used", u.Setup.File, err)
 		return
