@@ -230,7 +230,7 @@ func pillPressed(name string) {
 		return
 	}
 	if strings.HasPrefix(name, "add-ons ") || (name == "vanilla stable" || name == "game") && !menuOpen {
-		app.with(func(st *scene.State) { st.Menu = true })
+		app.with(func(st *scene.State) { st.Menu, st.MenuScroll = true, 0 })
 		return
 	}
 	if strings.HasPrefix(name, "name: ") {

@@ -226,7 +226,7 @@ static Script *s_contAdj, *s_kill, *s_restrain, *s_healthPct, *s_dmgPct;
 static Script *s_setXY, *s_place, *s_move, *s_remove, *s_sound, *s_hurt, *s_hit, *s_modIndex, *s_getCam[4], *s_hudRGB[3], *s_mate, *s_ride, *s_weaponOut;
 static u32 g_mod = 0xFF;
 static bool g_ready;
-#define PLUGIN_BUILD 295
+#define PLUGIN_BUILD 296
 #define STR2(x) #x
 #define STR(x) STR2(x)
 static const u32 kPluginBuild = PLUGIN_BUILD;
@@ -373,6 +373,9 @@ static Script *s_charMenu, *s_charDone;
 static Script *s_disable, *s_enable;
 static u32 g_handPlug[8] = {255, 255, 255, 255, 255, 255, 255, 255};
 static const char *kWeaponOut = "Begin Function {}\nSetFunctionValue (Player.IsWeaponOut)\nEnd";
+// 0 no scope, 1 the weapon's own, 2 a scope mod on it (JIP LN)
+static const char *kScoped = "Begin Function {}\nSetFunctionValue (Player.IsEquippedWeaponScoped)\nEnd";
+static Script *s_scoped;
 // Your companion gets in (fOn 0: gone from the world while riding) or out (1: back beside the car)
 static const char *kRide =
 	"Begin Function {ref rActor, float fOn, float fx, float fy, float fz}\n"
@@ -431,6 +434,8 @@ static bool compileAll()
 	s_modIndex = g_script->CompileScript(kModIndex);
 	s_mate = g_script->CompileScript(kMate);
 	s_weaponOut = g_script->CompileScript(kWeaponOut);
+	s_scoped = g_script->CompileScript(kScoped);
+	LOG("compile (scopes): %x", (u32)s_scoped);
 	s_ride = g_script->CompileScript(kRide);
 	s_ammo = g_script->CompileScript(kAmmo);
 	s_strip = g_script->CompileScript(kStrip);
@@ -4455,6 +4460,35 @@ static void fovDefault(TESObjectREFR *pl, double t)
 	LOG("fov: the save's view was %.1f - back to your setting %.1f (fDefaultWorldFOV)", *wf, ini);
 	*wf = ini;
 	g_fovStable = -1; g_fovSeen = -1;
+}
+// bIronSightsZoomEnable off (the iron sights keep your field of view) took the scopes' zoom with it
+static u8 g_sightsZoomGame = 1;
+static bool g_scopedWeapon;
+static bool scopedAim(TESObjectREFR *pl)
+{
+	u32 proc = pl ? ptr((u32)pl + 0x68) : 0;
+	return g_scopedWeapon && proc && rd<u32>(proc + 0x28) <= 1 && rd<u8>(proc + 0x228);
+}
+static void scopeTick(TESObjectREFR *pl, double t)
+{
+	static u32 lastW;
+	static double nextAt;
+	if (!pl || menumode()) return;
+	u32 proc = ptr((u32)pl + 0x68), we = proc && rd<u32>(proc + 0x28) <= 1 ? ptr(proc + 0x114) : 0, w = we ? ptr(we + 8) : 0;
+	if (w == lastW && t < nextAt) return;
+	nextAt = t + 0.5;
+	bool scoped = false;
+	if (w)
+	{
+		NVSEElement e;
+		memset(&e, 0, sizeof e);
+		if (s_scoped && g_script->CallFunction(s_scoped, pl, 0, &e, 0) && e.type == 1) scoped = e.num > 0;
+		else scoped = (rd<u8>(w + 0x100) & 4) != 0;
+	}
+	if (w != lastW || scoped != g_scopedWeapon) LOG("scope: %s %x", scoped ? "scoped weapon - the game's zoom on" : "no scope", w);
+	lastW = w;
+	g_scopedWeapon = scoped;
+	if (TUNE(adsKeepFov) > 0) *(u8 *)(0x11E097C + 4) = scoped ? g_sightsZoomGame : 0;
 }
 static void driftFovOff(TESObjectREFR *pl)
 {
@@ -8770,7 +8804,8 @@ static void installHooks()
 	done = true;
 	{
 		u8 *z = (u8 *)(0x11E097C + 4);
-		LOG("handling: bIronSightsZoomEnable %d%s", *z, TUNE(adsKeepFov) > 0 ? " -> 0 (the sights keep your field of view)" : "");
+		g_sightsZoomGame = *z;
+		LOG("handling: bIronSightsZoomEnable %d%s", *z, TUNE(adsKeepFov) > 0 ? " -> 0 (the sights keep your field of view; scopes still zoom)" : "");
 		if (TUNE(adsKeepFov) > 0) *z = 0;
 	}
 	u32 o = 0;
@@ -10697,7 +10732,13 @@ static void tick(float dt, double t, bool focus, TESObjectREFR *pl)
 	float fovWant = b0 * TUNE(sprintFovAdd) + b1 * TUNE(tacFovAdd);
 	static bool kicked;
 	float kick = g_driving ? 0 : g_fovKick;
-	if (g_driving) fovNow = 0;
+	if (scopedAim(pl))
+	{
+		if (fovNow != 0 || kicked) driftFovOff(pl);
+		fovNow = 0;
+		kicked = false;
+	}
+	else if (g_driving) fovNow = 0;
 	else if (rt::absf(fovWant - fovNow) > 0.01f || (fovNow != 0 && fovWant == 0) || rt::absf(kick) > 0.01f || kicked)
 	{
 		fovNow += (fovWant - fovNow) * clampf(dt * 6, 0, 1);
@@ -17161,6 +17202,7 @@ static void tick()
 	static u32 lastCell;
 	u32 cell = ptr((u32)pl + OFF_REF_CELL);
 	if (cell != lastCell) { lastCell = cell; g_quietUntil = t + 2.0; LOG("cell %x (Mojave %d), waiting", cell ? refid((void *)cell) : 0, inMojave); }
+	scopeTick(pl, t);
 	fovWatch(pl);
 	fovDefault(pl, t);
 	LAP("paint/fov");

@@ -91,6 +91,7 @@ type State struct {
 	MenuItems    []string
 	MenuOn       []bool
 	MenuGroups   []string
+	MenuScroll   float64
 	SideL, SideR []Side
 	Info         bool
 	InfoTitle    string
@@ -520,6 +521,8 @@ func pills(c *Canvas, s *State) []Hit {
 	return hits
 }
 
+type spot struct{ x, y, w float64 }
+
 // MenuClose is the panel's close pill's hit name.
 const MenuClose = "close panel"
 
@@ -528,7 +531,6 @@ func menu(c *Canvas, s *State) []Hit {
 	var hits []Hit
 	x0, y0, w := 26.0, 44.0, float64(W-52)
 	minH, maxH := 400.0, float64(H)-y0-14
-	type spot struct{ x, y, w float64 }
 	col := 118.0
 	layout := func(size float64) ([]spot, []float64, float64) {
 		left, right := x0+18+col, x0+w-18
@@ -561,16 +563,22 @@ func menu(c *Canvas, s *State) []Hit {
 	}
 	size := 10.5
 	at, heads, bottom := layout(size)
-	for bottom+12 > y0+maxH && size > 7.5 {
+	for bottom+12 > y0+maxH && size > 9 {
 		size -= 0.5
 		at, heads, bottom = layout(size)
 	}
 	h := math.Min(maxH, math.Max(minH, bottom+16-y0))
+	top, end := y0+46, y0+h-10
+	over := math.Max(0, bottom+6-end)
+	scroll := math.Max(0, math.Min(s.MenuScroll, over))
+	menuMu.Lock()
+	menuScrollMax = over
+	menuMu.Unlock()
 	c.FillPath(RoundRect(x0+5, y0+5, w, h, 14), rgba(cInk, 255))
 	c.FillPath(RoundRect(x0, y0, w, h, 14), rgba(cInk, 255))
 	c.FillPath(RoundRect(x0+2, y0+2, w-4, h-4, 12), rgba(cPaper, 255))
 	c.Text(fTitle, 17, x0+18, y0+30, s.MenuTitle, rgba(cInk, 255))
-	pill := func(x, y, pw float64, label, name string, on bool, size float64) {
+	pill := func(c *Canvas, x, y, pw float64, label, name string, on bool, size float64) {
 		c.FillPath(RoundRect(x+3, y+3, pw, 22, 11), rgba(cInk, 255))
 		c.FillPath(RoundRect(x, y, pw, 22, 11), rgba(cInk, 255))
 		var fill uint32 = cPaper
@@ -584,7 +592,48 @@ func menu(c *Canvas, s *State) []Hit {
 		hits = append(hits, Hit{name, x, y, pw + 3, 25})
 	}
 	dw := c.TextWidth(fMonoBold, 10.5, "DONE") + 30
-	pill(x0+w-18-dw, y0+12, dw, "DONE", MenuClose, false, 10.5)
+	pill(c, x0+w-18-dw, y0+12, dw, "DONE", MenuClose, false, 10.5)
+	done := hits
+	hits = nil
+	c.Clip(x0+2, top, w-4, end-top, func(c *Canvas) {
+		for i := range at {
+			at[i].y -= scroll
+			if heads[i] >= 0 {
+				heads[i] -= scroll
+			}
+		}
+		menuItems(c, s, at, heads, col, x0, size, pill)
+	})
+	var shown []Hit
+	for _, ht := range hits {
+		if ht.Y+ht.H > top && ht.Y < end {
+			shown = append(shown, ht)
+		}
+	}
+	hits = append(done, shown...)
+	if over > 0 {
+		trackH := end - top
+		barH := math.Max(24, trackH*trackH/(trackH+over))
+		barY := top + (trackH-barH)*scroll/over
+		c.FillPath(RoundRect(x0+w-9, top, 4, trackH, 2), rgba(0xE4DACB, 255))
+		c.FillPath(RoundRect(x0+w-9, barY, 4, barH, 2), rgba(cInk, 255))
+		if scroll < over {
+			c.Text(fMono, 9, x0+18+c.TextWidth(fTitle, 17, s.MenuTitle)+14, y0+29, "scroll for more", rgba(cGray, 255))
+		}
+	}
+	hits = append(hits, Hit{"", x0, y0, w, h})
+	return hits
+}
+
+var (
+	menuMu        sync.Mutex
+	menuScrollMax float64
+)
+
+// MenuScrollMax: how far the add-ons panel last drawn can scroll (0: it all fits)
+func MenuScrollMax() float64 { menuMu.Lock(); defer menuMu.Unlock(); return menuScrollMax }
+
+func menuItems(c *Canvas, s *State, at []spot, heads []float64, col, x0, size float64, pill func(c *Canvas, x, y, pw float64, label, name string, on bool, size float64)) {
 	for i, it := range s.MenuItems {
 		if heads[i] >= 0 && i < len(s.MenuGroups) && s.MenuGroups[i] != "" {
 			words := strings.Fields(strings.ToUpper(s.MenuGroups[i]))
@@ -607,10 +656,8 @@ func menu(c *Canvas, s *State) []Hit {
 			}
 		}
 		on := i < len(s.MenuOn) && s.MenuOn[i]
-		pill(at[i].x, at[i].y, at[i].w, it, strings.ToLower(it), on, size)
+		pill(c, at[i].x, at[i].y, at[i].w, it, strings.ToLower(it), on, size)
 	}
-	hits = append(hits, Hit{"", x0, y0, w, h})
-	return hits
 }
 
 func walker(c *Canvas, cx, base, t float64, moving bool) {

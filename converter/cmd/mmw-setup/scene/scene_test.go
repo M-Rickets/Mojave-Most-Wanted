@@ -1,7 +1,11 @@
 package scene
 
 import (
+	"fmt"
 	"image"
+	"image/png"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -36,6 +40,35 @@ func TestMenuPillsClickable(t *testing.T) {
 	for _, n := range []string{"a", "b", MenuClose} {
 		if got := at(n); got != n {
 			t.Fatalf("click on %q hits %q", n, got)
+		}
+	}
+}
+
+// More add-ons than the window holds: the panel scrolls, and nothing is drawn or clickable past its edge
+func TestMenuScrolls(t *testing.T) {
+	var items, groups []string
+	for g := 0; g < 9; g++ {
+		for i := 0; i < 5; i++ {
+			items = append(items, fmt.Sprintf("ADD-ON %d-%d WITH A LONG NAME", g, i))
+			groups = append(groups, fmt.Sprintf("Group %d", g))
+		}
+	}
+	for _, scroll := range []float64{0, 200, 1e6} {
+		img := image.NewRGBA(image.Rect(0, 0, W, H))
+		s := &State{Menu: true, MenuTitle: "GAME & ADD-ONS", MenuItems: items, MenuGroups: groups, MenuScroll: scroll, DoneT: -1}
+		hits := Render(img, 1, s)
+		if MenuScrollMax() <= 0 {
+			t.Fatal("45 add-ons fit without scrolling?")
+		}
+		for _, h := range hits {
+			if h.Name != "" && h.Y+h.H > H-14 {
+				t.Fatalf("scroll %v: %q clickable past the panel (y %v)", scroll, h.Name, h.Y)
+			}
+		}
+		if dir := os.Getenv("MMW_SHOTS"); dir != "" {
+			f, _ := os.Create(filepath.Join(dir, fmt.Sprintf("menu-scroll-%v.png", scroll)))
+			png.Encode(f, img)
+			f.Close()
 		}
 	}
 }

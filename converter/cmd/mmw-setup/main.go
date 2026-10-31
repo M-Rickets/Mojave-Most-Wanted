@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"image"
+	"math"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -20,7 +21,7 @@ import (
 	"mmw/cmd/mmw-setup/scene"
 )
 
-const appVersion = "1.0.35"
+const appVersion = "1.0.36"
 
 // Setup's own copy in the game folder (the desktop shortcut and updates use it); before 1.0.15 the mod was called
 // Mojave Most Wanted
@@ -315,6 +316,18 @@ func wndProc(hwnd uintptr, msg uint32, wp, lp uintptr) uintptr {
 		}
 		if h != hover {
 			hover = h
+			redraw()
+		}
+		return 0
+	case 0x020A:
+		app.mu.Lock()
+		open := app.st.Menu
+		if open {
+			d := float64(int16(uint16(wp>>16))) / 120 * 40
+			app.st.MenuScroll = math.Max(0, math.Min(app.st.MenuScroll-d, scene.MenuScrollMax()))
+		}
+		app.mu.Unlock()
+		if open {
 			redraw()
 		}
 		return 0
