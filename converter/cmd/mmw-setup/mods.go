@@ -3,10 +3,12 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 
@@ -22,6 +24,7 @@ const (
 	modsVortex = "VORTEX"
 	modsMO2    = "MOD ORGANIZER 2"
 	modsPickMO = "CHOOSE MODORGANIZER.EXE"
+	modsFindMO = "FIND MOD ORGANIZER 2"
 )
 
 // A Mod Organizer 2 instance that manages this game
@@ -47,47 +50,109 @@ func mo2Value(s, key string) string {
 	return strings.ReplaceAll(v, `\\`, `\`)
 }
 
-// mo2Instances: the Mod Organizer 2 instances whose game is this one (global ones in %LOCALAPPDATA%\ModOrganizer,
-// portable ones in the usual folders)
+// mo2Instances: the Mod Organizer 2 instances whose game is this one
 func mo2Instances(game string) []mo2 {
-	var inis []string
-	if m, _ := filepath.Glob(filepath.Join(os.Getenv("LOCALAPPDATA"), "ModOrganizer", "*", "ModOrganizer.ini")); len(m) > 0 {
-		inis = append(inis, m...)
+	mine, _ := mo2Scan(game)
+	return mine
+}
+
+// mo2Inis: every ModOrganizer.ini on this PC that setup can find.
+var (
+	mo2Mu   sync.Mutex
+	mo2At   time.Time
+	mo2Seen []string
+)
+
+func mo2Inis() []string {
+	mo2Mu.Lock()
+	defer mo2Mu.Unlock()
+	if time.Since(mo2At) < time.Minute && mo2At.After(time.Time{}) {
+		return mo2Seen
 	}
-	for _, d := range drives() {
-		for _, sub := range []string{"Modding", "MO2", "Mod Organizer 2", "Games", `Program Files\Mod Organizer 2`, `Program Files\Mod Organizer`} {
-			if m, _ := filepath.Glob(filepath.Join(d, sub, "ModOrganizer.ini")); len(m) > 0 {
-				inis = append(inis, m...)
-			}
-			if m, _ := filepath.Glob(filepath.Join(d, sub, "*", "ModOrganizer.ini")); len(m) > 0 {
-				inis = append(inis, m...)
+	var out []string
+	seen := map[string]bool{}
+	add := func(ini string) {
+		k := strings.ToLower(filepath.Clean(ini))
+		if !seen[k] && exists(ini) {
+			seen[k] = true
+			out = append(out, ini)
+		}
+	}
+	nearExe := func(exe string) {
+		if exe != "" {
+			add(filepath.Join(filepath.Dir(exe), "ModOrganizer.ini"))
+		}
+	}
+	for _, exe := range processPaths("ModOrganizer.exe") {
+		nearExe(exe)
+	}
+	app.mu.Lock()
+	chosen := man.ModsExe
+	app.mu.Unlock()
+	nearExe(chosen)
+	if cmd := regString(registry.CURRENT_USER, `Software\Classes\nxm\shell\open\command`, ""); cmd != "" {
+		nearExe(strings.Trim(strings.SplitN(strings.TrimPrefix(cmd, `"`), `"`, 2)[0], " "))
+	}
+	la := os.Getenv("LOCALAPPDATA")
+	if b, err := os.ReadFile(filepath.Join(la, "ModOrganizer", "nxmhandler.ini")); err == nil {
+		for _, l := range splitLines(string(b)) {
+			if k, v, ok := strings.Cut(strings.TrimSpace(l), "="); ok && strings.HasSuffix(strings.ToLower(k), "executable") {
+				nearExe(filepath.FromSlash(strings.Trim(strings.ReplaceAll(v, `\\`, `\`), `"`)))
 			}
 		}
 	}
-	var out []mo2
-	seen := map[string]bool{}
-	for _, ini := range inis {
-		if seen[strings.ToLower(ini)] {
+	if m, _ := filepath.Glob(filepath.Join(la, "ModOrganizer", "*", "ModOrganizer.ini")); len(m) > 0 {
+		for _, x := range m {
+			add(x)
+		}
+	}
+	var roots []string
+	for _, d := range drives() {
+		roots = append(roots, d)
+	}
+	if home := os.Getenv("USERPROFILE"); home != "" {
+		roots = append(roots, home, knownFolder(folderDesktop), knownFolder(folderDocuments), knownFolder(folderDownloads))
+	}
+	for _, r := range roots {
+		if r == "" {
 			continue
 		}
-		seen[strings.ToLower(ini)] = true
+		for _, pat := range []string{`ModOrganizer.ini`, `*\ModOrganizer.ini`, `*\*\ModOrganizer.ini`} {
+			if m, _ := filepath.Glob(filepath.Join(r, pat)); len(m) > 0 {
+				for _, x := range m {
+					add(x)
+				}
+			}
+		}
+	}
+	mo2Seen, mo2At = out, time.Now()
+	return out
+}
+
+// mo2Scan: the instances whose game is this one, and (for the report and the panel) the others' games
+func mo2Scan(game string) (mine []mo2, elsewhere []string) {
+	for _, ini := range mo2Inis() {
 		b, err := os.ReadFile(ini)
 		if err != nil {
 			continue
 		}
 		s := string(b)
 		gp := mo2Value(s, "gamePath")
-		if gp == "" || !strings.EqualFold(filepath.Clean(gp), filepath.Clean(game)) {
+		if gp == "" {
+			continue
+		}
+		if !strings.EqualFold(filepath.Clean(filepath.FromSlash(gp)), filepath.Clean(game)) {
+			elsewhere = append(elsewhere, fmt.Sprintf("%s (its game: %s)", redact(filepath.Dir(ini)), redact(filepath.FromSlash(gp))))
 			continue
 		}
 		dir := filepath.Dir(ini)
 		m := mo2{Name: filepath.Base(dir), Ini: ini, Base: dir, Profile: mo2Value(s, "selected_profile")}
 		if bd := mo2Value(s, "base_directory"); bd != "" {
-			m.Base = bd
+			m.Base = filepath.FromSlash(bd)
 		}
 		dirOf := func(key, def string) string {
 			if v := mo2Value(s, key); v != "" {
-				return filepath.Clean(strings.ReplaceAll(v, "%BASE_DIR%", m.Base))
+				return filepath.Clean(filepath.FromSlash(strings.ReplaceAll(v, "%BASE_DIR%", m.Base)))
 			}
 			return filepath.Join(m.Base, def)
 		}
@@ -97,9 +162,9 @@ func mo2Instances(game string) []mo2 {
 		}
 		m.Portable = exists(filepath.Join(dir, "ModOrganizer.exe"))
 		m.Exe = mo2Exe(dir)
-		out = append(out, m)
+		mine = append(mine, m)
 	}
-	return out
+	return
 }
 
 // mo2Exe: ModOrganizer.exe - beside a portable instance's ini, else where Mod Organizer handles Nexus links from, else
@@ -204,7 +269,7 @@ func modsLines(game string) []scene.Line {
 	app.mu.Lock()
 	pick := man.Mods
 	app.mu.Unlock()
-	ms := mo2Instances(game)
+	ms, elsewhere := mo2Scan(game)
 	v := help.ModsView{Pills: []string{modsFolder}, On: []bool{pick == ""}}
 	for _, m := range ms {
 		v.Pills, v.On = append(v.Pills, m.label(len(ms))), append(v.On, strings.EqualFold(pick, "mo2:"+m.Ini))
@@ -227,6 +292,12 @@ func modsLines(game string) []scene.Line {
 		v.Say = help.ModsFolderSay
 	}
 	v.NoneFound = len(ms) == 0 && !vortexThere()
+	if len(ms) == 0 && v.PickExe == "" {
+		v.PickExe = modsFindMO
+	}
+	if len(ms) == 0 && len(elsewhere) > 0 {
+		v.Say += " Mod Organizer 2 is on this PC, but it runs another copy of the game - " + elsewhere[0] + " - not this one (" + redact(game) + "). To play with its mods, put Mojave Enhanced in that copy: copy this setup into that game folder and press MAKE IT WORK there."
+	}
 	return help.ModsLines(v)
 }
 
@@ -241,12 +312,18 @@ func modsPressed(name string) bool {
 	case strings.ToLower(modsFolder):
 	case strings.ToLower(modsVortex):
 		pick = "vortex"
-	case strings.ToLower(modsPickMO):
+	case strings.ToLower(modsPickMO), strings.ToLower(modsFindMO):
 		if p := openFileDialog("Where is ModOrganizer.exe?", "ModOrganizer.exe\x00ModOrganizer.exe\x00\x00"); p != "" {
 			app.mu.Lock()
 			man.ModsExe = p
 			app.mu.Unlock()
 			saveManifest()
+			mo2Mu.Lock()
+			mo2At = time.Time{}
+			mo2Mu.Unlock()
+			if ms, _ := mo2Scan(game); len(ms) == 1 && name == strings.ToLower(modsFindMO) {
+				return modsPressed(strings.ToLower(ms[0].label(1)))
+			}
 		}
 		showInfo("mods")
 		return true

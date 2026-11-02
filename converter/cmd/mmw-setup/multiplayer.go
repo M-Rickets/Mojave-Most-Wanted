@@ -126,12 +126,22 @@ func netPills() {
 		if unlocked("addons") {
 			labels, aon, groups, n = addonItems(game)
 		}
+		fmPill := 0
+		if fm := friendsMode(); fm || len(loadAddons()) > 0 {
+			fmPill = 1
+			if fm {
+				labels, aon, groups, n = nil, nil, nil, 0
+			}
+			labels, aon, groups = append([]string{strings.ToUpper(friendsPill)}, labels...), append([]bool{fm}, aon...), append([]string{"Mode"}, groups...)
+		}
 		if unlocked("mmw") {
 			vl, vo, vg = versionItems()
 		}
 		if len(labels)+len(vl) > 0 {
-			label := fmt.Sprintf("ADD-ONS %d/%d", n, len(labels))
+			label := fmt.Sprintf("ADD-ONS %d/%d", n, len(labels)-fmPill)
 			switch {
+			case friendsMode():
+				label = "FRIENDS MODE"
 			case man.Vanilla:
 				label = "VANILLA STABLE"
 			case len(labels) == 0:
@@ -229,8 +239,12 @@ func pillPressed(name string) {
 	if worldPressed(name) {
 		return
 	}
-	if strings.HasPrefix(name, "add-ons ") || (name == "vanilla stable" || name == "game") && !menuOpen {
+	if strings.HasPrefix(name, "add-ons ") || (name == "vanilla stable" || name == "game" || name == friendsPill) && !menuOpen {
 		app.with(func(st *scene.State) { st.Menu, st.MenuScroll = true, 0 })
+		return
+	}
+	if name == friendsPill {
+		friendsPressed()
 		return
 	}
 	if strings.HasPrefix(name, "name: ") {
@@ -313,29 +327,37 @@ func hostGame(game string) {
 	port := p2p.RandomPort()
 	key, session := p2p.NewSession()
 	addrs := []string{}
-	public, upnp := "", false
+	public, upnp, routerIP, outPort := "", false, "", port
 	if u, err := p2p.FindRouter(3 * time.Second); err == nil {
 		if perm, err := u.MapPort(port, "Mojave Enhanced", 4*3600); err == nil {
 			upnp = true
+			outPort = u.ExternalPort(port)
 			how := ", for 4 hours"
 			if perm {
 				how = "; this router only takes forwards without an end - taken down when the game closes"
 			}
-			app.logf("Router: UDP %d now comes to this PC (%s, UPnP%s)", port, u.Local, how)
+			if outPort != port {
+				how += fmt.Sprintf("; outside it's port %d", outPort)
+			}
+			app.logf("Router: UDP %d now comes to this PC (%s, %s%s)", port, u.Local, u.Via, how)
 		} else {
-			app.logf("Router: couldn't open UDP %d by UPnP (%v)", port, err)
+			app.logf("Router: couldn't open UDP %d by %s (%v)", port, u.Via, err)
 		}
-		public = u.ExternalIP()
+		routerIP = u.ExternalIP()
 	} else {
 		app.logf("Router: %v", err)
 	}
-	if public == "" {
-		if ip, err := p2p.StunAddr("stun.l.google.com:19302", 3*time.Second); err == nil {
-			public = ip
-		}
+	stun, _ := p2p.StunAddr("stun.l.google.com:19302", 3*time.Second)
+	public = stun
+	if public == "" && !p2p.Shared(routerIP) {
+		public = routerIP
+	}
+	shared := p2p.Shared(routerIP) || (routerIP != "" && stun != "" && routerIP != stun)
+	if shared {
+		app.logf("Router: its internet address is %s but the internet sees %s - a shared address (the internet provider's, or a second router): friends outside can't reach this PC", routerIP, stun)
 	}
 	if public != "" {
-		addrs = append(addrs, fmt.Sprintf("%s:%d", public, port))
+		addrs = append(addrs, fmt.Sprintf("%s:%d", public, outPort))
 		app.logf("Internet address: %s", public)
 	}
 	for _, ip := range p2p.LocalIPv4s() {
@@ -367,6 +389,10 @@ func hostGame(game string) {
 	app.logf("Hosting: join code %s (addresses %s; good until %s)", code, strings.Join(addrs, ", "), jc.Expires.Format("15:04 Jan 2"))
 	if public == "" {
 		app.status("Join code copied, but no internet address found: friends on your network or VPN can join. Press PLAY.")
+	} else if shared {
+		app.status("Join code copied, but your internet provider shares your address with other homes: friends outside can't reach you. Let a friend host, or both use a virtual LAN app.")
+	} else if !upnp {
+		app.status("Join code copied, but your router didn't open the port (turn on UPnP in its settings, or forward UDP %d to this PC): friends may not get in. Press PLAY.", port)
 	} else {
 		app.status("Join code copied (good for 12 hours): send it to your friends, then press PLAY - you let each one in, in game.")
 	}

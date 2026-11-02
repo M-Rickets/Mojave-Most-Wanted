@@ -195,49 +195,148 @@ func LocalIPv4s() []string {
 	return out
 }
 
-// ---- UPnP: ask the router to send a UDP port to this PC (most home routers allow it), and its internet address
+// ---- The router: asked to send a UDP port to this PC, and for its internet address - by UPnP (most home routers) or,
 type Router struct {
 	control, typ string
+	pmp          string
+	ext          map[int]int
 	Local        string
+	Via          string
 }
 
+// FindRouter asks three ways at once, each again every 0.7 s
 func FindRouter(timeout time.Duration) (*Router, error) {
-	conn, err := net.ListenUDP("udp4", &net.UDPAddr{})
-	if err != nil {
-		return nil, err
+	deadline := time.Now().Add(timeout)
+	type hit struct {
+		loc  string
+		from net.IP
 	}
-	defer conn.Close()
-	dst := &net.UDPAddr{IP: net.IPv4(239, 255, 255, 250), Port: 1900}
-	for _, st := range []string{"urn:schemas-upnp-org:service:WANIPConnection:1", "urn:schemas-upnp-org:service:WANIPConnection:2", "urn:schemas-upnp-org:service:WANPPPConnection:1", "urn:schemas-upnp-org:device:InternetGatewayDevice:1"} {
-		msg := "M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nST: " + st + "\r\nMAN: \"ssdp:discover\"\r\nMX: 2\r\n\r\n"
-		conn.WriteTo([]byte(msg), dst)
-	}
-	conn.SetReadDeadline(time.Now().Add(timeout))
-	buf := make([]byte, 2048)
-	seen := map[string]bool{}
-	for {
-		n, from, err := conn.ReadFrom(buf)
-		if err != nil {
-			return nil, errors.New("no router answered (UPnP off, or not a home router)")
+	hits := make(chan hit, 32)
+	search := func(write func([]byte)) {
+		for _, st := range []string{"urn:schemas-upnp-org:service:WANIPConnection:1", "urn:schemas-upnp-org:service:WANIPConnection:2", "urn:schemas-upnp-org:service:WANPPPConnection:1", "urn:schemas-upnp-org:device:InternetGatewayDevice:1"} {
+			write([]byte("M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nST: " + st + "\r\nMAN: \"ssdp:discover\"\r\nMX: 2\r\n\r\n"))
 		}
-		loc := ""
-		for _, l := range strings.Split(string(buf[:n]), "\r\n") {
-			if k, v, ok := strings.Cut(l, ":"); ok && strings.EqualFold(strings.TrimSpace(k), "location") {
-				loc = strings.TrimSpace(v)
+	}
+	read := func(c net.Conn, rd func([]byte) (int, net.IP, error)) {
+		buf := make([]byte, 2048)
+		c.SetReadDeadline(deadline)
+		for {
+			n, from, err := rd(buf)
+			if err != nil {
+				return
+			}
+			for _, l := range strings.Split(string(buf[:n]), "\r\n") {
+				if k, v, ok := strings.Cut(l, ":"); ok && strings.EqualFold(strings.TrimSpace(k), "location") {
+					hits <- hit{strings.TrimSpace(v), from}
+				}
 			}
 		}
-		if loc == "" || seen[loc] {
+	}
+	var conns []net.Conn
+	defer func() {
+		for _, c := range conns {
+			c.Close()
+		}
+	}()
+	resend := func(send func()) {
+		go func() {
+			for time.Until(deadline) > 0 {
+				send()
+				time.Sleep(700 * time.Millisecond)
+			}
+		}()
+	}
+	if mc, err := net.ListenUDP("udp4", &net.UDPAddr{}); err == nil {
+		conns = append(conns, mc)
+		dst := &net.UDPAddr{IP: net.IPv4(239, 255, 255, 250), Port: 1900}
+		resend(func() { search(func(b []byte) { mc.WriteTo(b, dst) }) })
+		go read(mc, func(b []byte) (int, net.IP, error) {
+			n, a, err := mc.ReadFromUDP(b)
+			if err != nil {
+				return 0, nil, err
+			}
+			return n, a.IP, nil
+		})
+	}
+	gws := Gateways()
+	for _, gw := range gws {
+		uc, err := net.DialUDP("udp4", nil, &net.UDPAddr{IP: net.ParseIP(gw), Port: ssdpPort})
+		if err != nil {
 			continue
 		}
-		seen[loc] = true
-		if s, err := describe(loc); err == nil {
-			if c, err := net.Dial("udp4", from.(*net.UDPAddr).IP.String()+":1900"); err == nil {
+		conns = append(conns, uc)
+		ip := net.ParseIP(gw)
+		resend(func() { search(func(b []byte) { uc.Write(b) }) })
+		go read(uc, func(b []byte) (int, net.IP, error) { n, err := uc.Read(b); return n, ip, err })
+	}
+	seen := map[string]bool{}
+	answered := false
+	for time.Until(deadline) > 0 {
+		var h hit
+		select {
+		case h = <-hits:
+		case <-time.After(time.Until(deadline)):
+			continue
+		}
+		if h.loc == "" || seen[h.loc] {
+			continue
+		}
+		seen[h.loc] = true
+		answered = true
+		if s, err := describe(h.loc); err == nil {
+			if c, err := net.Dial("udp4", h.from.String()+":1900"); err == nil {
 				s.Local = c.LocalAddr().(*net.UDPAddr).IP.String()
 				c.Close()
 			}
+			s.Via = "UPnP"
 			return s, nil
 		}
 	}
+	for _, gw := range gws {
+		if ip, local, err := pmpAsk(gw, []byte{0, 0}, 12); err == nil && len(ip) == 12 {
+			return &Router{pmp: gw, ext: map[int]int{}, Local: local, Via: "NAT-PMP"}, nil
+		}
+	}
+	if answered {
+		return nil, errors.New("a device answered but none offers the router's port forwarding (UPnP off on the router?)")
+	}
+	if len(gws) == 0 {
+		return nil, errors.New("no router answered (UPnP off, or not a home router), and no gateway known to ask directly")
+	}
+	return nil, fmt.Errorf("no router answered at %s (UPnP and NAT-PMP off, or not a home router)", strings.Join(gws, ", "))
+}
+
+// Gateways: this PC's default gateways (IPv4), on Windows from its adapters
+var Gateways = gateways
+
+var ssdpPort, pmpPort = 1900, 5351
+
+// pmpAsk sends one NAT-PMP request to the gateway (again at 0.25, 0.5, 1 s) and returns the answer of want bytes and
+// this PC's address towards it
+func pmpAsk(gw string, req []byte, want int) ([]byte, string, error) {
+	c, err := net.DialUDP("udp4", nil, &net.UDPAddr{IP: net.ParseIP(gw), Port: pmpPort})
+	if err != nil {
+		return nil, "", err
+	}
+	defer c.Close()
+	local := c.LocalAddr().(*net.UDPAddr).IP.String()
+	buf := make([]byte, 64)
+	for _, wait := range []time.Duration{250, 500, 1000} {
+		c.Write(req)
+		c.SetReadDeadline(time.Now().Add(wait * time.Millisecond))
+		n, err := c.Read(buf)
+		if err != nil {
+			continue
+		}
+		if n < want || buf[0] != 0 || buf[1] != req[1]+128 {
+			return nil, local, errors.New("not a NAT-PMP answer")
+		}
+		if r := binary.BigEndian.Uint16(buf[2:]); r != 0 {
+			return nil, local, fmt.Errorf("the router said no (NAT-PMP result %d)", r)
+		}
+		return buf[:n], local, nil
+	}
+	return nil, local, errors.New("no answer")
 }
 
 func describe(loc string) (*Router, error) {
@@ -318,6 +417,19 @@ func (u *Router) soap(action, args string) (string, error) {
 // MapPort asks the router to send UDP port to this PC for lease seconds (it falls back to no expiry for routers that
 // only take that - Permanent says so: the guard then takes it down when the game closes)
 func (u *Router) MapPort(port int, desc string, lease int) (permanent bool, err error) {
+	if u.pmp != "" {
+		req := make([]byte, 12)
+		req[1] = 1
+		binary.BigEndian.PutUint16(req[4:], uint16(port))
+		binary.BigEndian.PutUint16(req[6:], uint16(port))
+		binary.BigEndian.PutUint32(req[8:], uint32(lease))
+		b, _, err := pmpAsk(u.pmp, req, 16)
+		if err != nil {
+			return false, err
+		}
+		u.ext[port] = int(binary.BigEndian.Uint16(b[10:]))
+		return false, nil
+	}
 	for _, l := range []int{lease, 0} {
 		var body string
 		body, err = u.soap("AddPortMapping", fmt.Sprintf("<NewRemoteHost></NewRemoteHost><NewExternalPort>%d</NewExternalPort><NewProtocol>UDP</NewProtocol><NewInternalPort>%d</NewInternalPort><NewInternalClient>%s</NewInternalClient><NewEnabled>1</NewEnabled><NewPortMappingDescription>%s</NewPortMappingDescription><NewLeaseDuration>%d</NewLeaseDuration>", port, port, u.Local, desc, l))
@@ -333,12 +445,26 @@ func (u *Router) MapPort(port int, desc string, lease int) (permanent bool, err 
 
 // UnmapPort takes the router's forward of UDP port down
 func (u *Router) UnmapPort(port int) error {
+	if u.pmp != "" {
+		req := make([]byte, 12)
+		req[1] = 1
+		binary.BigEndian.PutUint16(req[4:], uint16(port))
+		_, _, err := pmpAsk(u.pmp, req, 16)
+		return err
+	}
 	_, err := u.soap("DeletePortMapping", fmt.Sprintf("<NewRemoteHost></NewRemoteHost><NewExternalPort>%d</NewExternalPort><NewProtocol>UDP</NewProtocol>", port))
 	return err
 }
 
 // ExternalIP: the address the internet sees the router at ("" unknown)
 func (u *Router) ExternalIP() string {
+	if u.pmp != "" {
+		b, _, err := pmpAsk(u.pmp, []byte{0, 0}, 12)
+		if err != nil {
+			return ""
+		}
+		return net.IP(b[8:12]).String()
+	}
 	r, err := u.soap("GetExternalIPAddress", "")
 	if err != nil {
 		return ""
@@ -388,4 +514,22 @@ func StunAddr(server string, timeout time.Duration) (string, error) {
 		p += 4 + (l+3)/4*4
 	}
 	return "", errors.New("no address in the answer")
+}
+
+// ExternalPort: the outside port the router sends to port (NAT-PMP can pick another; UPnP: the same)
+func (u *Router) ExternalPort(port int) int {
+	if p := u.ext[port]; p > 0 {
+		return p
+	}
+	return port
+}
+
+// Shared says whether an internet address the router reports is one an internet provider shares between many homes or a
+// private one (a second router in front of this one)
+func Shared(ip string) bool {
+	a := net.ParseIP(ip).To4()
+	if a == nil {
+		return false
+	}
+	return a[0] == 100 && a[1]&0xC0 == 64 || a.IsPrivate()
 }

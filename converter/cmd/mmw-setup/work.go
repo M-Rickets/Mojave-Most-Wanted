@@ -157,10 +157,6 @@ func startup() {
 	app.mu.Lock()
 	app.game = game
 	app.mu.Unlock()
-	if fm := filepath.Join(knownFolder(folderLocalAppData), "MojaveMostWanted", "friends-mode.json"); exists(fm) {
-		os.Remove(fm)
-		app.logf("Friends mode is gone: the game stays as it is (the dev files it kept aside are in %s)", filepath.Join(mmwDir(game), "dev-backup"))
-	}
 	if loadManifest(game) && exists(filepath.Join(pluginDir(game), "MojaveMostWanted.dll")) && exists(filepath.Join(mmwDir(game), "mmw-launch.exe")) {
 		app.mu.Lock()
 		app.installed = true
@@ -712,7 +708,11 @@ func looseFiles(game string) error {
 // Mod Organizer 2 runs the game from its own profile's load order: our.esp goes in there too (mods.go)
 func modManagers(game string, fix bool) []string {
 	var notes []string
-	for _, m := range mo2Instances(game) {
+	mine, elsewhere := mo2Scan(game)
+	for _, e := range elsewhere {
+		notes = append(notes, "Mod Organizer 2 for another copy of the game: "+e)
+	}
+	for _, m := range mine {
 		notes = append(notes, fmt.Sprintf("Mod Organizer 2 manages this game (instance %q, profile %q)", m.Name, m.Profile))
 		if fix {
 			mo2PluginOn(m)

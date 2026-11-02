@@ -63,8 +63,8 @@ func WhatsInLines(g Game) []scene.Line {
 		text("Trade: look at a friend and press E. Friendly fire: /ff on or /ff off (the host decides)."),
 		head("Guns and moving"),
 		text("Weapon inertia and sway, hip and aimed recoil, a camera that kicks with each shot, contextual aiming at cover."),
-		text("Third person done properly: lean round cover, swap shoulders (X), feet on the ground, free look."),
-		text("Sprint and tactical sprint, vault, mantle, climb, wall kicks and a dropkick. F8 puts every part of the feel on sliders."),
+		text("Third person done properly: lean round cover, swap shoulders (X), free look."),
+		text("Sprint and tactical sprint, vault, mantle, climb and wall kicks. F8 puts every part of the feel on sliders."),
 	}
 	if g.Full {
 		l = append(l, head("Driving"), text("Drive the wasteland's own pickups (G), with a radio, your own music, headlights and wipers."))
@@ -108,8 +108,6 @@ func KeysLines(g Game) []scene.Line {
 		l = append(l, head(gr.title))
 		l = append(l, ks...)
 		switch gr.id {
-		case "foot":
-			l = append(l, key("Shift+Space+RMB", "Dropkick (weapon away)"))
 		case "coop":
 			l = append(l, key("E", "On a friend: trade; on a downed friend: get them up"),
 				key("1", "Downed: use a stimpak"),

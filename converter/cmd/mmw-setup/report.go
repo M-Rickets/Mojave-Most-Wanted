@@ -5,6 +5,7 @@ package main
 import (
 	"debug/pe"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -194,10 +195,26 @@ func makeReport() {
 		w("%s", tailFile(filepath.Join(game, "nvse.log"), 60))
 		w("")
 		w("== Mojave Enhanced's log (the last game)")
-		w("%s", tailFile(filepath.Join(pluginDir(game), "MojaveMostWanted.log"), 150))
+		lg := pluginLog(game, "MojaveMostWanted.log")
+		if lg != filepath.Join(pluginDir(game), "MojaveMostWanted.log") {
+			w("(from %s)", redact(filepath.Dir(lg)))
+		}
+		w("%s", tailFile(lg, 150))
+		if cr := pluginLog(game, "MojaveMostWanted-crash.log"); exists(cr) {
+			w("")
+			w("== Mojave Enhanced's crash log (%s)", redact(filepath.Dir(cr)))
+			w("%s", tailFile(cr, 80))
+		}
 		w("")
 		w("== The launcher's log (the last Play)")
 		w("%s", tailFile(filepath.Join(mmwDir(game), "mmw-launch.log"), 80))
+	}
+	w("")
+	w("== Playing together (the last hosting and joining, from setup.log)")
+	if l := sessionLines(filepath.Join(os.Getenv("LOCALAPPDATA"), "MojaveMostWanted", "setup.log"), 24); len(l) > 0 {
+		w("%s", strings.Join(l, "\r\n"))
+	} else {
+		w("none yet")
 	}
 	w("")
 	w("== Setup's log")
@@ -228,4 +245,66 @@ func baseNames(ps []string) []string {
 		o = append(o, filepath.Base(p))
 	}
 	return o
+}
+
+// pluginLog: the newest copy of a log the plugin writes - in the game's Data\NVSE\Plugins, or, when Mod Organizer 2
+// runs the game, in its overwrite folder (files a game run through MO2 writes land there)
+func pluginLog(game, name string) string {
+	best := filepath.Join(pluginDir(game), name)
+	var at time.Time
+	if st, err := os.Stat(best); err == nil {
+		at = st.ModTime()
+	}
+	mine, _ := mo2Scan(game)
+	for _, m := range mine {
+		if m.OverwriteDir == "" {
+			continue
+		}
+		p := filepath.Join(m.OverwriteDir, "NVSE", "Plugins", name)
+		if st, err := os.Stat(p); err == nil && st.ModTime().After(at) {
+			best, at = p, st.ModTime()
+		}
+	}
+	return best
+}
+
+// sessionLines: the last n lines of setup's log about playing together (the router, the internet address, the firewall,
+// hosting, joining, stopping) - the report's own run rarely has them
+func sessionLines(path string, n int) []string {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil
+	}
+	defer f.Close()
+	if st, err := f.Stat(); err == nil && st.Size() > 1<<20 {
+		f.Seek(st.Size()-1<<20, 0)
+	}
+	b, _ := io.ReadAll(f)
+	keys := []string{"Router:", "Internet address", "Firewall", "Hosting:", "Joining ", "Stopped hosting", "Left "}
+	var out []string
+	start := ""
+	for _, l := range strings.Split(strings.ReplaceAll(string(b), "\r", ""), "\n") {
+		if strings.Contains(l, "---- Mojave Enhanced Setup") {
+			start = l
+			continue
+		}
+		rest := l
+		if len(l) > 9 && l[2] == ':' && l[5] == ':' {
+			rest = l[9:]
+		}
+		for _, k := range keys {
+			if strings.HasPrefix(rest, k) {
+				if start != "" {
+					out = append(out, redact(start))
+					start = ""
+				}
+				out = append(out, redact(l))
+				break
+			}
+		}
+	}
+	if len(out) > n {
+		out = out[len(out)-n:]
+	}
+	return out
 }

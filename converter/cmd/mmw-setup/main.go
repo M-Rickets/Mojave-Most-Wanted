@@ -21,7 +21,7 @@ import (
 	"mmw/cmd/mmw-setup/scene"
 )
 
-const appVersion = "1.0.36"
+const appVersion = "1.0.40"
 
 // Setup's own copy in the game folder (the desktop shortcut and updates use it); before 1.0.15 the mod was called
 // Mojave Most Wanted

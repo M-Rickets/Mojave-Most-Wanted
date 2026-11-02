@@ -1,6 +1,6 @@
 # Mojave Enhanced
 
-<h2 align="center"><a href="https://github.com/M-Rickets/Mojave-Most-Wanted/raw/main/updates/MojaveEnhanced-Setup-1.0.36.exe">Download Mojave Enhanced 1.0.36</a></h2>
+<h2 align="center"><a href="https://github.com/M-Rickets/Mojave-Most-Wanted/raw/main/updates/MojaveEnhanced-Setup-1.0.40.exe">Download Mojave Enhanced 1.0.40</a></h2>
 <p align="center">Windows setup, 13 MB · run it, press <b>MAKE IT WORK</b>, then <b>FIRST TIME START-UP</b> shows how to play with friends<br>
 <a href="../../releases">all versions</a></p>
 
@@ -13,7 +13,7 @@ own pages, and everything in this repository is the mod's own work (plus the ope
 
 ## Download
 
-[Download the setup](https://github.com/M-Rickets/Mojave-Most-Wanted/raw/main/updates/MojaveEnhanced-Setup-1.0.36.exe) (or any version from [Releases](../../releases)), run it and press **MAKE IT WORK**.
+[Download the setup](https://github.com/M-Rickets/Mojave-Most-Wanted/raw/main/updates/MojaveEnhanced-Setup-1.0.40.exe) (or any version from [Releases](../../releases)), run it and press **MAKE IT WORK**.
 Play with the **Mojave Enhanced** shortcut it puts on your desktop.
 
 - You need Fallout: New Vegas (Steam or GOG) and a free Nexus Mods account (some of the tools are only on Nexus:
@@ -29,8 +29,8 @@ Play with the **Mojave Enhanced** shortcut it puts on your desktop.
   friendly fire (the host's rule), and downed-not-dead with 20 seconds for a friend to get you up.
 - **Gun handling:** weapon inertia and sway, hip and aimed recoil, a camera that kicks and rolls with each shot, and
   contextual aiming at cover.
-- **Third person done properly:** lean round cover, swap shoulders (**X**), feet on the ground, free look.
-- **Moving:** sprint and tactical sprint (**Shift**), vault, mantle and climb (**Space**), wall kicks and a dropkick.
+- **Third person done properly:** lean round cover, swap shoulders (**X**), free look.
+- **Moving:** sprint and tactical sprint (**Shift**), vault, mantle and climb (**Space**), and wall kicks.
 - **Your feel:** **F8** puts every part of the gun and body feel on sliders.
 - **Stable and smooth:** the fixes New Vegas needs, each from its author's own page: xNVSE, JIP LN NVSE, kNVSE,
   lStewieAl's Tweaks, New Vegas Tick Fix and the 4GB Patcher.
@@ -51,7 +51,7 @@ Everything builds on Linux (or WSL) and cross-compiles for Windows:
 | `converter/cmd/mmw-launch` | the launcher setup starts the game with | Go 1.24 |
 | `converter/cmd/mmw-setup` | setup itself, with the plugin, launcher and `.esp` inside it | Go 1.24 |
 | `sheets/` | the data everything is built from (keys, tuning, ...) | Python 3 |
-| `tools/` | `gen.py` (code from the sheets), `gen_esp.py` (the `.esp`), `build_setup.sh` | Python 3 |
+| `tools/` | `gen.py` (code from the sheets), `gen_esp.py` (the `.esp`), `build_setup.sh` (also the exes' icon and file details) | Python 3, llvm-rc, llvm-cvtres |
 
 ```sh
 sh tools/build_setup.sh          # everything: out/MojaveMostWanted-Setup.exe

@@ -62,7 +62,6 @@ __declspec(dllimport) void __stdcall Sleep(u32);
 __declspec(dllimport) HANDLE __stdcall CreateThread(void *, u32, u32(__stdcall *)(void *), void *, u32, u32 *);
 }
 static const char *volatile g_crumb = "loading";
-static double g_gearChangedAt = -99;
 #define CRUMB(s) (g_crumb = (s))
 static void *(__stdcall *s_vq)(const void *, void *, u32);
 static u32(__stdcall *s_modName)(void *, char *, u32);
@@ -226,7 +225,7 @@ static Script *s_contAdj, *s_kill, *s_restrain, *s_healthPct, *s_dmgPct;
 static Script *s_setXY, *s_place, *s_move, *s_remove, *s_sound, *s_hurt, *s_hit, *s_modIndex, *s_getCam[4], *s_hudRGB[3], *s_mate, *s_ride, *s_weaponOut;
 static u32 g_mod = 0xFF;
 static bool g_ready;
-#define PLUGIN_BUILD 296
+#define PLUGIN_BUILD 297
 #define STR2(x) #x
 #define STR(x) STR2(x)
 static const u32 kPluginBuild = PLUGIN_BUILD;
@@ -279,17 +278,6 @@ static Script *s_ammo;
 static const char *kStrip = "Begin Function {ref rA}\nrA.SetRestrained 1\nrA.RemoveAllItems\nEnd";
 static const char *kDressItem = "Begin Function {ref rA, ref rI}\nrA.AddItem rI 1 1\nrA.EquipItem rI 0 1\nEnd";
 static Script *s_strip, *s_dressItem;
-// The dropkick's hit: knocked flying, hurt by a share of their full health but never below 1 - never your companion.
-static const char *kDropHit =
-	"Begin Function {ref rA, float fForce, float fPct}\n"
-	"float fB\nfloat fH\nint iDone\n"
-	"if (rA.GetPlayerTeammate) == 0\n"
-	"let fB := (rA.GetBaseAV Health) * fPct\nlet fH := rA.GetAV Health\n"
-	"if fB > fH - 1\nlet fB := fH - 1\nendif\n"
-	"if fB > 0\nrA.DamageAV Health fB\nendif\n"
-	"Player.PushActorAway rA fForce\nlet iDone := 1\nendif\n"
-	"SetFunctionValue iDone\nEnd";
-static Script *s_dropHit;
 // A game vehicle in the world taken (hidden while it's yours: Disable, never deleted) or put back
 static const char *kDisable = "Begin Function {ref rObj}\nrObj.Disable\nEnd";
 static const char *kEnable = "Begin Function {ref rObj}\nrObj.Enable\nEnd";
@@ -440,10 +428,8 @@ static bool compileAll()
 	s_ammo = g_script->CompileScript(kAmmo);
 	s_strip = g_script->CompileScript(kStrip);
 	s_dressItem = g_script->CompileScript(kDressItem);
-	s_dropHit = g_script->CompileScript(kDropHit);
 	s_disable = g_script->CompileScript(kDisable);
 	s_enable = g_script->CompileScript(kEnable);
-	LOG("compile (the dropkick): hit %x", (u32)s_dropHit);
 	LOG("compile (friends as themselves): strip %x dress %x", (u32)s_strip, (u32)s_dressItem);
 	for (int i = 0; i < kNumHandPlugins && i < 8; i++)
 	{
@@ -2192,7 +2178,6 @@ static float g_wheelieAim;
 static float g_standLaunchT;
 static bool g_standArmed;
 static bool g_sliding;
-static float rnd01();
 static bool driftRevving(float speed, bool throttle)
 {
 	return TUNE(exhaustOn) > 0 && throttle && g_sliding && rt::absf(speed) > 3 && rt::absf(g_driftSlip) > TUNE(driftLimiterDegrees);
@@ -3919,14 +3904,6 @@ static float advanceCar(float dt, TESObjectREFR *pl)
 	return impact;
 }
 
-static float rnd01()
-{
-	static u32 st;
-	if (!st) st = (u32)(rt::now() * 1000.0) | 1;
-	st = st * 1664525u + 1013904223u;
-	return (float)(st >> 8) / 16777216.0f;
-}
-
 static float wrap180(float d)
 {
 	while (d > 180) d -= 360;
@@ -4196,11 +4173,6 @@ static const char *modName(u32 i)
 }
 static char lower(char c) { return c >= 'A' && c <= 'Z' ? c + 32 : c; }
 static bool same(const char *a, const char *b) { while (*a && lower(*a) == lower(*b)) { a++; b++; } return !*a && !*b; }
-static bool has(const char *s, const char *w)
-{
-	for (; *s; s++) { const char *p = s, *q = w; while (*q && lower(*p) == lower(*q)) { p++; q++; } if (!*q) return true; }
-	return false;
-}
 static u32 *s_rg, s_nrg;
 static void regions()
 {
@@ -5316,7 +5288,6 @@ static const int kJobs = 1024;
 static Job jobs[kJobs];
 static volatile int nJobs, nRead;
 static int nDone;
-static volatile long jlock;
 static int (__stdcall *pLink)(const char *, const char *, void *);
 static int (__stdcall *pMove)(const char *, const char *, u32);
 static bool started;
@@ -5383,8 +5354,6 @@ static void load()
 	}
 	LOG("winter: %d landscape textures in stages", nEnt);
 }
-static void jl() { while (__sync_lock_test_and_set(&jlock, 1)) Sleep(0); }
-static void ju() { __sync_lock_release(&jlock); }
 static u32 __stdcall worker(void *)
 {
 	char src[400], dst[400], tmp[420];
@@ -6919,8 +6888,6 @@ static void camRollIdentity()
 }
 static bool g_camOn, g_camSet;
 static float g_camRoll, g_camSide, g_camKeep[13 + 12];
-static float g_camRoll1;
-static float g_camShift[3];
 static u32 g_skyN[2]; static float g_skyKeep[2][3];
 static bool under(u32 n, u32 top) { for (int d = 0; n && d < 64; d++, n = ptr(n + 0x18)) if (n == top) return true; return false; }
 static void skyMove(const float *delta)
@@ -6953,21 +6920,18 @@ static u32 sceneCam() { u32 sg = ptr(0x11DEB7C); return sg ? ptr(sg + 0xAC) : 0;
 static void camApply()
 {
 	u32 camN = sceneCam();
-	bool shift = rt::absf(g_camShift[0]) + rt::absf(g_camShift[1]) + rt::absf(g_camShift[2]) > 0.01f || rt::absf(g_camRoll1) > 0.0005f;
 	bool rs = g_camOn && (rt::absf(g_camRoll) >= 0.001f || rt::absf(g_camSide) >= 0.01f);
-	if (!camN || g_camSet || (!rs && !shift)) return;
+	if (!camN || g_camSet || !rs) return;
 	TESObjectREFR *pl = player();
 	if (rd<u32>(0x11F2250 + 8) || menumode() || !pl) { g_camOn = false; return; }
 	if (rs && !thirdPerson(pl)) { g_camOn = false; rs = false; }
-	if (!rs && !shift) return;
+	if (!rs) return;
 	memcpy(g_camKeep, (void *)(camN + 0x34), 13 * 4); memcpy(g_camKeep + 13, (void *)(camN + 0x68), 12 * 4);
 	g_camSet = true;
 	const float *cl = g_camKeep, *cp = g_camKeep + 9;
 	float fw[3] = {cl[0], cl[3], cl[6]}, rg[3] = {cl[2], cl[5], cl[8]}, R[9], L[9], t[3];
-	if (rs) { rotAbout(fw, g_camRoll, R); mul3(R, cl, L); }
-	else if (rt::absf(g_camRoll1) > 0.0005f && !thirdPerson(pl)) { rotAbout(fw, g_camRoll1, R); mul3(R, cl, L); }
-	else memcpy(L, cl, 36);
-	for (int i = 0; i < 3; i++) t[i] = cp[i] + (rs ? rg[i] * g_camSide : 0) + (shift ? g_camShift[i] : 0);
+	rotAbout(fw, g_camRoll, R); mul3(R, cl, L);
+	for (int i = 0; i < 3; i++) t[i] = cp[i] + rg[i] * g_camSide;
 	memcpy((void *)(camN + 0x34), L, 36); memcpy((void *)(camN + 0x58), t, 12);
 	updateNode(camN);
 	float dw[3] = {((float *)(camN + 0x8C))[0] - g_camKeep[13 + 9], ((float *)(camN + 0x8C))[1] - g_camKeep[13 + 10], ((float *)(camN + 0x8C))[2] - g_camKeep[13 + 11]};
@@ -7902,7 +7866,7 @@ static void tick(float dt, double t, bool focus, TESObjectREFR *pl)
 	bool edge = action == 2 && lastAction != 2;
 	lastAction = action;
 	int n = 0;
-	if (w != weap) { g_gearChangedAt = rt::now(); readWeapon(w); lastClip = clip; LOG("handling: ammo entry %x, rounds %d", ae, clip); }
+	if (w != weap) { readWeapon(w); lastClip = clip; LOG("handling: ammo entry %x, rounds %d", ae, clip); }
 	else
 	{
 		if (clip >= 0 && lastClip > clip && lastClip - clip <= 40)
@@ -8104,18 +8068,15 @@ static const Group kGroups[] = {
 	{"FOV KICK", " fovKickDeg "},
 	{"CORNER LEAN SPEED", " coverHz coverSmoothHz tpLeanHz "},
 	{"3RD PERSON BODY", " tpSpineInertia tpShoulderScale tpStrafeRockDeg "},
-	{"FOOT PLACEMENT", " bodyIkWeight "},
 	{"BODY LEAN", " bodyAccelLean bodyRunLeanDeg ", 0, "BODY LEAN & BANK"},
 	{"BODY BANK", " bodyBankScale ", 0, "BODY LEAN & BANK"},
-	{"HILL LEAN", " bodySlopeLeanUp bodySlopeLeanDown bodySlopeBodyUp bodySlopeBodyDown "},
-	{"HILL SIDE LEAN", " bodySlopeSide "},
 	{"ANIMATION BLEND TIME", " bodyBlendSec ", 0.2f},
 	{"HEAD LOOK", " headLookScale "},
 	{"BREATH, WEIGHT & ARMS", " lifeBreathDeg lifeBreathShoulder lifeShiftUnits lifeHipDeg lifeShrugUnits lifeArmSwing lifeArmIdleDeg lifeHeadDriftDeg "},
 	{"MOVEMENT ACCELERATION", " moveAccelSec moveDecelSec ", 0.2f},
 };
 static const int N = sizeof kGroups / sizeof kGroups[0];
-static float scale[N] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+static float scale[N] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 static bool open, loaded;
 static int sel;
 static float holdT;
@@ -8826,15 +8787,6 @@ static bool ctrlOff, grip;
 static int kicks, upKicks;
 static float reachW, camOff, lastCamOff, afterLog;
 static float hintT[3]; static bool hintOn, hintHave; static float sinceProbeLog;
-static bool dropOn, dropHit, dropUsed;
-static bool dropGround; static float dropG, dropL[3], dropGlide;
-static double sprintSeenT = -9;
-static float dropJolt;
-static float dropLand = -1;
-static bool dropSlowed; static double dropSlowUntil;
-static void dropStopEnd() { if (dropSlowed) { dropSlowed = false; console("sgtm 1"); LOG("move: dropkick - the hit's freeze over, the world's time back to normal"); } }
-static void slowTick() { if (dropSlowed && rt::now() >= dropSlowUntil) dropStopEnd(); }
-static float joltAt(float tau) { if (tau < 0) return 0; float x = tau / 0.06f, y = 1 - x; if (y < -12) return 0; float e = 1 + y / 32; for (int i = 0; i < 5; i++) e *= e; return x * e; }
 static float clampf(float x, float a, float b) { return x < a ? a : x > b ? b : x; }
 static float ease(float u) { u = clampf(u, 0, 1); return u * u * (3 - 2 * u); }
 static Script *s_setPos;
@@ -9342,61 +9294,6 @@ static void armTick(TESObjectREFR *pl, const float *target, float w, bool grippi
 	}
 }
 
-static rider::Body pk;
-static u32 pkHolder, pkParent, pkKidRoot[2];
-static HiddenSet pkKids[2];
-static float pkO[3], pkX[3], pkFw[3], pkW, pkH, pkEyeH, pkT, pkStandY;
-static float moveWorstDt, moveStartMs;
-static float pkLookDown, pkLookW, pkGrip[2][3]; static bool pkGripOk;
-static int pkKind;
-static bool pkOn, pkThird;
-static u32 pkSig;
-static bool pkDirty = true;
-static u32 pkSeenSig;
-static bool pkBroken;
-static u32 sig3ptr(TESObjectREFR *pl)
-{
-	u32 n3 = thirdPersonNode(pl);
-	if (!n3) return 0;
-	u32 h = n3 * 2654435761u;
-	u32 arr = ptr(n3 + OFF_NODE_CHILDREN);
-	u16 cnt = rd<u16>(n3 + OFF_NODE_CHILDCOUNT);
-	for (u16 i = 0; arr && i < cnt && i < 128; i++) h = (h ^ ptr(arr + 4 * i)) * 16777619u;
-	return h ^ cnt;
-}
-static u32 sig3(TESObjectREFR *pl)
-{
-	u32 n3 = thirdPersonNode(pl);
-	if (!n3) return 0;
-	u32 h = 2166136261u;
-	u32 arr = ptr(n3 + OFF_NODE_CHILDREN);
-	u16 cnt = rd<u16>(n3 + OFF_NODE_CHILDCOUNT);
-	for (u16 i = 0; arr && i < cnt && i < 128; i++)
-	{
-		u32 c = ptr(arr + 4 * i);
-		const char *nm = c ? (const char *)ptr(c + 8) : 0;
-		h = (h ^ (c ? 1u : 0u)) * 16777619u;
-		for (int k = 0; nm && k < 64 && nm[k]; k++) h = (h ^ (u8)nm[k]) * 16777619u;
-		h = (h ^ 0x2Fu) * 16777619u;
-	}
-	return h ^ cnt;
-}
-static const char *kBlendName[] = {"Bip01 Pelvis", "Bip01 Spine", "Bip01 Spine1", "Bip01 Spine2", "Bip01 Neck", "Bip01 Neck1", "Bip01 Head",
-	"Bip01 L Clavicle", "Bip01 L UpperArm", "Bip01 L Forearm", "Bip01 L Hand", "Bip01 R Clavicle", "Bip01 R UpperArm", "Bip01 R Forearm", "Bip01 R Hand",
-	"Bip01 L Thigh", "Bip01 L Calf", "Bip01 L Foot", "Bip01 L Toe0", "Bip01 R Thigh", "Bip01 R Calf", "Bip01 R Foot", "Bip01 R Toe0"};
-enum { NBN = sizeof kBlendName / sizeof kBlendName[0], NBF = 30, NB = NBN + NBF };
-static u32 bD[NB], bL[NB];
-static float bSave[NB][9];
-static float bRootSave[13];
-static float bLiveR[9], bLiveT[3], bLiveS = 1, bLiveYaw, bLivePos[3];
-static bool pkFading; static float pkFadeT;
-static float bLiveAt0[3][9];
-static void blendName(int i, char *nm, int cap)
-{
-	if (i < NBN) { rt::fmt(nm, cap, "%s", kBlendName[i]); return; }
-	int k = i - NBN, h = k / 15, f = (k % 15) / 3, j = k % 3;
-	rt::fmt(nm, cap, j ? "Bip01 %c Finger%d%d" : "Bip01 %c Finger%d", h ? 'R' : 'L', f, j);
-}
 static void q4(const float *m, float *q)
 {
 	float tr = m[0] + m[4] + m[8];
@@ -9412,388 +9309,12 @@ static void m9(const float *q, float *m)
 	m[3] = 2 * (x * y + w * z); m[4] = 1 - 2 * (x * x + z * z); m[5] = 2 * (y * z - w * x);
 	m[6] = 2 * (x * z - w * y); m[7] = 2 * (y * z + w * x); m[8] = 1 - 2 * (x * x + y * y);
 }
-static void rotBlend(const float *a, const float *b, float k, float *o)
+static float mvO[3], mvFw[3];
+static float moveWorstDt, moveStartMs;
+static void moveFrame(TESObjectREFR *pl, const float *f)
 {
-	float qa[4], qb[4], q[4];
-	q4(a, qa); q4(b, qb);
-	float d = qa[0] * qb[0] + qa[1] * qb[1] + qa[2] * qb[2] + qa[3] * qb[3], sg = d < 0 ? -1.0f : 1.0f, l = 0;
-	for (int i = 0; i < 4; i++) { q[i] = qa[i] * (1 - k) + qb[i] * sg * k; l += q[i] * q[i]; }
-	l = rt::sqrt(l);
-	if (l < 1e-6f) { memcpy(o, b, 36); return; }
-	for (int i = 0; i < 4; i++) q[i] /= l;
-	m9(q, o);
-}
-static void liveRootInHolder(TESObjectREFR *pl, float *R, float *T, float *S)
-{
-	float dy = rot(pl)[2] - bLiveYaw, c = rt::cos(dy), sn = rt::sin(dy);
-	float Z[9] = {c, sn, 0, -sn, c, 0, 0, 0, 1}, Rw[9], off[3] = {bLiveT[0] - bLivePos[0], bLiveT[1] - bLivePos[1], bLiveT[2] - bLivePos[2]}, ow[3];
-	handling::mul3(Z, bLiveR, Rw);
-	for (int i = 0; i < 3; i++) ow[i] = Z[i * 3] * off[0] + Z[i * 3 + 1] * off[1] + Z[i * 3 + 2] * off[2];
-	const float *p = pos(pl);
-	float tw[3] = {p[0] + ow[0], p[1] + ow[1], p[2] + ow[2]};
-	float H[9] = {pkX[0], pkFw[0], 0, pkX[1], pkFw[1], 0, 0, 0, 1}, HT[9];
-	tr(H, HT);
-	handling::mul3(HT, Rw, R);
-	float d[3] = {tw[0] - pkO[0], tw[1] - pkO[1], tw[2] - pkO[2]};
-	apply(HT, d, T);
-	*S = bLiveS;
-}
-static u32 slGun, slFrom, slBone;
-static float slOrig[13], slAxB[3], slAxU[3], slWS = 1;
-static bool slHip;
-static void sling(TESObjectREFR *pl)
-{
-	if (slGun || TUNE(moveSlingGun) <= 0 || !pk.root) return;
-	u32 proc = handling::process(pl);
-	if (!proc || !rd<u8>(proc + 0x135)) return;
-	u32 n3 = thirdPersonNode(pl);
-	u32 hand = n3 ? findNamed(n3, "Bip01 R Hand", 40) : 0, wb = hand ? findNamed(hand, "Weapon", 3) : 0;
-	if (!wb && n3) wb = findNamed(n3, "Weapon", 40);
-	u32 g = 0;
-	if (wb)
-	{
-		u32 arr = ptr(wb + OFF_NODE_CHILDREN);
-		u16 cnt = rd<u16>(wb + OFF_NODE_CHILDCOUNT);
-		for (u16 i = 0; arr && i < cnt && i < 16 && !g; i++) { u32 c = ptr(arr + 4 * i); if (c && handling::isNodeObj(c)) g = c; }
-	}
-	static double told;
-	if (!g) { if (rt::now() - told > 10) { told = rt::now(); LOG("move: no gun to carry (Weapon node %x%s)", wb, wb ? " has no gun under it" : " not found"); } return; }
-	slBone = rider::findByName(pk.root, "Bip01 Spine2");
-	if (!slBone) slBone = rider::findByName(pk.root, "Bip01 Spine1");
-	if (!slBone) return;
-	tpgun::identity();
-	memcpy(slOrig, (void *)(g + 0x34), 52);
-	using handling::Xf; using handling::xfRead;
-	Xf Wg = xfRead(g, 0x68);
-	slWS = Wg.s;
-	float b[3] = {0, 1, 0};
-	u32 pn = rider::findByName(g, "ProjectileNode");
-	bool fromNode = false;
-	if (pn)
-	{
-		Xf Wp = xfRead(pn, 0x68);
-		float d[3] = {Wp.t[0] - Wg.t[0], Wp.t[1] - Wg.t[1], Wp.t[2] - Wg.t[2]}, l[3], RT[9];
-		tr(Wg.r, RT); apply(RT, d, l);
-		if (norm(l) > 1e-3f && rt::sqrt(dot(d, d)) > 3) { memcpy(b, l, 12); fromNode = true; }
-	}
-	memcpy(slAxB, b, 12);
-	float u[3] = {0, 0, 1}, k = dot(u, b);
-	for (int i = 0; i < 3; i++) u[i] -= b[i] * k;
-	if (norm(u) < 0.1f) { u[0] = 1; u[1] = u[2] = 0; }
-	memcpy(slAxU, u, 12);
-	int wt = handling::wtype;
-	slHip = !(wt >= 5 && wt <= 9);
-	rider::hold(g); rider::hold(wb);
-	rider::detach(wb, g);
-	rider::attach(slBone, g);
-	slGun = g; slFrom = wb;
-	const char *gn = (const char *)ptr(g + 8);
-	LOG("move: your gun %s carried at your %s through the move (barrel %.2f %.2f %.2f in its own frame%s)", gn ? gn : "?", slHip ? "hip" : "back", b[0], b[1], b[2], fromNode ? ", from its ProjectileNode" : ", assumed");
-}
-static void slingPlace()
-{
-	if (!slGun || !slBone || !pk.root) return;
-	using handling::Xf; using handling::xfRead;
-	Xf S2 = xfRead(slBone, 0x68);
-	float nk[3], sp[3], pv[3], lu[3], ru[3];
-	memcpy(nk, (void *)(pk.bone[rider::NECK] + 0x8C), 12); memcpy(sp, (void *)(pk.bone[rider::SPINE] + 0x8C), 12);
-	memcpy(pv, (void *)(pk.bone[rider::PELVIS] + 0x8C), 12);
-	memcpy(lu, (void *)(pk.bone[rider::L_UPPER] + 0x8C), 12); memcpy(ru, (void *)(pk.bone[rider::R_UPPER] + 0x8C), 12);
-	float up[3], rgt[3], fwd[3];
-	sub(nk, sp, up); if (norm(up) < 0.1f) return;
-	sub(ru, lu, rgt); { float k = dot(rgt, up); for (int i = 0; i < 3; i++) rgt[i] -= up[i] * k; } if (norm(rgt) < 0.1f) return;
-	cross(up, rgt, fwd);
-	float d[3], top[3], g[3];
-	if (!slHip)
-	{
-		for (int i = 0; i < 3; i++) { d[i] = -0.5f * rgt[i] - up[i]; top[i] = -fwd[i]; g[i] = S2.t[i] - fwd[i] * TUNE(moveSlingBack) + rgt[i] * 7 + up[i] * 5; }
-	}
-	else
-	{
-		for (int i = 0; i < 3; i++) { d[i] = -up[i] + 0.1f * fwd[i]; top[i] = fwd[i]; g[i] = pv[i] + rgt[i] * 12 - up[i] * 2; }
-	}
-	norm(d);
-	{ float k = dot(top, d); for (int i = 0; i < 3; i++) top[i] -= d[i] * k; } norm(top);
-	float sd[3], sb[3]; cross(d, top, sd); cross(slAxB, slAxU, sb);
-	float M[9], RT[9], Lr[9], dl[3], Lt[3];
-	for (int i = 0; i < 3; i++) for (int j = 0; j < 3; j++) M[i * 3 + j] = d[i] * slAxB[j] + top[i] * slAxU[j] + sd[i] * sb[j];
-	tr(S2.r, RT); handling::mul3(RT, M, Lr);
-	sub(g, S2.t, dl); apply(RT, dl, Lt);
-	for (int i = 0; i < 3; i++) Lt[i] /= S2.s;
-	memcpy((void *)(slGun + 0x34), Lr, 36); memcpy((void *)(slGun + 0x58), Lt, 12); *(float *)(slGun + 0x64) = slWS / S2.s;
-	updateNode(slGun);
-}
-static void unsling()
-{
-	if (!slGun) return;
-	u32 g = slGun, wb = slFrom; slGun = slFrom = 0;
-	if (slBone && ptr(g + 0x18) == slBone) rider::detach(slBone, g);
-	TESObjectREFR *pl = player();
-	u32 n3 = pl ? thirdPersonNode(pl) : 0;
-	bool back = wb && n3 && handling::isAncestor(n3, wb);
-	if (back) { memcpy((void *)(g + 0x34), slOrig, 52); rider::attach(wb, g); }
-	rider::release(g); rider::release(wb);
-	LOG("move: your gun back in your hand%s", back ? "" : " - not put back: your body was rebuilt meanwhile");
-}
-static void pkDestroy()
-{
-	unsling();
-	pkFading = false;
-	if (pkHolder)
-	{
-		if (pkParent) rider::detach(pkParent, pkHolder);
-		if (pk.root) { rider::detach(pkHolder, pk.root); rider::release(pk.root); }
-		rider::release(pkHolder);
-	}
-	if (pkParent) rider::release(pkParent);
-	pkHolder = pkParent = 0; pk.root = 0;
-}
-static void pkVisible(bool on);
-static void pkPark()
-{
-	unsling();
-	pkFading = false;
-	if (!pkHolder) return;
-	pkVisible(false);
-	if (pkParent) { rider::detach(pkParent, pkHolder); rider::release(pkParent); pkParent = 0; }
-}
-static void pkVisible(bool on)
-{
-	if (!pkHolder) return;
-	u32 &f = *(u32 *)(pkHolder + OFF_NIAV_FLAGS);
-	if (on) f &= ~1u; else f |= 1u;
-}
-static bool pkBuild(TESObjectREFR *pl, const char *why)
-{
-	if (TUNE(moveFullBody) <= 0) return false;
-	double t0 = rt::now();
-	{
-		u32 sg = sig3ptr(pl);
-		if (sg != pkSeenSig) { pkSeenSig = sg; g_gearChangedAt = t0; }
-		if (t0 - g_gearChangedAt < TUNE(moveCopySettleSec) || handling::curAction == 0 || handling::curAction == 1)
-		{
-			static double told;
-			if (t0 - told > 2) { told = t0; LOG("move: full body not copied yet (%s) - your 3D changed %.1f s ago%s; next quiet moment", why, (float)(t0 - g_gearChangedAt), handling::curAction == 0 || handling::curAction == 1 ? ", a weapon going in/out" : ""); }
-			pkDirty = true;
-			return false;
-		}
-	}
-	pkDestroy();
-	u32 n3 = thirdPersonNode(pl);
-	u32 par = n3 ? ptr(n3 + 0x18) : 0;
-	if (!n3 || !par)
-	{
-		static double toldNo;
-		if (t0 - toldNo > 2) { toldNo = t0; LOG("move: full body: no third-person model to copy (%s)", why); }
-		return false;
-	}
-	if (pkBroken) return false;
-	neutral3rd();
-	double tCopy = rt::now();
-	u32 c = rider::copy(n3);
-	double tCopied = rt::now();
-	if (rider::lastCopyFaulted())
-	{
-		pkBroken = true;
-		LOG("move: full body: the game faulted inside its copy of your body (at %08x) - caught; the full-body double is off for this session (climbs go on with your arms)", g_gFaultEip);
-		return false;
-	}
-	if (!c) { LOG("move: full body: the copy failed"); return false; }
-	rider::hold(c);
-	if (!rider::bind(pk, c)) { rider::release(c); pk.root = 0; LOG("move: full body: the copy has no human skeleton"); return false; }
-	pkHolder = ((u32(__cdecl *)())0xA5F030)();
-	if (!pkHolder) { rider::release(c); pk.root = 0; return false; }
-	rider::hold(pkHolder);
-	rider::attach(pkHolder, c);
-	pkParent = par;
-	rider::hold(pkParent);
-	pkVisible(false);
-	rider::attach(pkParent, pkHolder);
-	pkSig = sig3(pl); pkDirty = false;
-	{ char nm[40]; for (int i = 0; i < NB; i++) { blendName(i, nm, sizeof nm); bD[i] = rider::findByName(c, nm); } }
-	double tBound = rt::now();
-	int out = 0, sk = rider::skinCheck(c, &out);
-	int pr[4]; rider::lastPruned(pr);
-	double tEnd = rt::now();
-	float cms[5]; rider::lastCopyMs(cms);
-	LOG("move: full body made ahead (%s) in %.0f ms (pose %.0f, copy %.0f [lift %.0f, clone %.0f, fix-up %.0f, strip %.0f, prune %.0f], bones %.0f, check %.0f) - copy %x, %d skinned meshes (%d on outside bones), left out %d lights %d particles %d flashes %d guns; %d parts lifted off your body for the copy",
-		why, (tEnd - t0) * 1000, (tCopy - t0) * 1000, (tCopied - tCopy) * 1000, cms[0], cms[1], cms[2], cms[3], cms[4], (tBound - tCopied) * 1000, (tEnd - tBound) * 1000, c, sk, out, pr[0], pr[1], pr[2], pr[3], rider::lastLifted());
-	return true;
-}
-static void pkReparent(TESObjectREFR *pl);
-static void pkPrepare(TESObjectREFR *pl, const char *why)
-{
-	if (TUNE(moveFullBody) <= 0 || TUNE(moveOn) <= 0 || pkOn || pkFading || g_driving || !pl) return;
-	if (!pkHolder || pkDirty || sig3(pl) != pkSig) pkBuild(pl, why);
-	else pkReparent(pl);
-}
-static void pkShowYou(const char *why)
-{
-	for (int i = 0; i < 2; i++) { showChildren(pkKidRoot[i], pkKids[i]); pkKidRoot[i] = 0; }
-	pkVisible(false);
-	handling::g_camShift[0] = handling::g_camShift[1] = handling::g_camShift[2] = 0;
-	unsling();
-	LOG("move: full body hidden (%s)", why);
-}
-static void pkFadeStop(const char *why) { if (!pkFading) return; pkFading = false; pkShowYou(why); }
-static bool pkBlendingIn;
-static void pkEnd(const char *why, bool blend = false)
-{
-	if (pkFading) pkFadeStop(why);
-	if (!pkOn) return;
-	pkOn = false; pkBlendingIn = false;
-	if (blend && pkThird && TUNE(moveBlendOutSec) > 0.01f && pk.root && pkHolder)
-	{
-		for (int i = 0; i < NB; i++) if (bD[i]) memcpy(bSave[i], (void *)(bD[i] + 0x34), 36);
-		memcpy(bRootSave, (void *)(pk.root + 0x34), 52);
-		pkFading = true; pkFadeT = 0;
-		float worst = 0;
-		for (int k = 0; k < 3; k++)
-		{
-			int i = k == 0 ? 0 : k == 1 ? 15 : 12;
-			if (!bL[i]) continue;
-			const float *a = bLiveAt0[k], *b = (const float *)(bL[i] + 0x34);
-			float tr3 = 0; for (int r = 0; r < 3; r++) for (int c = 0; c < 3; c++) tr3 += a[r * 3 + c] * b[r * 3 + c];
-			float cs = rt::clamp((tr3 - 1) * 0.5f, -1.0f, 1.0f), ang = rt::atan2(rt::sqrt(rt::max(0.0f, 1 - cs * cs)), cs) * 180 / rt::PI;
-			if (ang > worst) worst = ang;
-		}
-		LOG("move: blending back into your body (%s) - your hidden body's pelvis/thigh/arm turned up to %.1f deg meanwhile (%s)", why, worst, worst > 0.5f ? "it kept animating" : "it was frozen");
-		return;
-	}
-	pkShowYou(why);
-}
-static void pkFadeTick(TESObjectREFR *pl, float dt)
-{
-	if (!pkFading) return;
-	if (!pk.root || !pkHolder) { pkFadeStop("nothing to blend"); return; }
-	pkFadeT += dt;
-	float k = ease(pkFadeT / rt::max(TUNE(moveBlendOutSec), 0.02f)), o[9];
-	for (int i = 0; i < NB; i++)
-		if (bD[i] && bL[i]) { rotBlend(bSave[i], (const float *)(bL[i] + 0x34), k, o); memcpy((void *)(bD[i] + 0x34), o, 36); }
-	float R[9], T[3], S;
-	liveRootInHolder(pl, R, T, &S);
-	float *rl = (float *)(pk.root + 0x34);
-	rotBlend(bRootSave, R, k, o); memcpy(rl, o, 36);
-	for (int i = 0; i < 3; i++) rl[9 + i] = bRootSave[9 + i] + (T[i] - bRootSave[9 + i]) * k;
-	rl[12] = bRootSave[12] + (S - bRootSave[12]) * k;
-	updateNode(pkHolder);
-	slingPlace();
-	if (k >= 1) pkFadeStop("blended back into yours");
-}
-static void pkHide(int i, u32 n)
-{
-	if (pkKidRoot[i] != n) { pkKids[i].n = 0; pkKidRoot[i] = n; }
-	hideChildren(n, pkKids[i]);
-}
-static void pkFrame(TESObjectREFR *pl, const float *f)
-{
-	const float *p = pos(pl);
-	memcpy(pkO, p, 12);
-	pkFw[0] = f[0]; pkFw[1] = f[1]; pkFw[2] = 0;
-	pkX[0] = f[1]; pkX[1] = -f[0]; pkX[2] = 0;
-	pkT = 0;
-}
-static void pkReparent(TESObjectREFR *pl)
-{
-	u32 n3 = thirdPersonNode(pl), np = n3 ? ptr(n3 + 0x18) : 0;
-	if (!pkHolder || !np || np == pkParent) return;
-	rider::hold(np);
-	if (pkParent) { rider::detach(pkParent, pkHolder); rider::release(pkParent); }
-	pkParent = np;
-	rider::attach(pkParent, pkHolder);
-	LOG("move: full body moved to the new cell's node (no new copy)");
-}
-static bool pkBegin(TESObjectREFR *pl, int kind, const float *f, float wall, float h, float standY)
-{
-	if (TUNE(moveFullBody) <= 0) return false;
-	pkKind = kind; pkW = wall; pkH = h; pkStandY = standY;
-	if (pkOn) { pkFrame(pl, f); return true; }
-	if (pkFading) pkFadeStop("a new move");
-	u32 n3 = thirdPersonNode(pl);
-	if (!pkHolder || !pk.root) { if (!pkBuild(pl, "none ready - made now")) return false; }
-	else pkReparent(pl);
-	pkThird = thirdPerson(pl);
-	showChildren(pkKidRoot[0], pkKids[0]); showChildren(pkKidRoot[1], pkKids[1]); pkKidRoot[0] = pkKidRoot[1] = 0;
-	pkHide(0, n3); pkHide(1, firstPersonNode(pl));
-	u32 sg = ptr(0x11DEB7C), camN = sg ? ptr(sg + 0xAC) : 0;
-	pkEyeH = camN ? rd<float>(camN + 0x8C + 8) - pos(pl)[2] : 120;
-	if (pkThird || !(pkEyeH > 60 && pkEyeH < 170)) pkEyeH = 120;
-	pkFrame(pl, f);
-	pkOn = true;
-	pkVisible(true);
-	if (pkThird)
-	{
-		char nm[40];
-		for (int i = 0; i < NB; i++) { blendName(i, nm, sizeof nm); bL[i] = n3 ? findNamed(n3, nm, 40) : 0; }
-		using handling::Xf; using handling::xfRead;
-		Xf W = xfRead(n3, 0x68);
-		memcpy(bLiveR, W.r, 36); memcpy(bLiveT, W.t, 12); bLiveS = W.s;
-		bLiveYaw = rot(pl)[2]; memcpy(bLivePos, pos(pl), 12);
-		pkBlendingIn = TUNE(moveBlendInSec) > 0.01f;
-		for (int k = 0; k < 3; k++) { int i = k == 0 ? 0 : k == 1 ? 15 : 12; if (bL[i]) memcpy(bLiveAt0[k], (void *)(bL[i] + 0x34), 36); }
-		sling(pl);
-	}
-	LOG("move: full body shown (%s) - eye %.0f over the feet, %s", kind == 1 ? "vault" : kind == 2 ? "mantle" : kind == 3 ? "climb" : kind == 4 ? "kick up" : "kick off", pkEyeH, pkThird ? "third person" : "first person");
-	return true;
-}
-static void fr(const float *w, float *o) { float d[3] = {w[0] - pkO[0], w[1] - pkO[1], w[2] - pkO[2]}; o[0] = d[0] * pkX[0] + d[1] * pkX[1]; o[1] = d[0] * pkFw[0] + d[1] * pkFw[1]; o[2] = d[2]; }
-static u32 poseBody() { return (pkOn || pkFading) && pk.root && pkHolder ? pk.root : 0; }
-static void pkTick(TESObjectREFR *pl, float u, float dt)
-{
-	if (!pkOn || !pk.root || !pkHolder) return;
-	pkT += dt;
-	pkHide(0, thirdPersonNode(pl)); pkHide(1, firstPersonNode(pl));
-	{
-		using handling::Xf; using handling::xfRead; using handling::xfMul; using handling::xfInv;
-		Xf Pw = xfRead(pkParent, 0x68), D;
-		float R[9] = {pkX[0], pkFw[0], 0, pkX[1], pkFw[1], 0, 0, 0, 1};
-		memcpy(D.r, R, 36); memcpy(D.t, pkO, 12); D.s = 1;
-		Xf L = xfMul(xfInv(Pw), D);
-		memcpy((void *)(pkHolder + 0x34), L.r, 36); memcpy((void *)(pkHolder + 0x58), L.t, 12); *(float *)(pkHolder + 0x64) = L.s;
-	}
-	rider::Free F;
-	float pw[3] = {pos(pl)[0], pos(pl)[1], pos(pl)[2] + pkEyeH}, eye[3];
-	fr(pw, eye);
-	float anc[3]; bool anchored = pkKind == 6 && dropGround;
-	if (anchored) fr(dropL, anc);
-	rider::parkour(F, pkKind, u, pkT, eye, pkEyeH, pkW, pkH, pkStandY, pkThird, pkGripOk && (pkKind <= 3) ? pkGrip : 0, anchored ? anc : 0);
-	if (pkKind == 6)
-	{
-		float d[3] = {0, 0, 0};
-		if (!pkThird && !thirdPerson(pl)) { float m[3] = {F.eye[0] - eye[0], F.eye[1] - eye[1], F.eye[2] - eye[2]}; d[0] = pkX[0] * m[0] + pkFw[0] * m[1]; d[1] = pkX[1] * m[0] + pkFw[1] * m[1]; d[2] = m[2]; }
-		memcpy(handling::g_camShift, d, 12);
-	}
-	const float *E = F.eye; float W = pkW, H = pkH;
-	rider::poseFree(pk, F);
-	if (pkBlendingIn)
-	{
-		float k = ease(pkT / rt::max(TUNE(moveBlendInSec), 0.02f)), o[9];
-		for (int i = 0; i < NB; i++)
-			if (bD[i] && bL[i]) { rotBlend((const float *)(bL[i] + 0x34), (const float *)(bD[i] + 0x34), k, o); memcpy((void *)(bD[i] + 0x34), o, 36); }
-		float R[9], T[3], S;
-		liveRootInHolder(pl, R, T, &S);
-		float *rl = (float *)(pk.root + 0x34);
-		rotBlend(R, rl, k, o); memcpy(rl, o, 36);
-		for (int i = 0; i < 3; i++) rl[9 + i] = T[i] + (rl[9 + i] - T[i]) * k;
-		rl[12] = S + (rl[12] - S) * k;
-		if (k >= 1) pkBlendingIn = false;
-	}
-	updateNode(pkHolder);
-	slingPlace();
-	{
-		float tg[3], w;
-		rider::parkourLook(F, pkKind, u, tg, &w);
-		float dx = tg[0] - E[0], dy = tg[1] - E[1], dz = tg[2] - E[2];
-		pkLookDown = rt::clamp(rt::atan2(-dz, rt::max(rt::sqrt(dx * dx + dy * dy), 1.0f)), -0.6f, 1.35f);
-		pkLookW = w * TUNE(moveLookAt);
-	}
-	static int logged;
-	if (logged < 3 && u > 0.5f)
-	{
-		logged++;
-		float hp[3]; rider::bonePos(pk, rider::L_HAND, hp);
-		LOG("move: full body at %.0f%%: eye %.0f %.0f %.0f (frame), left hand at %.0f %.0f %.0f (grip %.0f %.0f %.0f)", u * 100, E[0], E[1], E[2], hp[0], hp[1], hp[2], -11.0f, W + 0.5f, H + 5);
-	}
+	memcpy(mvO, pos(pl), 12);
+	mvFw[0] = f[0]; mvFw[1] = f[1]; mvFw[2] = 0;
 }
 
 static float pathGap, pathW, pathH, pathStand, pathEyeH = 120;
@@ -9822,11 +9343,8 @@ static void finish(TESObjectREFR *pl, const char *why, bool keepVel = false)
 	controls(false);
 	LOG("move: %s done (%s) at %.0f %.0f %.0f - its start took %.1f ms, the worst frame during it %.0f ms", state == 1 ? (climbKind == 0 ? "vault" : climbKind == 1 ? "mantle" : "climb") : "kick flight", why, pos(pl)[0], pos(pl)[1], pos(pl)[2], moveStartMs, moveWorstDt * 1000);
 	moveWorstDt = 0;
-	state = 0; afterLog = 0.15f; grip = false; dropOn = false; dropGround = false;
-	dropStopEnd(); dropLand = -1; handling::g_camRoll1 = 0;
-	handling::g_camShift[0] = handling::g_camShift[1] = handling::g_camShift[2] = 0;
+	state = 0; afterLog = 0.15f; grip = false;
 	handling::extP = handling::extR = 0;
-	pkEnd(why, true);
 }
 static void unview(TESObjectREFR *pl)
 {
@@ -9837,16 +9355,10 @@ static void view(TESObjectREFR *pl)
 {
 	if (camOff != 0) { rot(pl)[0] += camOff; lastCamOff = camOff; }
 }
-static void reset() { dropOn = dropHit = dropGround = false; dropJolt = -1; dropStopEnd(); dropLand = -1; handling::g_camRoll1 = 0; handling::g_camShift[0] = handling::g_camShift[1] = handling::g_camShift[2] = 0; if (noclipOn) noclip(false); pkOn = false; pkBlendingIn = false; pkPark(); pkKids[0].n = pkKids[1].n = 0; pkKidRoot[0] = pkKidRoot[1] = 0; state = 0; aRoot = 0; memset(sl, 0, sizeof sl); aWritten = false; forced = false; nShown = 0; reachW = 0; camOff = lastCamOff = 0; kicks = upKicks = 0; hintHave = false; if (ctrlOff) controls(false); }
-static void menuPrepare(TESObjectREFR *pl)
-{
-	if (pkHolder || !pl || g_driving || rt::now() - g_loadedAt > 600) return;
-	pkPrepare(pl, "in a menu");
-}
+static void reset() { if (noclipOn) noclip(false); state = 0; aRoot = 0; memset(sl, 0, sizeof sl); aWritten = false; forced = false; nShown = 0; reachW = 0; camOff = lastCamOff = 0; kicks = upKicks = 0; hintHave = false; if (ctrlOff) controls(false); }
 static void menu(TESObjectREFR *pl)
 {
 	if (state) finish(pl, "a menu opened");
-	pkEnd("a menu opened");
 	unview(pl); camOff = 0; armIdentity(); reachW = 0;
 	if (forced) { u32 r = firstPersonNode(pl); if (r) showArms(r, false); }
 }
@@ -9870,31 +9382,13 @@ static void startClimb(TESObjectREFR *pl, const Ledge &L, const float *f, bool a
 	el = 0; state = 1; grip = true;
 	controls(true);
 	pathGap = gap; pathW = L.wall; pathH = L.h; pathStand = rt::sqrt((C[0] - A[0]) * (C[0] - A[0]) + (C[1] - A[1]) * (C[1] - A[1]));
-	pkFrame(pl, f);
+	moveFrame(pl, f);
 	{
 		u32 sg = ptr(0x11DEB7C), camN = sg ? ptr(sg + 0xAC) : 0;
 		pathEyeH = camN && !thirdPerson(pl) ? rd<float>(camN + 0x8C + 8) - p[2] : 120;
 		if (!(pathEyeH > 60 && pathEyeH < 170)) pathEyeH = 120;
 	}
 	noclip(true);
-	pkGripOk = true;
-	{
-		float xr[3] = {f[1], -f[0], 0};
-		for (int k = 0; k < 2; k++)
-		{
-			float sx = k ? 10.0f : -10.0f, a[3], b[3], frc; bool ac;
-			float base[3] = {p[0] + xr[0] * sx, p[1] + xr[1] * sx, p[2]};
-			float reachY = L.wall + 40, d = L.wall;
-			at(base, f, 0, L.z - 4, a); at(base, f, reachY, L.z - 4, b);
-			if (cast(a, b, &frc, &ac) && !ac) d = frc * reachY;
-			float top = L.z;
-			at(base, f, d + 3, L.z + 25, a); at(base, f, d + 3, L.z - 25, b);
-			if (cast(a, b, &frc, &ac) && !ac) top = a[2] + (b[2] - a[2]) * frc; else pkGripOk = false;
-			pkGrip[k][0] = sx; pkGrip[k][1] = d; pkGrip[k][2] = top - p[2];
-		}
-		LOG("move: grips - left %.0f ahead at %.0f, right %.0f ahead at %.0f (the body's wall %.0f, top %.0f)%s", pkGrip[0][1], pkGrip[0][2], pkGrip[1][1], pkGrip[1][2], L.wall, L.h, pkGripOk ? "" : " - an edge not found, the plain one used");
-	}
-	pkBegin(pl, climbKind == 0 ? 1 : climbKind == 1 ? 2 : 3, f, L.wall, L.h, pathStand);
 	u32 cc = ctrl(pl);
 	moveStartMs = (float)((rt::now() - st0) * 1000); moveWorstDt = 0;
 	LOG("move: %s onto a ledge %.0f above your feet (wall %.0f away, body radius %.0f, state %d): %.2f s, from %.0f %.0f %.0f to %.0f %.0f %.0f",
@@ -9921,100 +9415,8 @@ static void startKick(TESObjectREFR *pl, const float *f, const float *wallDir, f
 	kicks++;
 	flyT = 0; state = 2; grip = false;
 	controls(true);
-	pkBegin(pl, upWall ? 4 : 5, f, wallDist + radius(ctrl(pl)), 0, 0);
 	moveStartMs = (float)((rt::now() - st0) * 1000); moveWorstDt = 0;
 	LOG("move: kick %s (kick %d, %d up) - wall %.0f away, at %.0f %.0f %.0f, velocity %.0f %.0f %.0f", upWall ? "up the wall" : "off the wall", kicks, upKicks, wallDist, p[0], p[1], p[2], vel[0], vel[1], vel[2]);
-}
-static float s5(float x) { x = clampf(x, 0, 1); return x * x * x * (x * (x * 6 - 15) + 10); }
-static void startDropkick(TESObjectREFR *pl, const float *f, const float *v0)
-{
-	double st0 = rt::now();
-	float hs = rt::sqrt(v0[0] * v0[0] + v0[1] * v0[1]), sp = hs + TUNE(dropkickBoost);
-	vel[0] = f[0] * sp; vel[1] = f[1] * sp; vel[2] = rt::max(v0[2], 0.0f) + TUNE(dropkickLift);
-	flyT = 0; state = 2; grip = false;
-	dropOn = true; dropHit = false; dropUsed = true; dropJolt = -1; dropGround = false; dropG = 0;
-	controls(true);
-	if (!pkBegin(pl, 6, f, TUNE(dropkickGetUpSec), TUNE(dropkickTiltDeg) * rt::PI / 180, 0)) LOG("move: the dropkick's body couldn't be shown (flying without it)");
-	moveStartMs = (float)((rt::now() - st0) * 1000); moveWorstDt = 0;
-	dropLand = -1;
-	{
-		static u32 snd; static bool looked;
-		if (!looked)
-		{
-			looked = true;
-			u32 map = ptr(ADDR_FORM_MAP), buckets = map ? rd<u32>(map + 4) : 0, table = map ? ptr(map + 8) : 0;
-			u32 any = 0;
-			for (u32 bk = 0; table && bk < buckets && buckets < (1u << 24) && !snd; bk++)
-				for (u32 e = ptr(table + 4 * bk); e && !snd; e = ptr(e))
-				{
-					u32 f = ptr(e + 8), id = rd<u32>(e + 4);
-					if (!f || (id >> 24) != 0 || formtype((void *)f) != 0x28 || rd<u8>(f + 0xF4) != 0) continue;
-					u32 sn = ptr(f + 0x21C);
-					if (!sn || formtype((void *)sn) != 0x0D) continue;
-					const char *nm = (const char *)ptr(f + 0x34);
-					if (nm && readable((u32)nm, 7) && !memcmp(nm, "Unarmed", 7)) snd = sn; else if (!any) any = sn;
-				}
-			if (!snd) snd = any;
-			LOG("move: dropkick whoosh %s", snd ? "- the game's unarmed attack sound" : "- none found");
-		}
-		if (snd && s_sound) g_script->CallFunctionAlt(s_sound, player(), 2, pl, (TESForm *)snd);
-	}
-	const float *p = pos(pl);
-	LOG("move: dropkick - from %.0f units a second, at %.0f %.0f %.0f, velocity %.0f %.0f %.0f", hs, p[0], p[1], p[2], vel[0], vel[1], vel[2]);
-}
-static void dropHitTick(TESObjectREFR *pl, float rad)
-{
-	if (!dropOn || dropHit || dropGround || flyT < 0.14f) return;
-	const float *p = pos(pl);
-	float hv = rt::sqrt(vel[0] * vel[0] + vel[1] * vel[1]);
-	float yaw = rot(pl)[2], fw[3] = {rt::sin(yaw), rt::cos(yaw), 0};
-	if (hv > 50) { fw[0] = vel[0] / hv; fw[1] = vel[1] / hv; }
-	float rgt[3] = {fw[1], -fw[0], 0}, reach = rad + TUNE(dropkickReach);
-	u32 best = 0; float bestF = 1e9f;
-	forEachActor([&](TESObjectREFR *a) {
-		u8 ft = formtype(a);
-		if (a == pl || (ft != 0x3B && ft != 0x3C) || rd<u32>((u32)a + OFF_ACTOR_LIFESTATE) != 0) return;
-		const float *ap = pos(a);
-		float d[3] = {ap[0] - p[0], ap[1] - p[1], ap[2] - p[2]};
-		float fo = d[0] * fw[0] + d[1] * fw[1], la = rt::absf(d[0] * rgt[0] + d[1] * rgt[1]);
-		if (fo < 0 || fo > reach + 30 || la > 45 || d[2] < -120 || d[2] > 90) return;
-		if (fo < bestF) { bestF = fo; best = refid(a); }
-	});
-	if (!best) return;
-	TESObjectREFR *a = (TESObjectREFR *)lookup(best);
-	if (!a || !s_dropHit) return;
-	NVSEElement res; memset(&res, 0, sizeof res);
-	g_script->CallFunction(s_dropHit, player(), 0, &res, 3, a, F(TUNE(dropkickPush)), F(TUNE(dropkickDamagePct)));
-	dropHit = true;
-	if (res.type == 1 && res.num != 0)
-	{
-		float k = -TUNE(dropkickBounce);
-		vel[0] *= k; vel[1] *= k; vel[2] = rt::max(vel[2], 0.0f) + 100;
-		dropJolt = 0;
-		if (TUNE(dropkickHitstopSec) > 0.005f) { char c[32]; rt::fmt(c, sizeof c, "sgtm %.2f", rt::clamp(TUNE(dropkickHitstopScale), 0.02f, 1.0f)); console(c); dropSlowed = true; dropSlowUntil = rt::now() + TUNE(dropkickHitstopSec); }
-		LOG("move: dropkick - %08x kicked flying (%.0f units ahead, at %.2f s)", best, bestF, flyT);
-	}
-	else LOG("move: dropkick - %08x is your companion: not kicked", best);
-}
-static void dropGroundTick(TESObjectREFR *pl, u32 cc, float dt, float rad)
-{
-	flyT += dt; dropG += dt;
-	float G = rt::max(TUNE(dropkickGetUpSec), 0.4f);
-	float hv = rt::sqrt(vel[0] * vel[0] + vel[1] * vel[1]);
-	if (hv > 1)
-	{
-		float k = rt::max(0.0f, 1 - 5 * dt);
-		vel[0] *= k; vel[1] *= k;
-		float st[3] = {vel[0] * dt, vel[1] * dt, 0}, a[3] = {dropL[0], dropL[1], dropL[2] + 30}, b[3] = {dropL[0] + st[0] + vel[0] / hv * rad, dropL[1] + st[1] + vel[1] / hv * rad, dropL[2] + 30};
-		if (clear(a, b)) { dropL[0] += st[0]; dropL[1] += st[1]; } else vel[0] = vel[1] = 0;
-		float g0[3] = {dropL[0], dropL[1], dropL[2] + 25}, g1[3] = {dropL[0], dropL[1], dropL[2] - 40}, fr; bool ac;
-		if (cast(g0, g1, &fr, &ac)) dropL[2] = g0[2] + (g1[2] - g0[2]) * fr + 1;
-	}
-	float s3 = s5((dropG - 0.7f * G) / (0.3f * G)), gl = rt::min(dropGlide, rider::dropkickStandY()) * s3;
-	float P[3] = {dropL[0] + pkFw[0] * gl, dropL[1] + pkFw[1] * gl, dropL[2]};
-	setPos(pl, P);
-	float z0[3] = {0, 0, 0}; setVel(cc, z0); noFall(cc, P[2]);
-	if (dropG >= G) finish(pl, "got up");
 }
 static void fly(TESObjectREFR *pl, u32 cc, float dt, bool focus, float yaw, float rad)
 {
@@ -10063,15 +9465,6 @@ static void fly(TESObjectREFR *pl, u32 cc, float dt, bool focus, float yaw, floa
 			N[2] = a[2] + (b[2] - a[2]) * fr + 1;
 			setPos(pl, N);
 			vel[2] = 0;
-			if (dropOn)
-			{
-				dropGround = true; dropG = 0; memcpy(dropL, N, 12); dropLand = 0;
-				float want = rider::dropkickStandY(), a2[3] = {N[0], N[1], N[2] + 50}, b2[3] = {N[0] + pkFw[0] * (want + rad), N[1] + pkFw[1] * (want + rad), N[2] + 50}, fr2; bool ac2;
-				dropGlide = cast(a2, b2, &fr2, &ac2) ? rt::max(0.0f, fr2 * (want + rad) - rad) : want;
-				float z0[3] = {0, 0, 0}; setVel(cc, z0); noFall(cc, N[2]);
-				LOG("move: dropkick - down on your back after %.2f s at %.0f %.0f %.0f (room to stand %.0f of %.0f ahead)", flyT, N[0], N[1], N[2], dropGlide, want);
-				return;
-			}
 			finish(pl, "landed");
 			return;
 		}
@@ -10083,8 +9476,6 @@ static void fly(TESObjectREFR *pl, u32 cc, float dt, bool focus, float yaw, floa
 
 static void tick(float dt, double t, bool focus, TESObjectREFR *pl, bool quiet)
 {
-	{ u32 sg = sig3ptr(pl); if (sg != pkSeenSig) { pkSeenSig = sg; g_gearChangedAt = rt::now(); } }
-	if (handling::curAction == 0 || handling::curAction == 1) g_gearChangedAt = rt::now();
 	float target[3];
 	bool reach = false;
 	const char *why = 0;
@@ -10094,24 +9485,13 @@ static void tick(float dt, double t, bool focus, TESObjectREFR *pl, bool quiet)
 	else if (rd<u32>(0x11F2250 + 8)) why = "VATS";
 	u32 cc = ctrl(pl);
 	if (!cc) why = "no character controller";
-	{
-		static float lastP[3]; static double stillSince;
-		const float *p = pos(pl);
-		float dx = p[0] - lastP[0], dy = p[1] - lastP[1], dz = p[2] - lastP[2];
-		if (dx * dx + dy * dy + dz * dz > 4) stillSince = rt::now();
-		memcpy(lastP, p, 12);
-		if (!g_driving && cc && pkHolder && !pkParent) pkPrepare(pl, "after a loading screen");
-		else if (!g_driving && cc && !pkHolder && rt::now() - g_loadedAt < 120 && rt::now() - stillSince > 2) pkPrepare(pl, "standing still after a loading screen");
-	}
 	if (why)
 	{
 		if (state) finish(pl, why);
-		pkEnd(why);
 		camOff = 0; reachW = 0; armIdentity();
 		if (forced) { u32 r = firstPersonNode(pl); if (r) showArms(r, false); else { forced = false; nShown = 0; } }
 		return;
 	}
-	pkFadeTick(pl, dt);
 	int hs = hkState(cc);
 	if (!s_setPos) { s_setPos = g_script->CompileScript(kSetPos3); LOG("move: SetPos function %x", (u32)s_setPos); }
 	float yaw = rot(pl)[2], f[3] = {rt::sin(yaw), rt::cos(yaw), 0};
@@ -10125,8 +9505,6 @@ static void tick(float dt, double t, bool focus, TESObjectREFR *pl, bool quiet)
 	}
 	bool ground = hs == 0 && state != 2;
 	if (ground && !state) kicks = upKicks = 0;
-	if (ground && !state) { dropUsed = false; if (sprint::modeNow() > 0) sprintSeenT = rt::now(); }
-	bool rmb = focus && pressed(0x02);
 	bool space = focus && pressed(VK_CLIMB);
 	if (state && dt > moveWorstDt) moveWorstDt = dt;
 	if (state == 1)
@@ -10134,23 +9512,16 @@ static void tick(float dt, double t, bool focus, TESObjectREFR *pl, bool quiet)
 		el += dt;
 		float u = clampf(el / dur, 0, 1), P[3], ey, ez;
 		rider::parkourEye(climbKind == 0 ? 1 : 2, u, pathEyeH, pathGap, pathW, pathH, pathStand, &ey, &ez);
-		P[0] = pkO[0] + pkFw[0] * ey; P[1] = pkO[1] + pkFw[1] * ey; P[2] = pkO[2] + ez - pathEyeH;
+		P[0] = mvO[0] + mvFw[0] * ey; P[1] = mvO[1] + mvFw[1] * ey; P[2] = mvO[2] + ez - pathEyeH;
 		if (u >= 1) memcpy(P, C, 12);
 		setPos(pl, P);
 		float z0[3] = {0, 0, 0}; setVel(cc, z0); noFall(cc, P[2]);
 		float s = rt::sin(rt::PI * u);
 		camOff = -(TUNE(handlingUpSign) < 0 ? -1.0f : 1.0f) * TUNE(moveCamDipDeg) * s * (climbKind == 0 ? 0.5f : 1.0f) * rt::PI / 180;
 		handling::extP = -TUNE(moveGunDropDeg) * s; handling::extR = TUNE(moveGunDropDeg) * 0.4f * s;
-		reach = u < 0.8f && !pkOn;
+		reach = u < 0.8f;
 		memcpy(target, handT, 12);
-		pkLookW = 0;
-		pkTick(pl, u, dt);
-		if (pkOn && pkLookW > 0)
-		{
-			float sgn = TUNE(handlingUpSign) < 0 ? 1.0f : -1.0f, now = rot(pl)[0] * sgn;
-			camOff = sgn * pkLookW * (pkLookDown - now);
-		}
-		if (pkThird || thirdPerson(pl)) camOff = 0;
+		if (thirdPerson(pl)) camOff = 0;
 		if (u >= 1) finish(pl, "arrived");
 	}
 	else
@@ -10196,33 +9567,7 @@ static void tick(float dt, double t, bool focus, TESObjectREFR *pl, bool quiet)
 					else startKick(pl, f, bd, best - rad, facing);
 				}
 			}
-			if (rmb && !state && air && TUNE(dropkickOn) > 0 && hs != 3 && hs != 4 && hs != 5)
-			{
-				float *pv = (float *)(ptr(cc + 8) + 0x10), v0[3] = {pv[0] / kHavok, pv[1] / kHavok, pv[2] / kHavok};
-				float sp = rt::sqrt(v0[0] * v0[0] + v0[1] * v0[1]);
-				const char *no = weaponOut ? "your weapon is out" : dropUsed ? "one per jump" : rt::now() - sprintSeenT > TUNE(dropkickSprintSec) ? "you weren't sprinting" : sp < TUNE(dropkickMinSpeed) ? "too slow" : 0;
-				if (no) LOG("move: right-click in the air - no dropkick (%s; %.0f units a second)", no, sp);
-				else startDropkick(pl, f, v0);
-			}
-			if (state == 2)
-			{
-				float mdt = dt;
-				slowTick();
-				if (dropSlowed) mdt = dt * rt::clamp(TUNE(dropkickHitstopScale), 0.02f, 1.0f);
-				if (dropOn && dropGround) dropGroundTick(pl, cc, mdt, rad); else fly(pl, cc, mdt, focus, yaw, rad);
-				if (dropOn) pkStandY = dropJolt;
-				if (state == 2) { dropHitTick(pl, rad); pkTick(pl, dropOn ? (dropGround ? dropG : -1.0f) : 0, mdt); }
-				if (state == 2 && dropOn && !thirdPerson(pl))
-				{
-					if (dropJolt >= 0) dropJolt += mdt;
-					if (dropLand >= 0) dropLand += mdt;
-					float sg = TUNE(handlingUpSign) < 0 ? -1.0f : 1.0f, lie = rider::dropkickLie(flyT - (dropGround ? dropG : 0), dropGround ? dropG : -1.0f, TUNE(dropkickGetUpSec));
-					float j = joltAt(dropJolt), l = joltAt(dropLand * 0.8f);
-					camOff = -sg * (TUNE(dropkickCamDeg) * lie + TUNE(dropkickJoltDeg) * j + TUNE(dropkickLandDeg) * l) * rt::PI / 180;
-					handling::g_camRoll1 = (TUNE(dropkickRollDeg) * j - TUNE(dropkickRollDeg) * 0.6f * l) * rt::PI / 180;
-				}
-				else handling::g_camRoll1 = 0;
-			}
+			if (state == 2) fly(pl, cc, dt, focus, yaw, rad);
 		}
 	}
 	float rs = rt::max(TUNE(moveReachInSec), 0.02f);
@@ -10838,7 +10183,7 @@ struct Bone
 	bool have;
 };
 static Bone b[NB];
-static u32 root, toe[2], nac, nacN;
+static u32 root, nac, nacN;
 static bool written;
 static double findT = -99, lockUntil;
 static int headAx = -1;
@@ -10875,23 +10220,12 @@ static const char *kState = "Begin Function {}\nint i\nif player.GetKnockedState
 
 static double lastT;
 static float wOn, wIk;
-static float drop, dropV, stairZ, stairV; static bool stairHave;
-static float lean, leanV, bank, bankV, spP, spV;
-static bool hillReset;
-static float stairT, stairK;
+static float lean, leanV, bank, bankV;
 static float hy, hyV, hp, hpV, hr, hrV;
 static float bias; static bool biasHave;
-static float gz[2], gzV[2]; static bool gzHave;
-static float fpH[2][2], fpT[2][2]; static bool fpOk[2];
-static float gAcc[2], gPend[2], gPendT[2], pitchS[2], nS[2][3]; static bool gAccHave[2];
-static bool idleLatch; static float idleIn;
-static float rest = 9;
 static int jumps; static float logT;
 static double evUntil; static int evLast = -1;
-static float plantPrev[2] = {1, 1};
 static float tw, twV;
-struct Lock { bool on; float p[2], from[2], st; };
-static Lock lk[2]; static float lockW, stepGap;
 static bool flOn; static float flYaw, flV, pinned;
 
 static bool valid(u32 r)
@@ -10906,7 +10240,7 @@ static bool find(u32 r)
 {
 	if (rt::now() - findT < 2) return false;
 	findT = rt::now();
-	root = 0; written = false; headAx = -1; hintOk[0] = hintOk[1] = hintOk[2] = false; gzHave = stairHave = false; fpOk[0] = fpOk[1] = gAccHave[0] = gAccHave[1] = false; pitchS[0] = pitchS[1] = 0; nS[0][0] = nS[0][1] = nS[1][0] = nS[1][1] = 0; nS[0][2] = nS[1][2] = 1; idleLatch = false; idleIn = 0;
+	root = 0; written = false; headAx = -1; hintOk[0] = hintOk[1] = hintOk[2] = false;
 	u32 was[NB]; for (int i = 0; i < NB; i++) was[i] = b[i].node;
 	memset(b, 0, sizeof b);
 	int made = 0, kept = 0;
@@ -10934,12 +10268,10 @@ static bool find(u32 r)
 	if (!nac) nacN = 0;
 	if (nac) { u32 p = ptr(nac + 0x18), wasN = nacN; nacN = ours(p) && p == wasN ? p : move::insertAbove(nac); if (nacN) handling::flagsLike(nacN, nac); }
 	if (!nacN) { LOG("body: no node above Bip01 NonAccum - the body's IK is off"); return false; }
-	toe[0] = findNamed(b[FTL].bone, "Bip01 L Toe0", 4);
-	toe[1] = findNamed(b[FTR].bone, "Bip01 R Toe0", 4);
 	root = r; lockUntil = rt::now() + 0.5;
 	auto pn = [](u32 n) { u32 p = n ? ptr(ptr(n + 0x18) + 0x18) : 0; const char *s = p ? (const char *)ptr(p + 8) : 0; return s ? s : "?"; };
-	LOG("body: %d node(s) put in, %d ours already - pelvis under %s, thighs under %s / %s, spine1 under %s, neck %s under %s, toes %x %x",
-		made, kept, pn(b[PELV].node), pn(b[THL].node), pn(b[THR].node), b[SPN].node ? pn(b[SPN].node) : "-", b[NCK].bone ? (const char *)ptr(b[NCK].bone + 8) : "-", b[NCK].node ? pn(b[NCK].node) : "-", toe[0], toe[1]);
+	LOG("body: %d node(s) put in, %d ours already - pelvis under %s, thighs under %s / %s, spine1 under %s, neck %s under %s",
+		made, kept, pn(b[PELV].node), pn(b[THL].node), pn(b[THR].node), b[SPN].node ? pn(b[SPN].node) : "-", b[NCK].bone ? (const char *)ptr(b[NCK].bone + 8) : "-", b[NCK].node ? pn(b[NCK].node) : "-");
 	return true;
 }
 static void identity()
@@ -10949,11 +10281,10 @@ static void identity()
 	TESObjectREFR *pl = player();
 	if (pl && valid(thirdPersonNode(pl))) { for (int i = 0; i < NB; i++) ident(b[i].node); ident(nacN); }
 	for (int i = 0; i < NB; i++) b[i].have = b[i].pdOk = false;
-	lk[0].on = lk[1].on = false; lockW = 0;
-	drop = dropV = lean = leanV = bank = bankV = spP = spV = hy = hyV = hp = hpV = hr = hrV = tw = twV = 0;
-	for (int k = 0; k < 2; k++) armF[k] = armFV[k] = armO[k] = armOV[k] = 0; landD = landDV = 0; ws = wsV = 0; fid = -1; stairHave = gzHave = false; fpOk[0] = fpOk[1] = gAccHave[0] = gAccHave[1] = false;
+	lean = leanV = bank = bankV = hy = hyV = hp = hpV = hr = hrV = tw = twV = 0;
+	for (int k = 0; k < 2; k++) armF[k] = armFV[k] = armO[k] = armOV[k] = 0; landD = landDV = 0; ws = wsV = 0; fid = -1;
 }
-static void reset() { identity(); hillReset = true; root = 0; glRef = 0; hpNow = -1; flOn = false; flYaw = flV = 0; havePrev = false; wOn = wIk = 0; findT = -99; }
+static void reset() { identity(); root = 0; glRef = 0; hpNow = -1; flOn = false; flYaw = flV = 0; havePrev = false; wOn = wIk = 0; findT = -99; }
 
 static bool groundAt(float x, float y, float z0, float *gzOut, float *n, bool *nok)
 {
@@ -10974,7 +10305,7 @@ static bool groundAt(float x, float y, float z0, float *gzOut, float *n, bool *n
 	return false;
 }
 
-struct Probe { bool have, n0ok, okF[2], cov, stepped, nHok, hgHave; float nH[3], hg[2]; float n0[3], gF[2], nF[2][3], pitchF[2], toeLen[2], covD, covH, wallD[2], g0, backD; };
+struct Probe { bool have, n0ok, cov; float n0[3], covD, covH, wallD[2], g0, backD; };
 static Probe pr;
 static void probe(TESObjectREFR *pl, float dt)
 {
@@ -10985,96 +10316,10 @@ static void probe(TESObjectREFR *pl, float dt)
 	float *n0 = pr.n0; bool &n0ok = pr.n0ok; n0[0] = n0[1] = 0; n0[2] = 1; n0ok = false;
 	float g0;
 	bool have0 = groundAt(P[0], P[1], P[2], &g0, n0, &n0ok);
-	static int hillTick; static bool stepLast;
-	if (hillReset) { hillReset = false; pr.hgHave = pr.nHok = false; stepLast = false; }
-	if (have0 && !n0ok && (++hillTick & 1))
-	{
-		float h = flOn ? pinned : rot(pl)[2], fx = rt::sin(h), fy = rt::cos(h), rx = rt::cos(h), ry = -rt::sin(h);
-		const float off[9][2] = {{0, 0}, {32, 0}, {-32, 0}, {0, 32}, {0, -32}, {16, 0}, {-16, 0}, {0, 16}, {0, -16}};
-		float gq[9], nq[3]; bool kq, okq[9];
-		gq[0] = g0; okq[0] = true;
-		for (int i = 1; i < 9; i++)
-		{
-			okq[i] = groundAt(P[0] + fx * off[i][0] + rx * off[i][1], P[1] + fy * off[i][0] + ry * off[i][1], P[2], &gq[i], nq, &kq);
-			if (okq[i] && rt::absf(gq[i] - g0) > rt::absf(off[i][0] + off[i][1]) * 1.5f) okq[i] = false;
-		}
-		auto fit = [&](float &a, float &sF, float &sR) -> bool
-		{
-			double S[3][4] = {};
-			int n = 0;
-			for (int i = 0; i < 9; i++)
-			{
-				if (!okq[i]) continue;
-				double v[3] = {1, off[i][0], off[i][1]};
-				for (int r = 0; r < 3; r++) { for (int c = 0; c < 3; c++) S[r][c] += v[r] * v[c]; S[r][3] += v[r] * gq[i]; }
-				n++;
-			}
-			if (n < 4) return false;
-			for (int c = 0; c < 3; c++)
-			{
-				int pv = c; for (int r = c + 1; r < 3; r++) if ((S[r][c] < 0 ? -S[r][c] : S[r][c]) > (S[pv][c] < 0 ? -S[pv][c] : S[pv][c])) pv = r;
-				if ((S[pv][c] < 0 ? -S[pv][c] : S[pv][c]) < 1e-6) return false;
-				for (int k2 = 0; k2 < 4; k2++) { double t2 = S[c][k2]; S[c][k2] = S[pv][k2]; S[pv][k2] = t2; }
-				for (int r = 0; r < 3; r++) if (r != c) { double m2 = S[r][c] / S[c][c]; for (int k2 = 0; k2 < 4; k2++) S[r][k2] -= m2 * S[c][k2]; }
-			}
-			a = (float)(S[0][3] / S[0][0]); sF = (float)(S[1][3] / S[1][1]); sR = (float)(S[2][3] / S[2][2]);
-			return true;
-		};
-		float a, sF, sR, lim = TUNE(bodySlopeStepUnits);
-		if (fit(a, sF, sR))
-		{
-			int worst = -1; float wr = 0;
-			for (int i = 0; i < 9; i++) if (okq[i]) { float r2 = rt::absf(gq[i] - (a + sF * off[i][0] + sR * off[i][1])); if (r2 > wr) { wr = r2; worst = i; } }
-			if (wr > lim && worst >= 0) { okq[worst] = false; fit(a, sF, sR); }
-			int offN = 0;
-			for (int i = 0; i < 9; i++) if (okq[i] && rt::absf(gq[i] - (a + sF * off[i][0] + sR * off[i][1])) > lim) offN++;
-			stepLast = offN >= 2;
-			float gx = fx * sF + rx * sR, gy = fy * sF + ry * sR;
-			float c[3] = {-gx, -gy, 1};
-			if (norm(c) > 1e-3f) { memcpy(pr.nH, c, 12); pr.nHok = true; }
-			float k2 = clampf(2 * dt / rt::max(TUNE(bodySlopeSmoothSec), 0.02f), 0, 1);
-			if (!pr.hgHave) { pr.hg[0] = gx; pr.hg[1] = gy; pr.hgHave = true; }
-			else { pr.hg[0] += (gx - pr.hg[0]) * k2; pr.hg[1] += (gy - pr.hg[1]) * k2; }
-		}
-	}
-	if (!have0) { pr.nHok = false; }
-	pr.stepped = stepLast;
-	if (have0 && !n0ok && pr.nHok) { memcpy(n0, pr.nH, 12); n0ok = true; }
 	if (have0 && n0ok && n0[2] > 0.985f && onGround && spd < 200)
 	{
 		if (!biasHave) { bias = g0 - P[2]; biasHave = true; }
 		else bias += (clampf(g0 - P[2], -6, 6) - bias) * clampf(dt * 0.5f, 0, 1);
-	}
-	float *gF = pr.gF, (*nF)[3] = pr.nF, *pitchF = pr.pitchF, *toeLen = pr.toeLen;
-	bool *okF = pr.okF;
-	for (int k = 0; k < 2; k++)
-	{
-		u32 ft = b[k ? FTR : FTL].bone;
-		const float *Ab = (const float *)(ft + 0x8C);
-		if (fpOk[k] && (fpH[k][0] - Ab[0]) * (fpH[k][0] - Ab[0]) + (fpH[k][1] - Ab[1]) * (fpH[k][1] - Ab[1]) > 30 * 30) fpOk[k] = false;
-		const float *A = fpOk[k] ? fpH[k] : Ab;
-		float gh = 0, gt = 0, nh[3] = {0, 0, 1}, nt[3]; bool nhok = false, ntok = false;
-		okF[k] = groundAt(A[0], A[1], P[2], &gh, nh, &nhok);
-		bool tOk = false; toeLen[k] = 0; pitchF[k] = 0;
-		if (toe[k])
-		{
-			const float *Tp = fpOk[k] ? fpT[k] : (const float *)(toe[k] + 0x8C);
-			float dx = Tp[0] - A[0], dy = Tp[1] - A[1];
-			toeLen[k] = rt::sqrt(dx * dx + dy * dy);
-			if (toeLen[k] > 3) tOk = groundAt(Tp[0], Tp[1], P[2], &gt, nt, &ntok);
-		}
-		if (!okF[k] && tOk) { gh = gt; okF[k] = true; }
-		float g = gh;
-		if (okF[k] && tOk)
-		{
-			float maxRise = toeLen[k] * rt::sin(TUNE(bodyFootPitchDeg) * D2R) / rt::max(rt::cos(TUNE(bodyFootPitchDeg) * D2R), 0.2f);
-			float rise = gt - gh;
-			if (rise > maxRise) g = gh + (rise - maxRise);
-			pitchF[k] = rt::atan2(clampf(rise, -maxRise, maxRise), toeLen[k]);
-		}
-		gF[k] = g;
-		if (nhok) memcpy(nF[k], nh, 12); else { nF[k][0] = nF[k][1] = 0; nF[k][2] = 1; }
-		if (!nhok && n0ok) memcpy(nF[k], n0, 12);
 	}
 	pr.cov = false;
 	if (sneaking && onGround && TUNE(coverPoseOn) > 0)
@@ -11269,21 +10514,19 @@ static void frame()
 	if (menumode()) return;
 	if (!valid(r) && !find(r)) return;
 	{
-		bool bad = !fin(drop) || !fin(dropV) || !fin(lean) || !fin(leanV) || !fin(bank) || !fin(bankV) || !fin(spP) || !fin(spV)
-			|| !fin(hy) || !fin(hyV) || !fin(hp) || !fin(hpV) || !fin(hr) || !fin(hrV) || !fin(tw) || !fin(twV) || !fin(stairZ) || !fin(stairV)
+		bool bad = !fin(lean) || !fin(leanV) || !fin(bank) || !fin(bankV)
+			|| !fin(hy) || !fin(hyV) || !fin(hp) || !fin(hpV) || !fin(hr) || !fin(hrV) || !fin(tw) || !fin(twV)
 			|| !fin(ws) || !fin(wsV) || !fin(landD) || !fin(landDV) || !fin(flin) || !fin(flinV) || !fin(kneel) || !fin(kneelV) || !fin(hideCmd)
 			|| !fin(flYaw) || !fin(flV) || !fin(pinned) || !fin(glW) || !fin(kneelLift);
-		for (int k = 0; k < 2 && !bad; k++) bad = !fin(gz[k]) || !fin(gzV[k]) || !fin(armF[k]) || !fin(armFV[k]) || !fin(armO[k]) || !fin(armOV[k]) || !fin(pitchS[k]) || !fin(nS[k][0]) || !fin(nS[k][1]) || !fin(nS[k][2]) || !fin(plantPrev[k]);
+		for (int k = 0; k < 2 && !bad; k++) bad = !fin(armF[k]) || !fin(armFV[k]) || !fin(armO[k]) || !fin(armOV[k]);
 		for (int i = 0; i < NB && !bad; i++) for (int k = 0; k < 3 && !bad; k++) bad = !fin(b[i].q[k]) || !fin(b[i].qv[k]) || !fin(b[i].d[k]) || !fin(b[i].dv[k]);
 		if (bad)
 		{
-			static int told; if (told++ < 10) LOG("body: a value went NaN - the whole body put back to rest (drop %.1f lean %.1f head %.1f/%.1f torso %.1f feet %.1f/%.1f pelvis offset %.2f %.1f, free look %.2f, life state %u)",
-				drop, lean, hy, hp, tw, gz[0], gz[1], b[PELV].q[0], b[PELV].d[2], flYaw, rd<u32>((u32)pl + OFF_ACTOR_LIFESTATE));
+			static int told; if (told++ < 10) LOG("body: a value went NaN - the whole body put back to rest (lean %.1f head %.1f/%.1f torso %.1f pelvis offset %.2f %.1f, free look %.2f, life state %u)",
+				lean, hy, hp, tw, b[PELV].q[0], b[PELV].d[2], flYaw, rd<u32>((u32)pl + OFF_ACTOR_LIFESTATE));
 			identity();
 			for (int i = 0; i < NB; i++) for (int k = 0; k < 3; k++) b[i].q[k] = b[i].qv[k] = b[i].d[k] = b[i].dv[k] = 0;
 			flOn = false; flYaw = flV = 0; pinned = rot(pl)[2]; glW = 0; hideCmd = kneel = kneelV = kneelLift = 0; kneeling = false; flin = flinV = 0;
-			for (int k = 0; k < 2; k++) { pitchS[k] = 0; nS[k][0] = nS[k][1] = 0; nS[k][2] = 1; plantPrev[k] = 0; }
-			gAccHave[0] = gAccHave[1] = false;
 			return;
 		}
 	}
@@ -11298,72 +10541,16 @@ static void frame()
 	float aimK = aiming ? TUNE(bodyAimScale) : 1;
 
 	if (!pr.have) return;
-	float n0[3] = {pr.n0[0], pr.n0[1], pr.n0[2]}; bool n0ok = pr.n0ok;
-	float gF[2] = {pr.gF[0], pr.gF[1]}, nF[2][3], pitchF[2] = {pr.pitchF[0], pr.pitchF[1]}, toeLen[2] = {pr.toeLen[0], pr.toeLen[1]};
-	bool okF[2] = {pr.okF[0], pr.okF[1]};
-	memcpy(nF, pr.nF, sizeof nF);
-	if (!gzHave) { for (int k = 0; k < 2; k++) { gz[k] = okF[k] ? gF[k] : P[2] + bias; gzV[k] = 0; } gzHave = true; }
-	for (int k = 0; k < 2; k++)
-	{
-		float tg = okF[k] ? gF[k] : P[2] + bias;
-		bool onPlane = false;
-		if (n0ok && n0[2] > 0.3f && !pr.stepped && stairT <= 0)
-		{
-			const float *Q = fpOk[k] ? fpH[k] : (const float *)(b[k ? FTR : FTL].bone + 0x8C);
-			float zp = P[2] + bias - (n0[0] * (Q[0] - P[0]) + n0[1] * (Q[1] - P[1])) / n0[2];
-			onPlane = rt::absf(tg - zp) < 2.5f;
-		}
-		if (!gAccHave[k] || rt::absf(tg - gAcc[k]) < 2 || onPlane) { gAcc[k] = tg; gAccHave[k] = true; gPendT[k] = 0; }
-		else
-		{
-			if (rt::absf(tg - gPend[k]) < 2) gPendT[k] += dt; else { gPend[k] = tg; gPendT[k] = 0; }
-			if (gPendT[k] >= TUNE(bodyFootSettleSec)) { gAcc[k] = tg; gPendT[k] = 0; }
-		}
-		spring(gz[k], gzV[k], gAcc[k], TUNE(bodyFootHz), 1, dt);
-		float ke = clampf(dt / rt::max(TUNE(bodyFootSettleSec), 0.02f), 0, 1);
-		pitchS[k] += (pitchF[k] - pitchS[k]) * ke;
-		for (int i = 0; i < 3; i++) nS[k][i] += (nF[k][i] - nS[k][i]) * ke;
-		if (norm(nS[k]) < 0.5f) { nS[k][0] = nS[k][1] = 0; nS[k][2] = 1; }
-		pitchF[k] = pitchS[k]; memcpy(nF[k], nS[k], 12);
-	}
-	float dz[2] = {gz[0] - (P[2] + bias), gz[1] - (P[2] + bias)};
-	for (int k = 0; k < 2; k++) dz[k] = clampf(dz[k], -TUNE(bodyDropMaxUnits) * 1.5f, TUNE(bodyRayUp) - 5);
-	float slope = 0, slopeR = 0;
-	if (pr.hgHave) { slope = pr.hg[0] * f[0] + pr.hg[1] * f[1]; slopeR = pr.hg[0] * rr[0] + pr.hg[1] * rr[1]; }
-	slope = clampf(slope, -1.2f, 1.2f); slopeR = clampf(slopeR, -1.2f, 1.2f);
 
 	float accM = accS / kUnitsPerMetre, vM = spd / kUnitsPerMetre;
 	float runK = clampf((spd - 180) / 300, 0, 1);
-	float slopeDeg = rt::atan2(slope, 1) * R2D, sideDeg = rt::atan2(slopeR, 1) * R2D, moveK = 0.5f + 0.5f * clampf(spd / 150, 0, 1);
-	float cv0 = rt::max(TUNE(bodySlopeCurveDeg), 5.0f);
-	float hillF = slopeDeg * (1 + rt::absf(slopeDeg) / cv0), hillS = sideDeg * (1 + rt::absf(sideDeg) / cv0);
-	stairT = pr.stepped ? 0.6f : rt::max(0.0f, stairT - dt);
-	stairK = clampf(stairK + (stairT > 0 ? dt : -dt) * 3, 0, 1);
-	float gradeDeg = rt::atan2(rt::sqrt(slope * slope + slopeR * slopeR), 1) * R2D;
-	float hillK = moveK * (0.5f + 0.5f * aimK) * (1 - smooth01(stairK)) * smooth01((gradeDeg - TUNE(bodySlopeMinDeg)) / 4);
-	float hillLean = clampf(hillF * (hillF > 0 ? TUNE(bodySlopeBodyUp) : TUNE(bodySlopeBodyDown)) * hillK, -12, 12);
-	float hillBank = clampf(hillS * TUNE(bodySlopeSide) * hillK, -10, 10);
 	float leanT = rt::atan2(accM, 9.81f) * R2D * TUNE(bodyAccelLean) + runK * TUNE(bodyRunLeanDeg);
-	leanT = clampf(leanT * aimK, -TUNE(bodyLeanMaxDeg), TUNE(bodyLeanMaxDeg)) + hillLean;
+	leanT = clampf(leanT * aimK, -TUNE(bodyLeanMaxDeg), TUNE(bodyLeanMaxDeg));
 	spring(lean, leanV, onGround ? leanT : 0, TUNE(bodyLeanHz), TUNE(bodyLeanDamping), dt);
 	float bankT = spd > 80 && onGround ? rt::atan2(vM * yawRate, 9.81f) * R2D * TUNE(bodyBankScale) : 0;
-	bankT = clampf(bankT * aimK, -TUNE(bodyBankMaxDeg), TUNE(bodyBankMaxDeg)) + (onGround ? hillBank : 0);
+	bankT = clampf(bankT * aimK, -TUNE(bodyBankMaxDeg), TUNE(bodyBankMaxDeg));
 	spring(bank, bankV, bankT, TUNE(bodyBankHz), TUNE(bodyBankDamping), dt);
-	float spT = hillF * (hillF > 0 ? TUNE(bodySlopeLeanUp) : TUNE(bodySlopeLeanDown)) * hillK;
-	spring(spP, spV, onGround ? clampf(spT, -12, 24) : 0, 2.0f, 1, dt);
-	float dbd = TUNE(bodyDropDeadband), dzL = rt::min(0.0f, dz[0] + dbd), dzR = rt::min(0.0f, dz[1] + dbd);
-	float dropT = rt::min(0.0f, rt::min(dzL * plantPrev[0], dzR * plantPrev[1])) - rt::absf(slopeDeg) / 20 * TUNE(bodySlopeCrouchUnits);
-	dropT = clampf(dropT, -TUNE(bodyDropMaxUnits), 0) * TUNE(bodyIkWeight);
-	spring(drop, dropV, onGround ? dropT : 0, TUNE(bodyDropHz), 1, dt);
-	if (!stairHave || !onGround) { stairZ = P[2]; stairV = 0; stairHave = true; }
-	else
-	{
-		spring(stairZ, stairV, P[2], TUNE(bodyStairHz), 1, dt);
-		float m = TUNE(bodyStairMaxUnits);
-		if (stairZ - P[2] > m) stairZ = P[2] + m; else if (stairZ - P[2] < -m) stairZ = P[2] - m;
-	}
-	float wl = wOn * wIk;
-	float vz = (drop + (stairZ - P[2]) * TUNE(bodyIkWeight)) * wl;
+	float wl = wOn * wIk, vz = 0;
 
 	float lifeK = TUNE(lifeOn) > 0 ? wOn : 0;
 	lifeClock += dt;
@@ -11562,13 +10749,13 @@ static void frame()
 	}
 	spring(tw, twV, twT, TUNE(headLookHz) * 0.7f, 1, dt);
 	float spRoll = (ws * 0.8f * TUNE(lifeHipDeg) / 3 + fidChestRoll) * lifeK;
-	if (b[SPN].node && (rt::absf(spP) + rt::absf(tw) + rt::absf(spRoll) + tiredHunch + coverHunch + rt::absf(flin) > 0.01f))
+	if (b[SPN].node && (rt::absf(tw) + rt::absf(spRoll) + tiredHunch + coverHunch + rt::absf(flin) > 0.01f))
 	{
 		u32 sn = b[SPN].node;
 		Xf Pw = W(ptr(sn + 0x18));
 		const float *sc = (const float *)(b[SPN].bone + 0x8C);
 		float S[9], Sl[9], St[9], Sr[9], S1[9], Xr[9], Xt[3];
-		rotAbout(rr, (-(spP + tiredHunch * lifeK + coverHunch) + flin * lifeK) * wOn, Sl); rotAbout(up, -tw, St); rotAbout(f, spRoll, Sr);
+		rotAbout(rr, (-(tiredHunch * lifeK + coverHunch) + flin * lifeK) * wOn, Sl); rotAbout(up, -tw, St); rotAbout(f, spRoll, Sr);
 		mul3(St, Sl, S1); mul3(Sr, S1, S);
 		motionLocal(Pw, S, sc, 0, Xr, Xt);
 		preMul(sn, Xr, Xt);
@@ -11646,15 +10833,9 @@ static void frame()
 			}
 		}
 	}
-	float plant[2] = {0, 0}, hgt[2] = {0, 0};
-	if (TUNE(bodyIkOn) > 0 && wl > 0.001f)
+	if (wl > 0.001f)
 	{
 		float Mi[9]; tr(M, Mi);
-		idleIn = spd < 10 && onGround ? idleIn + dt : 0;
-		if (spd > 24 || !onGround) idleLatch = false; else if (idleIn > 0.12f) idleLatch = true;
-		bool idle = idleLatch && TUNE(bodyStepUnits) > 0 && kneel < 0.05f;
-		lockW = clampf(lockW + (idle ? dt : -dt) * 6, 0, 1);
-		stepGap -= dt;
 		for (int k = 0; k < 2; k++)
 		{
 			Bone &Th = b[k ? THR : THL], &Ca = b[k ? CAR : CAL], &Ft = b[k ? FTR : FTL];
@@ -11663,32 +10844,7 @@ static void frame()
 			float y[3] = {A[0] - c[0] - mv[0], A[1] - c[1] - mv[1], A[2] - c[2] - mv[2]}, a0[3];
 			apply(Mi, y, a0);
 			for (int i = 0; i < 3; i++) a0[i] += c[i];
-			hgt[k] = a0[2] - (P[2] + bias);
-			plant[k] = 1 - smooth01((hgt[k] - rest - 2) / 12);
-			float tz = a0[2] + dz[k];
-			float T[3] = {A[0], A[1], A[2] + (tz - A[2]) * wl * (tz > A[2] ? 1.0f : TUNE(bodyIkWeight))};
-			Lock &L = lk[k];
-			if (!idle && L.on && lockW <= 0) { L.on = false; L.st = -1; }
-			if (idle && !L.on) { L.on = true; L.p[0] = A[0]; L.p[1] = A[1]; L.st = -1; }
-			if (L.on)
-			{
-				float ex = A[0] - L.p[0], ey = A[1] - L.p[1];
-				if (idle && L.st < 0 && ex * ex + ey * ey > TUNE(bodyStepUnits) * TUNE(bodyStepUnits) && lk[1 - k].st < 0 && stepGap <= 0)
-				{
-					L.st = 0; L.from[0] = L.p[0]; L.from[1] = L.p[1]; stepGap = TUNE(bodyStepSec) * 0.6f;
-				}
-				float cx = L.p[0], cy = L.p[1], lift = 0;
-				if (L.st >= 0)
-				{
-					L.st += dt / rt::max(TUNE(bodyStepSec), 0.05f);
-					float u = smooth01(L.st);
-					cx = L.from[0] + (A[0] - L.from[0]) * u; cy = L.from[1] + (A[1] - L.from[1]) * u;
-					lift = rt::sin(rt::PI * clampf(L.st, 0, 1)) * TUNE(bodyStepLift);
-					if (L.st >= 1) { L.p[0] = A[0]; L.p[1] = A[1]; L.st = -1; }
-				}
-				T[0] += (cx - A[0]) * lockW * wl; T[1] += (cy - A[1]) * lockW * wl; T[2] += lift * lockW * wl;
-				if (lift > 0.5f) plant[k] *= 1 - clampf(lift / rt::max(TUNE(bodyStepLift), 1.0f), 0, 1);
-			}
+			float T[3] = {A[0], A[1], A[2] + (a0[2] - A[2]) * wl};
 			bool rearLeg = (k == 1) == (TUNE(coverKneelRight) > 0);
 			if (kneel > 0.001f)
 			{
@@ -11700,41 +10856,20 @@ static void frame()
 				{
 					float fw = rt::min(la * 0.6f, pr.cov ? rt::max(pr.covD - 14, 0.0f) : la * 0.6f), out = (la * 0.6f - fw) * 0.8f;
 					float sd = k ? 1.0f : -1.0f;
-					Tk[0] = H[0] + f[0] * fw + rr[0] * sd * out; Tk[1] = H[1] + f[1] * fw + rr[1] * sd * out; Tk[2] = gk + rest;
+					Tk[0] = H[0] + f[0] * fw + rr[0] * sd * out; Tk[1] = H[1] + f[1] * fw + rr[1] * sd * out; Tk[2] = gk + 9;
 				}
 				for (int i = 0; i < 3; i++) T[i] += (Tk[i] - T[i]) * kneel * wOn;
-				if (rearLeg) plant[k] *= 1 - kneel;
 			}
-			fpH[k][0] = T[0]; fpH[k][1] = T[1];
-			if (toe[k]) { const float *Tq = (const float *)(toe[k] + 0x8C); fpT[k][0] = T[0] + Tq[0] - A[0]; fpT[k][1] = T[1] + Tq[1] - A[1]; }
-			else { fpT[k][0] = T[0]; fpT[k][1] = T[1]; }
-			fpOk[k] = true;
 			float Rh[9], Rk[9];
 			solve(k, H, K, A, T, Rh, Rk);
 			if (kneel > 0.05f && rearLeg)
 			{
 				float kv[3] = {K[0] - H[0], K[1] - H[1], K[2] - H[2]}, kn[3]; apply(Rh, kv, kn);
-				float kz = H[2] + kn[2], floor = gz[k] + 3;
+				float kz = H[2] + kn[2], floor = pr.g0 + 3;
 				if (kz < floor) kneelLift = rt::min(kneelLift + (floor - kz) * 0.5f, TUNE(coverKneelDropUnits) + 10);
 			}
 			float G[9]; memcpy(G, kId, 36);
-			float ng[3] = {nF[k][0], nF[k][1], nF[k][2]};
-			if (toeLen[k] > 3 && rt::absf(pitchF[k]) > 0.001f)
-			{
-				const float *Tp = (const float *)(toe[k] + 0x8C);
-				float fd[3] = {Tp[0] - A[0], Tp[1] - A[1], 0}; norm(fd);
-				float al = dot(ng, fd), ns[3] = {ng[0] - fd[0] * al, ng[1] - fd[1] * al, ng[2]};
-				float tn = rt::sin(pitchF[k]) / rt::max(rt::cos(pitchF[k]), 0.2f) * ns[2];
-				for (int i = 0; i < 3; i++) ns[i] -= fd[i] * tn;
-				norm(ns); memcpy(ng, ns, 12);
-			}
-			float ang = acosf(ng[2]) * R2D;
-			if (ang > 0.5f)
-			{
-				float kk = plant[k] * wl * rt::min(1.0f, TUNE(bodyFootMaxDeg) / ang);
-				between(up, ng, kk, G);
-			}
-			if (kneel > 0.001f && rearLeg) { float Gk[9], G2[9]; rotAbout(rr, -TUNE(coverKneelToeDeg) * kneel, Gk); mul3(Gk, G, G2); memcpy(G, G2, 36); }
+			if (kneel > 0.001f && rearLeg) rotAbout(rr, -TUNE(coverKneelToeDeg) * kneel, G);
 			float RhRk[9], RT[9], Mf[9];
 			mul3(Rh, Rk, RhRk); tr(RhRk, RT); mul3(RT, G, Mf);
 			float Xr[9], Xt[3];
@@ -11743,8 +10878,6 @@ static void frame()
 			motionLocal(Cw, Mf, A, 0, Xr, Xt); preMul(Ft.node, Xr, Xt);
 			worldDown(Th.node);
 		}
-		plantPrev[0] = plant[0]; plantPrev[1] = plant[1];
-		if (spd < 5 && onGround && n0ok && n0[2] > 0.985f) rest += (clampf(rt::min(hgt[0], hgt[1]), 2, 20) - rest) * clampf(dt * 0.3f, 0, 1);
 	}
 	u32 camN = handling::sceneCam();
 	u32 hb = b[HED].bone;
@@ -11816,8 +10949,8 @@ static void frame()
 	if ((logT += dt) > 6)
 	{
 		logT = 0;
-		LOG("body: on %.2f ik %.2f - feet' ground %+.1f %+.1f (ankles %.1f %.1f over it, planted %.2f %.2f, rest %.1f), hips %+.1f (stairs %+.1f), lean %.1f bank %.1f torso %.1f, slope %.0f deg (grade %.0f, stairs %.2f, hill lean x%.2f); head %.0f right %.0f up; %d jump(s) blended; free look %.0f deg; normal %s %.2f",
-			wOn, wIk, dz[0], dz[1], hgt[0], hgt[1], plant[0], plant[1], rest, drop, stairZ - P[2], lean, bank, spP, slopeDeg, gradeDeg, stairK, hillK, hy, hp, jumps, flYaw * R2D, n0ok ? "known" : "NOT known", n0[2]);
+		LOG("body: on %.2f legs %.2f - lean %.1f bank %.1f; head %.0f right %.0f up; %d jump(s) blended; free look %.0f deg; ground %s %.2f",
+			wOn, wIk, lean, bank, hy, hp, jumps, flYaw * R2D, pr.n0ok ? "known" : "NOT known", pr.n0[2]);
 	}
 }
 }
@@ -14061,7 +13194,6 @@ static void tick(float dt, TESObjectREFR *pl, bool quiet)
 		{
 			poseT = rt::now();
 			bool wantSkel = rt::now() - skelT > 2.0;
-			u32 pkb = move::poseBody();
 			if (me.status & 1)
 			{
 				Xf F = feetFrame(pos(pl), me.yaw);
@@ -14069,15 +13201,7 @@ static void tick(float dt, TESObjectREFR *pl, bool quiet)
 				if (n3) { float sc = xfRead(n3, 0x68).s; if (sc > 0.01f && sc < 100) F.s = sc; }
 				wantSkel = false; poseOk = buildPose(n3, pose, 0, &F);
 			}
-			else if (pkb)
-			{
-				Xf F = feetFrame(pos(pl), rot(pl)[2]);
-				u32 n3 = thirdPersonNode(pl);
-				if (n3) { float sc = xfRead(n3, 0x68).s; if (sc > 0.01f && sc < 100) F.s = sc; }
-				wantSkel = false; poseOk = buildPose(pkb, pose, 0, &F);
-			}
 			else poseOk = buildPose(thirdPersonNode(pl), pose, wantSkel ? &skel : 0);
-			static bool pkTold; if (pkb && !pkTold && poseOk) { pkTold = true; LOG("ghosts: friends see your vault/climb/kick (the move's body, %d bones)", pose.n); }
 			if (wantSkel && poseOk) { skelT = rt::now(); net::setSkel(skel); }
 			if (!told && poseOk) { told = true; LOG("ghosts: your body - %d bones sent", pose.n); }
 		}
@@ -15718,7 +14842,6 @@ static u32 markerData(u32 ref)
 		if (rd<u8>(x + 4) == 0x2C) { u32 d = ptr(x + 0xC); return d && readable(d, 0x14) ? d : 0; }
 	return 0;
 }
-static u32 fbits(float f) { u32 b; memcpy(&b, &f, 4); return b; }
 static float bitsf(u32 b) { float f; memcpy(&f, &b, 4); return f; }
 
 static void capture(Sheet &S)
@@ -15871,7 +14994,6 @@ static bool load(const char *file, Sheet &S)
 	rt::free(txt);
 	return true;
 }
-static bool exists(const char *file) { char p[400]; path(p, sizeof p, file); return GetFileAttributesA(p) != 0xFFFFFFFF; }
 
 static int findIn(const u32 *ids, int n, u32 id) { for (int i = 0; i < n; i++) if (ids[i] == id) return i; return -1; }
 static void cmd(const char *line) { console(line); }
@@ -17133,7 +16255,6 @@ static void tick()
 	}
 	if (dt > 0.1f) dt = 0.1f;
 	if (dt <= 0) return;
-	move::slowTick();
 	if (g_radioKnob < 0) radioKnobLoad();
 	if (g_menu)
 	{
@@ -17153,9 +16274,9 @@ static void tick()
 	static bool wasMenu;
 	if (menumode())
 	{
+		if (!wasMenu) { handling::release(pl, "a menu"); handling::active = false; driftFovOff(pl); }
 		if (!wasMenu) { wasMenu = true; move::menu(pl); audio::setEngine(false, g_rpm, 0, 0); audio::setLimiter(false, 13, 0, 0); audio::setSkid(0, 1, 0); if (g_radioOn) audio::radioPause(true); }
 		if (g_worldUp) ghosts::menuTick(pl);
-		move::menuPrepare(pl);
 		if (g_worldUp) PROF(COOP, ghosts::tick(dt, pl, false));
 		else ghosts::pump();
 		return;

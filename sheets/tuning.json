@@ -1443,16 +1443,6 @@
    "about": "With no weapon out, show the arms while the left hand reaches (1) or not (0)"
   },
   {
-   "id": "moveFullBody",
-   "value": 1,
-   "about": "Vaults, mantles, climbs and kicks are shown on a full body (a posed copy of yours, both hands, legs over), 1 on, 0 off"
-  },
-  {
-   "id": "moveLookAt",
-   "value": 0.8,
-   "about": "During a climb the view is drawn this far (0..1) toward your hands as they land, then your knee coming over (Dying Light style)"
-  },
-  {
    "id": "sprintOn",
    "value": 1,
    "about": "The two-tier sprint on foot (1 on, 0 off)"
@@ -1748,26 +1738,6 @@
    "about": "multiplayer: how fast a friend's bullet streak flies (game units a second; it shows for 0.03-0.4 s)"
   },
   {
-   "id": "moveBlendInSec",
-   "value": 0.15,
-   "about": "Third person: the parkour double's pose blends in from your body's over this long at the start of a move"
-  },
-  {
-   "id": "moveBlendOutSec",
-   "value": 0.2,
-   "about": "Third person: the parkour double's pose blends back into your body's over this long at the end of a move"
-  },
-  {
-   "id": "moveSlingGun",
-   "value": 1,
-   "about": "Third person: 1 carries your drawn gun on the double through a climb (long guns across the back, pistols at the hip), 0 lets it vanish as before"
-  },
-  {
-   "id": "moveSlingBack",
-   "value": 9,
-   "about": "Third person: how far behind the upper spine a slung long gun's grip sits (units)"
-  },
-  {
    "id": "barrelFollow",
    "value": 1,
    "about": "Hip fire: each shot leaves along the gun as you see it (its swing, kick and wobble) instead of the screen centre (1 on, 0 off; aimed shots always go to the sights)"
@@ -1901,11 +1871,6 @@
    "id": "hipHeavyBack",
    "value": 0.7,
    "about": "From the hip a two-handed gun's shove back grows with its weight: times sqrt(weight / gunMassPounds) x this - heavy guns push into you, and come back slower"
-  },
-  {
-   "id": "moveCopySettleSec",
-   "value": 3.0,
-   "about": "The climbing double (a copy of your body) is only made once your 3D has been unchanged this long and no weapon is going in or out"
   },
   {
    "id": "camShakeDeg",
@@ -2208,91 +2173,6 @@
    "about": "Playing together: how many times a second your state and body pose go to friends; 20 before plugin 145"
   },
   {
-   "id": "dropkickOn",
-   "value": 1,
-   "about": "The dropkick: sprinting, jump, then right-click with your weapon holstered (0 off)"
-  },
-  {
-   "id": "dropkickSprintSec",
-   "value": 0.8,
-   "about": "How recently you must have been sprinting on the ground for the jump to allow a dropkick (seconds)"
-  },
-  {
-   "id": "dropkickMinSpeed",
-   "value": 200,
-   "about": "And at least this fast across the ground when you right-click (units a second)"
-  },
-  {
-   "id": "dropkickBoost",
-   "value": 320,
-   "about": "The lunge: speed added along your view when the kick starts (units a second)"
-  },
-  {
-   "id": "dropkickLift",
-   "value": 150,
-   "about": "The lunge: upward speed added when it starts (units a second)"
-  },
-  {
-   "id": "dropkickTiltDeg",
-   "value": 88,
-   "about": "How far back your body lays out in the air (degrees; 90 is flat, parallel to the ground)"
-  },
-  {
-   "id": "dropkickGetUpSec",
-   "value": 1.3,
-   "about": "After landing flat on your back: sitting up, over your feet into a crouch and standing (seconds)"
-  },
-  {
-   "id": "dropkickReach",
-   "value": 70,
-   "about": "How far past your body the feet reach for someone (units)"
-  },
-  {
-   "id": "dropkickPush",
-   "value": 55,
-   "about": "How hard whoever you hit is sent flying (PushActorAway force; the cars use up to 80)"
-  },
-  {
-   "id": "dropkickDamagePct",
-   "value": 0.15,
-   "about": "Damage as a share of their full health - never more than leaves them 1 health (the kick never kills)"
-  },
-  {
-   "id": "dropkickBounce",
-   "value": 0.35,
-   "about": "After the hit you bounce back by this share of your speed"
-  },
-  {
-   "id": "dropkickCamDeg",
-   "value": 8,
-   "about": "First person, lying flat: the view tips down this much toward your feet (degrees)"
-  },
-  {
-   "id": "dropkickJoltDeg",
-   "value": 5,
-   "about": "First person: the view jolts this much at the impact (degrees)"
-  },
-  {
-   "id": "dropkickHitstopSec",
-   "value": 0.07,
-   "about": "The hit freezes the world for this long (real seconds) before they fly - its weight"
-  },
-  {
-   "id": "dropkickHitstopScale",
-   "value": 0.1,
-   "about": "How slow the world runs during that freeze (the game's time multiplier)"
-  },
-  {
-   "id": "dropkickLandDeg",
-   "value": 4,
-   "about": "First person: hitting the ground on your back thuds the view down this much (degrees)"
-  },
-  {
-   "id": "dropkickRollDeg",
-   "value": 3,
-   "about": "First person: the impact rolls the view this much, the landing back the other way (degrees)"
-  },
-  {
    "id": "shareReachUnits",
    "value": 8000,
    "about": "A friend's game may kill an actor or change a container in yours only within this far of where that friend is"
@@ -2528,16 +2408,6 @@
    "about": "Third person: the whole-body system on (1) or off (0) - foot IK, the hips, lean and bank, blended transitions, the head after the camera"
   },
   {
-   "id": "bodyIkOn",
-   "value": 1,
-   "about": "Each foot onto the ground under it (heel and toe), the knee bending in its own plane (1 on, 0 off)"
-  },
-  {
-   "id": "bodyIkWeight",
-   "value": 1,
-   "about": "How much of the foot placement, the hips lowered to the lower foot and the stairs' smoothing is used (0..1; F8: FOOT PLACEMENT)"
-  },
-  {
    "id": "bodyRayUp",
    "value": 45,
    "about": "Foot IK: the ground is looked for from this far above where the game stands you (units; a step's height)"
@@ -2546,51 +2416,6 @@
    "id": "bodyRayDown",
    "value": 60,
    "about": "Foot IK: and down to this far below it (units)"
-  },
-  {
-   "id": "bodyFootHz",
-   "value": 14,
-   "about": "Foot IK: how quickly each foot's ground height follows a new surface under it (spring frequency, Hz; critically damped)"
-  },
-  {
-   "id": "bodyFootSettleSec",
-   "value": 0.1,
-   "about": "feet: a jump in a foot's ground (a step's edge) has to hold this long before the foot takes it; the sole's slope eases over the same (seconds)"
-  },
-  {
-   "id": "bodyFootMaxDeg",
-   "value": 30,
-   "about": "Foot IK: the furthest a planted sole tilts to the surface (degrees)"
-  },
-  {
-   "id": "bodyFootPitchDeg",
-   "value": 25,
-   "about": "Foot IK: the heel-to-toe slope a sole follows; a step's edge further up under the toes lifts the whole foot instead (degrees)"
-  },
-  {
-   "id": "bodyDropMaxUnits",
-   "value": 28,
-   "about": "The hips go down at most this far so the lower foot reaches its ground (units)"
-  },
-  {
-   "id": "bodyDropDeadband",
-   "value": 2.5,
-   "about": "feet: a foot's ground this little lower than you is the knee's to reach - the hips don't drop for it (units)"
-  },
-  {
-   "id": "bodyDropHz",
-   "value": 8,
-   "about": "How quickly the hips go down or up to it (Hz, critically damped)"
-  },
-  {
-   "id": "bodyStairHz",
-   "value": 7,
-   "about": "stairs: the hips follow the game's step-ups and step-downs on a spring this quick (Hz), so they glide instead of popping"
-  },
-  {
-   "id": "bodyStairMaxUnits",
-   "value": 18,
-   "about": "stairs: the hips never lag the game's place by more than this (units)"
   },
   {
    "id": "bodyAccelLean",
@@ -2636,56 +2461,6 @@
    "id": "bodyBankDamping",
    "value": 0.7,
    "about": "The bank's damping"
-  },
-  {
-   "id": "bodySlopeLeanUp",
-   "value": 0.3,
-   "about": "hills: the trunk leans forward up a hill this many degrees per degree of slope (x the curve)"
-  },
-  {
-   "id": "bodySlopeLeanDown",
-   "value": 0.2,
-   "about": "hills:... and back down one (degrees per degree, x the curve)"
-  },
-  {
-   "id": "bodySlopeBodyUp",
-   "value": 0.15,
-   "about": "hills: the whole body leans forward over the feet up a hill, degrees per degree of slope (x the curve)"
-  },
-  {
-   "id": "bodySlopeBodyDown",
-   "value": 0.08,
-   "about": "hills:... and back down one"
-  },
-  {
-   "id": "bodySlopeSide",
-   "value": 0.15,
-   "about": "hills: across a slope the body leans to its high side, degrees per degree (x the curve)"
-  },
-  {
-   "id": "bodySlopeCurveDeg",
-   "value": 30,
-   "about": "hills: the lean grows faster than the slope - x (1 + slope / this): x1.33 at 10 deg, x1.67 at 20, x2 at 30"
-  },
-  {
-   "id": "bodySlopeMinDeg",
-   "value": 5,
-   "about": "hills: no lean on a slope gentler than this; it comes in over the next 4 degrees"
-  },
-  {
-   "id": "bodySlopeStepUnits",
-   "value": 2.5,
-   "about": "hills: the plane round you (8 points, 16 and 32 units out) drops its worst point; stairs when 2+ points are still off it by more than this (units) - no hill lean on stairs"
-  },
-  {
-   "id": "bodySlopeSmoothSec",
-   "value": 0.4,
-   "about": "hills: the body's lean follows the hill eased over this long (seconds) - a rock or a facet doesn't rock it"
-  },
-  {
-   "id": "bodySlopeCrouchUnits",
-   "value": 3,
-   "about": "On a 20 degree slope the hips sit this much lower (knees softer; units)"
   },
   {
    "id": "bodyAimScale",
@@ -2821,21 +2596,6 @@
    "id": "headTorsoMaxDeg",
    "value": 30,
    "about": "The look: the most the chest turns (degrees)"
-  },
-  {
-   "id": "bodyStepUnits",
-   "value": 9,
-   "about": "standing: a planted foot stays put while the body turns over it, and steps once the animation would have it this far away (units; 0: no holding)"
-  },
-  {
-   "id": "bodyStepSec",
-   "value": 0.3,
-   "about": "standing: how long a step takes (seconds)"
-  },
-  {
-   "id": "bodyStepLift",
-   "value": 5,
-   "about": "standing: how high the foot lifts mid-step (units)"
   },
   {
    "id": "lifeOn",

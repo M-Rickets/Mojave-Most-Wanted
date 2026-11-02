@@ -12,6 +12,9 @@ import (
 var defaultUnlocked = []string{"vanilla"}
 
 func localUnlocked() []string {
+	if friendsMode() {
+		return nil
+	}
 	b, err := os.ReadFile(filepath.Join(knownFolder(folderLocalAppData), "MojaveMostWanted", "unlocked.txt"))
 	if err != nil {
 		return nil

@@ -47,15 +47,10 @@ struct Free
 	float hand[2][3], handDir[2][3], handSide[2][3], curl[2];
 	float foot[2][3], kneePole[2][3];
 	bool hideHead;
-	float tilt;
 };
 void poseFree(Body &b, const Free &p);
 void unpose(const Body &b);
 void parkourEye(int kind, float u, float eyeH, float gap, float wall, float h, float standY, float *y, float *z);
-void parkourLook(const Free &F, int kind, float u, float *target, float *w);
-void parkour(Free &F, int kind, float u, float t, const float *eye, float eyeH, float wall, float h, float standY, bool third, const float (*grip)[3] = 0, const float *anchor = 0);
-float dropkickStandY();
-float dropkickLie(float t, float u, float G);
 u32 copy(u32 obj, bool prune = true);
 void lastCopyMs(float out[5]);
 void lastPruned(int out[4]);

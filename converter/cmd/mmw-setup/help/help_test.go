@@ -80,3 +80,45 @@ func TestPanelsFit(t *testing.T) {
 		}
 	}
 }
+
+// Every pill on the YOUR MODS panel and its DONE take a click (the panel itself never stands in front of them)
+func TestModsPanelClickable(t *testing.T) {
+	left, right := Columns(true, false, "GAME FOLDER")
+	s := scene.State{DoneT: -1, SideL: left, SideR: right, Info: true, InfoTitle: "YOUR MODS", InfoCols: 1,
+		InfoLines: ModsLines(ModsView{Pills: []string{"GAME FOLDER", "MOD ORGANIZER 2", "VORTEX"}, On: []bool{true, false, false},
+			Say: ModsFolderSay, PickExe: "FIND MOD ORGANIZER 2"})}
+	img := image.NewRGBA(image.Rect(0, 0, scene.W, scene.H))
+	hits := scene.Render(img, 1, &s)
+	at := func(x, y float64) string {
+		for _, h := range hits {
+			if x >= h.X && x < h.X+h.W && y >= h.Y && y < h.Y+h.H {
+				return h.Name
+			}
+		}
+		return "?"
+	}
+	for _, want := range []string{"game folder", "mod organizer 2", "vortex", "find mod organizer 2", scene.MenuClose} {
+		ok := false
+		for _, h := range hits {
+			if h.Name == want {
+				ok = at(h.X+h.W/2, h.Y+h.H/2) == want
+			}
+		}
+		if !ok {
+			t.Errorf("%q can't be clicked", want)
+		}
+	}
+	s.Info = false
+	hits = scene.Render(img, 1, &s)
+	for _, want := range []string{"first time start-up", "keybinds", "game folder", "fnv", "ttw"} {
+		ok := false
+		for _, h := range hits {
+			if h.Name == want {
+				ok = at(h.X+h.W/2, h.Y+h.H/2) == want
+			}
+		}
+		if !ok {
+			t.Errorf("closed: %q can't be clicked", want)
+		}
+	}
+}
